@@ -1,6 +1,7 @@
 # private
 /config/database.js
 /config/secret.js
+/log/*
 
 # Logs
 logs
