@@ -1,5 +1,15 @@
 # Node.js Template
 
+## To Test
+> 웹 브라우저 주소창 or Postman에서 다음을 입력
+> 
+>> 서버주소/app/test
+>
+> 현재 서버 주소 : 3.39.210.120
+
+> 다음 결과가 나오면 성공
+>> {"isSuccess":true,"code":1000,"message":"성공"}
+
 ## To Start
 1. 해당 폴더 위치로 이동
 > cd ./Backend
@@ -7,7 +17,10 @@
 2. 의존성 모듈들 설치 (node_modules 폴더 생성)
 > npm install
 
-3. 서버 열기
+3. database.js 파일 따로 추가하기! (gitignore 되어 있음)
+
+
+4. 서버 열기
 > node index.js
 
 ### Folder Structure
