@@ -75,7 +75,6 @@ exports.postSignIn = async function (nickname, password) {
         //     .digest("hex");
 
         // const selectUserPasswordParams = [selectEmail, hashedPassword];
-        // const passwordRows = await userProvider.passwordCheck(selectUserPasswordParams);
         const selectUserPasswordParams = [selectNickname, password];
         const passwordRows = await userProvider.passwordCheck(selectUserPasswordParams);
 
