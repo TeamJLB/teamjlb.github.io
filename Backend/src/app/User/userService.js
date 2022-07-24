@@ -39,7 +39,8 @@ exports.createUser = async function (name, nickname, password, email, phone) {
         //     .digest("hex");
 
         // 쿼리문에 사용할 변수 값을 배열 형태로 전달
-        const insertUserInfoParams = [name, nickname, hashedPassword, email, phone];
+        // const insertUserInfoParams = [name, nickname, hashedPassword, email, phone];
+        const insertUserInfoParams = [name, nickname, password, email, phone];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
