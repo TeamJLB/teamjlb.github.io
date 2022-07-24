@@ -15,8 +15,14 @@ const crypto = require("crypto");
 
 // Service: Create, Update, Delete 비즈니스 로직 처리
 
-exports.createUser = async function (email, password, nickname) {
+exports.createUser = async function (name, nickname, password, email, phone) {
     try {
+        // [Validation Check]
+        // 아이디 중복 확인
+        const nicknameRows = await userProvider.nicknameCheck(nickname);
+        if (nicknameRows.length > 0)
+            return errResponse(baseResponse.SIGNUP_REDUNDANT_NICKNAME);
+
         // 이메일 중복 확인
         // UserProvider에서 해당 이메일과 같은 User 목록을 받아서 emailRows에 저장한 후, 배열의 길이를 검사한다.
         // -> 길이가 0 이상이면 이미 해당 이메일을 갖고 있는 User가 조회된다는 의미
@@ -24,19 +30,21 @@ exports.createUser = async function (email, password, nickname) {
         if (emailRows.length > 0)
             return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
 
+        // ------
+
         // 비밀번호 암호화
-        const hashedPassword = await crypto
-            .createHash("sha512")
-            .update(password)
-            .digest("hex");
+        // const hashedPassword = await crypto
+        //     .createHash("sha512")
+        //     .update(password)
+        //     .digest("hex");
 
         // 쿼리문에 사용할 변수 값을 배열 형태로 전달
-        const insertUserInfoParams = [email, hashedPassword, nickname];
+        const insertUserInfoParams = [name, nickname, hashedPassword, email, phone];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
         const userIdResult = await userDao.insertUserInfo(connection, insertUserInfoParams);
-        console.log(`추가된 회원 : ${userIdResult[0].insertId}`)
+        console.log(`추가된 회원id : ${userIdResult[0].insertId}`)
         connection.release();
         return response(baseResponse.SUCCESS);
 
@@ -48,29 +56,35 @@ exports.createUser = async function (email, password, nickname) {
 
 
 // TODO: After 로그인 인증 방법 (JWT)
-exports.postSignIn = async function (email, password) {
+exports.postSignIn = async function (nickname, password) {
     try {
-        // 이메일 여부 확인
-        const emailRows = await userProvider.emailCheck(email);
-        if (emailRows.length < 1) return errResponse(baseResponse.SIGNIN_EMAIL_WRONG);
+        // [Validation Check]
+        // 닉네임 여부 확인
+        const nicknameRows = await userProvider.nicknameCheck(nickname);
+        if (nicknameRows.length < 1) return errResponse(baseResponse.SIGNIN_NICKNAME_WRONG);
 
-        const selectEmail = emailRows[0].email
+        // ------
+
+        const selectNickname = nicknameRows[0].nickname
 
         // 비밀번호 확인 (입력한 비밀번호를 암호화한 것과 DB에 저장된 비밀번호가 일치하는 지 확인함)
-        const hashedPassword = await crypto
-            .createHash("sha512")
-            .update(password)
-            .digest("hex");
+        // const hashedPassword = await crypto
+        //     .createHash("sha512")
+        //     .update(password)
+        //     .digest("hex");
 
-        const selectUserPasswordParams = [selectEmail, hashedPassword];
+        // const selectUserPasswordParams = [selectEmail, hashedPassword];
+        // const passwordRows = await userProvider.passwordCheck(selectUserPasswordParams);
+        const selectUserPasswordParams = [selectNickname, password];
         const passwordRows = await userProvider.passwordCheck(selectUserPasswordParams);
 
-        if (passwordRows[0].password !== hashedPassword) {
-            return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
-        }
+        // if (passwordRows[0].password !== hashedPassword) {
+        //     return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
+        // }
+        if (passwordRows.length < 1) return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
 
         // 계정 상태 확인
-        const userInfoRows = await userProvider.accountCheck(email);
+        const userInfoRows = await userProvider.accountCheck(nickname);
 
         if (userInfoRows[0].status === "INACTIVE") {
             return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);

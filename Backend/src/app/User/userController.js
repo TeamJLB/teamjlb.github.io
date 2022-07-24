@@ -18,40 +18,57 @@ exports.getTest = async function (req, res) {
 /**
  * API No. 1
  * API Name : 유저 생성 (회원가입) API
- * [POST] /app/users
+ * [POST] /app/signup
  */
 exports.postUsers = async function (req, res) {
 
     /**
-     * Body: email, password, nickname
+     * Body: name, nickname, password, email, phone
      */
-    const {email, password, nickname} = req.body;
+    const {name, nickname, password, email, phone} = req.body;
 
+    // [Validation Check]
     // 빈 값 체크
-    if (!email)
-        return res.send(response(baseResponse.SIGNUP_EMAIL_EMPTY));
+    if (!name || !nickname || !password || !email)
+        return res.send(response(baseResponse.SIGNUP_EMPTY));
 
-    // 길이 체크
-    if (email.length > 30)
-        return res.send(response(baseResponse.SIGNUP_EMAIL_LENGTH));
-
-    // 형식 체크 (by 정규표현식)
+    // 이메일 형식 체크 (by 정규표현식)
     if (!regexEmail.test(email))
         return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
 
+    // 이메일 길이 체크
+    // if (email.length > 30)
+    //     return res.send(response(baseResponse.SIGNUP_EMAIL_LENGTH));
+
+    // ------
+
     // createUser 함수 실행을 통한 결과 값을 signUpResponse에 저장
-    const signUpResponse = await userService.createUser(
-        email,
-        password,
-        nickname
-    );
+    const signUpResponse = await userService.createUser(name, nickname, password, email, phone);
 
     // signUpResponse 값을 json으로 전달
     return res.send(signUpResponse);
 };
 
+// TODO: After 로그인 인증 방법 (JWT)
 /**
  * API No. 2
+ * API Name : 로그인 API
+ * [POST] /app/login
+ * body : nickname, passsword
+ */
+exports.login = async function (req, res) {
+
+    const {nickname, password} = req.body;
+
+    const signInResponse = await userService.postSignIn(nickname, password);
+
+    return res.send(signInResponse);
+};
+
+
+
+/**
+ * API No.
  * API Name : 유저 조회 API (+ 이메일로 검색 조회)
  * [GET] /app/users
  */
@@ -75,7 +92,7 @@ exports.getUsers = async function (req, res) {
 };
 
 /**
- * API No. 3
+ * API No.
  * API Name : 특정 유저 조회 API
  * [GET] /app/users/{userId}
  */
@@ -93,26 +110,8 @@ exports.getUserById = async function (req, res) {
     return res.send(response(baseResponse.SUCCESS, userByUserId));
 };
 
-
-// TODO: After 로그인 인증 방법 (JWT)
 /**
- * API No. 4
- * API Name : 로그인 API
- * [POST] /app/login
- * body : email, passsword
- */
-exports.login = async function (req, res) {
-
-    const {email, password} = req.body;
-
-    const signInResponse = await userService.postSignIn(email, password);
-
-    return res.send(signInResponse);
-};
-
-
-/**
- * API No. 5
+ * API No.
  * API Name : 회원 정보 수정 API + JWT + Validation
  * [PATCH] /app/users/:userId
  * path variable : userId
@@ -138,12 +137,6 @@ exports.patchUsers = async function (req, res) {
     }
 };
 
-
-
-
-
-
-// JWT 이 후 주차에 다룰 내용
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login
  */
