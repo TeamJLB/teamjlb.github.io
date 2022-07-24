@@ -4,6 +4,7 @@ module.exports = function(app){
 
     // 0. 테스트 API
     app.get('/app/test', user.getTest)
+    app.get('/app/testdb', user.getTestDB)
 
     // 1. 유저 생성 (회원가입) API
     app.post('/app/signup', user.postUsers);

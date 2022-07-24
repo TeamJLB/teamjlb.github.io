@@ -14,6 +14,10 @@ const regexEmail = require("regex-email");
 exports.getTest = async function (req, res) {
     return res.send(response(baseResponse.SUCCESS))
 }
+exports.getTestDB = async function (req, res) {
+    const testResponse = await userProvider.retrieveAllUser()
+    return res.send(testResponse)
+}
 
 /**
  * API No. 1
