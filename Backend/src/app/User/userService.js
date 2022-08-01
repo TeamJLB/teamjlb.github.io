@@ -15,12 +15,12 @@ const crypto = require("crypto");
 
 // Service: Create, Update, Delete 비즈니스 로직 처리
 
-exports.createUser = async function (name, nickname, password, email, phone) {
+exports.createUser = async function (name, id, password, email, phone) {
     try {
         // [Validation Check]
         // 아이디 중복 확인
-        const nicknameRows = await userProvider.nicknameCheck(nickname);
-        if (nicknameRows.length > 0)
+        const idRows = await userProvider.idCheck(id);
+        if (idRows.length > 0)
             return errResponse(baseResponse.SIGNUP_REDUNDANT_NICKNAME);
 
         // 이메일 중복 확인
@@ -39,8 +39,8 @@ exports.createUser = async function (name, nickname, password, email, phone) {
         //     .digest("hex");
 
         // 쿼리문에 사용할 변수 값을 배열 형태로 전달
-        // const insertUserInfoParams = [name, nickname, hashedPassword, email, phone];
-        const insertUserInfoParams = [name, nickname, password, email, phone];
+        // const insertUserInfoParams = [name, id, hashedPassword, email, phone];
+        const insertUserInfoParams = [name, id, password, email, phone];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
@@ -57,16 +57,16 @@ exports.createUser = async function (name, nickname, password, email, phone) {
 
 
 // TODO: After 로그인 인증 방법 (JWT)
-exports.postSignIn = async function (nickname, password) {
+exports.postSignIn = async function (id, password) {
     try {
         // [Validation Check]
         // 닉네임 여부 확인
-        const nicknameRows = await userProvider.nicknameCheck(nickname);
-        if (nicknameRows.length < 1) return errResponse(baseResponse.SIGNIN_NICKNAME_WRONG);
+        const idRows = await userProvider.idCheck(id);
+        if (idRows.length < 1) return errResponse(baseResponse.SIGNIN_NICKNAME_WRONG);
 
         // ------
 
-        const selectNickname = nicknameRows[0].nickname
+        const selectId = idRows[0].id
 
         // 비밀번호 확인 (입력한 비밀번호를 암호화한 것과 DB에 저장된 비밀번호가 일치하는 지 확인함)
         // const hashedPassword = await crypto
@@ -75,7 +75,7 @@ exports.postSignIn = async function (nickname, password) {
         //     .digest("hex");
 
         // const selectUserPasswordParams = [selectEmail, hashedPassword];
-        const selectUserPasswordParams = [selectNickname, password];
+        const selectUserPasswordParams = [selectId, password];
         const passwordRows = await userProvider.passwordCheck(selectUserPasswordParams);
 
         // if (passwordRows[0].password !== hashedPassword) {
@@ -84,7 +84,7 @@ exports.postSignIn = async function (nickname, password) {
         if (passwordRows.length < 1) return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
 
         // 계정 상태 확인
-        const userInfoRows = await userProvider.accountCheck(nickname);
+        const userInfoRows = await userProvider.accountCheck(id);
 
         if (userInfoRows[0].status === "INACTIVE") {
             return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);

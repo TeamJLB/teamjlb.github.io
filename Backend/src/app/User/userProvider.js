@@ -48,12 +48,12 @@ exports.retrieveUser = async function (userId) {
   return userResult[0]; // 한 명의 유저 정보만을 불러오므로 배열 타입을 리턴하는 게 아닌 0번 인덱스를 파싱해서 오브젝트 타입 리턴
 };
 
-exports.nicknameCheck = async function (nickname) {
+exports.idCheck = async function (id) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const nicknameCheckResult = await userDao.selectUserNickname(connection, nickname);
+  const idCheckResult = await userDao.selectUserId(connection, id);
   connection.release();
 
-  return nicknameCheckResult;
+  return idCheckResult;
 };
 
 exports.emailCheck = async function (email) {
@@ -76,9 +76,9 @@ exports.passwordCheck = async function (selectUserPasswordParams) {
   return passwordCheckResult;
 };
 
-exports.accountCheck = async function (nickname) {
+exports.accountCheck = async function (id) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const userAccountResult = await userDao.selectUserAccount(connection, nickname);
+  const userAccountResult = await userDao.selectUserAccount(connection, id);
   connection.release();
 
   return userAccountResult;

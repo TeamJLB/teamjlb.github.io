@@ -4,7 +4,7 @@
 // 유저 생성 (회원가입)
 async function insertUserInfo(connection, insertUserInfoParams) {
   const insertUserInfoQuery = `
-        INSERT INTO User(user_name, nickname, password, email, phone)
+        INSERT INTO User(user_name, id, password, email, phone)
         VALUES (?, ?, ?, ?, ?);
     `;
   const insertUserInfoRow = await connection.query(
@@ -16,14 +16,14 @@ async function insertUserInfo(connection, insertUserInfoParams) {
 }
 
 // 아이디로 회원 조회
-async function selectUserNickname(connection, nickname) {
-  const selectUserNicknameQuery = `
-                SELECT nickname 
+async function selectUserId(connection, id) {
+  const selectUserIdQuery = `
+                SELECT * 
                 FROM User 
-                WHERE nickname = ?;
+                WHERE id = ?;
                 `;
-  const [nicknameRows] = await connection.query(selectUserNicknameQuery, nickname);
-  return nicknameRows;
+  const [idRows] = await connection.query(selectUserIdQuery, id);
+  return idRows;
 }
 
 // 이메일로 회원 조회
@@ -52,14 +52,14 @@ async function selectUserPassword(connection, selectUserPasswordParams) {
 }
 
 // 유저 계정 상태 체크 (jwt 생성 위해 id 값도 가져온다.)
-async function selectUserAccount(connection, nickname) {
+async function selectUserAccount(connection, id) {
   const selectUserAccountQuery = `
         SELECT status, user_id
         FROM User
-        WHERE nickname = ?;`;
+        WHERE id = ?;`;
   const selectUserAccountRow = await connection.query(
       selectUserAccountQuery,
-      nickname
+      id
   );
   return selectUserAccountRow[0];
 }
@@ -74,17 +74,6 @@ async function selectUser(connection) {
   return userRows;
 }
 
-// userId 회원 조회
-async function selectUserId(connection, userId) {
-  const selectUserIdQuery = `
-                 SELECT id, email, nickname 
-                 FROM UserInfo 
-                 WHERE id = ?;
-                 `;
-  const [userRow] = await connection.query(selectUserIdQuery, userId);
-  return userRow;
-}
-
 async function updateUserInfo(connection, id, nickname) {
   const updateUserQuery = `
   UPDATE UserInfo 
@@ -97,10 +86,9 @@ async function updateUserInfo(connection, id, nickname) {
 
 module.exports = {
   insertUserInfo,
-  selectUserNickname,
+  selectUserId,
   selectUserEmail,
   selectUser,
-  selectUserId,
   selectUserPassword,
   selectUserAccount,
   updateUserInfo,

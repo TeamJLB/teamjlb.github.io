@@ -27,13 +27,13 @@ exports.getTestDB = async function (req, res) {
 exports.postUsers = async function (req, res) {
 
     /**
-     * Body: name, nickname, password, email, phone
+     * Body: name, id, password, email, phone
      */
-    const {name, nickname, password, email, phone} = req.body;
+    const {name, id, password, email, phone} = req.body;
 
     // [Validation Check]
     // 빈 값 체크
-    if (!name || !nickname || !password || !email)
+    if (!name || !id || !password || !email)
         return res.send(response(baseResponse.SIGNUP_EMPTY));
 
     // 이메일 형식 체크 (by 정규표현식)
@@ -47,7 +47,7 @@ exports.postUsers = async function (req, res) {
     // ------
 
     // createUser 함수 실행을 통한 결과 값을 signUpResponse에 저장
-    const signUpResponse = await userService.createUser(name, nickname, password, email, phone);
+    const signUpResponse = await userService.createUser(name, id, password, email, phone);
 
     // signUpResponse 값을 json으로 전달
     return res.send(signUpResponse);
@@ -58,13 +58,13 @@ exports.postUsers = async function (req, res) {
  * API No. 2
  * API Name : 로그인 API
  * [POST] /app/login
- * body : nickname, passsword
+ * body : id, passsword
  */
 exports.login = async function (req, res) {
 
-    const {nickname, password} = req.body;
+    const {id, password} = req.body;
 
-    const signInResponse = await userService.postSignIn(nickname, password);
+    const signInResponse = await userService.postSignIn(id, password);
 
     return res.send(signInResponse);
 };
