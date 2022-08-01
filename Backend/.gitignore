@@ -3,6 +3,7 @@
 /config/secret.js
 /log/*
 /package-lock.json
+package-lock.json
 
 # Logs
 logs
