@@ -26,6 +26,20 @@ async function selectUserId(connection, id) {
   return idRows;
 }
 
+// 패스워드 체크
+async function selectUserPassword(connection, selectUserPasswordParams) {
+  const selectUserPasswordQuery = `
+        SELECT *
+        FROM User
+        WHERE id = ? AND password = ?;`;
+  const selectUserPasswordRow = await connection.query(
+      selectUserPasswordQuery,
+      selectUserPasswordParams
+  );
+
+  return selectUserPasswordRow[0];
+}
+
 // 이메일로 회원 조회
 async function selectUserEmail(connection, email) {
   const selectUserEmailQuery = `
@@ -35,20 +49,6 @@ async function selectUserEmail(connection, email) {
                 `;
   const [emailRows] = await connection.query(selectUserEmailQuery, email);
   return emailRows;
-}
-
-// 패스워드 체크
-async function selectUserPassword(connection, selectUserPasswordParams) {
-  const selectUserPasswordQuery = `
-        SELECT *
-        FROM User
-        WHERE email = ? AND password = ?;`;
-  const selectUserPasswordRow = await connection.query(
-      selectUserPasswordQuery,
-      selectUserPasswordParams
-  );
-
-  return selectUserPasswordRow;
 }
 
 // 유저 계정 상태 체크 (jwt 생성 위해 id 값도 가져온다.)
@@ -87,9 +87,9 @@ async function updateUserInfo(connection, id, nickname) {
 module.exports = {
   insertUserInfo,
   selectUserId,
+  selectUserPassword,
   selectUserEmail,
   selectUser,
-  selectUserPassword,
   selectUserAccount,
   updateUserInfo,
 };

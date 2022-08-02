@@ -1,6 +1,10 @@
 const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
 
+const baseResponse = require("../../../config/baseResponseStatus");
+const {response} = require("../../../config/response");
+const {errResponse} = require("../../../config/response");
+
 const userDao = require("./userDao");
 
 // Provider: Read 비즈니스 로직 처리
@@ -14,6 +18,20 @@ exports.retrieveAllUser = async function () {
   connection.release();
 
   return userListResult;
+};
+
+exports.retrieveUser = async function (userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userResult = await userDao.selectUserId(connection, userId);
+
+  connection.release();
+
+  if (userResult.length > 0)
+    return response(baseResponse.SUCCESS, {'unique': false});
+  else
+    return response(baseResponse.SUCCESS, {'unique': true});
+
+  // return userResult[0]; // 한 명의 유저 정보만을 불러오므로 배열 타입을 리턴하는 게 아닌 0번 인덱스를 파싱해서 오브젝트 타입 리턴
 };
 
 exports.retrieveUserList = async function (email) {
@@ -37,15 +55,6 @@ exports.retrieveUserList = async function (email) {
 
     return userListResult;
   }
-};
-
-exports.retrieveUser = async function (userId) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const userResult = await userDao.selectUserId(connection, userId);
-
-  connection.release();
-
-  return userResult[0]; // 한 명의 유저 정보만을 불러오므로 배열 타입을 리턴하는 게 아닌 0번 인덱스를 파싱해서 오브젝트 타입 리턴
 };
 
 exports.idCheck = async function (id) {

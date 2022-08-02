@@ -69,6 +69,25 @@ exports.login = async function (req, res) {
     return res.send(signInResponse);
 };
 
+/**
+ * API No. 3
+ * API Name : 특정 유저 조회 API (중복체크)
+ * [GET] /app/users
+ */
+exports.getUserById = async function (req, res) {
+
+    /**
+     * Query String: id
+     */
+    const userId = req.query.id;
+
+    // errResponse 전달
+    if (!userId) return res.send(errResponse(baseResponse.USER_NICKNAME_EMPTY));
+
+    // userId를 통한 유저 검색 함수 호출 및 결과 저장
+    const checkUserIdResponse = await userProvider.retrieveUser(userId);
+    return res.send(checkUserIdResponse);
+};
 
 
 /**
@@ -79,9 +98,9 @@ exports.login = async function (req, res) {
 exports.getUsers = async function (req, res) {
 
     /**
-     * Query String: email
+     * Path Variable: email
      */
-    const email = req.query.email;
+    const email = req.params.email;
 
     if (!email) {
         // 유저 전체 조회
@@ -95,24 +114,6 @@ exports.getUsers = async function (req, res) {
     }
 };
 
-/**
- * API No.
- * API Name : 특정 유저 조회 API
- * [GET] /app/users/{userId}
- */
-exports.getUserById = async function (req, res) {
-
-    /**
-     * Path Variable: userId
-     */
-    const userId = req.params.userId;
-    // errResponse 전달
-    if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-    // userId를 통한 유저 검색 함수 호출 및 결과 저장
-    const userByUserId = await userProvider.retrieveUser(userId);
-    return res.send(response(baseResponse.SUCCESS, userByUserId));
-};
 
 /**
  * API No.

@@ -66,7 +66,8 @@ exports.postSignIn = async function (id, password) {
 
         // ------
 
-        const selectId = idRows[0].id
+        const selectId = idRows[0].id;
+        // console.log(selectId);
 
         // 비밀번호 확인 (입력한 비밀번호를 암호화한 것과 DB에 저장된 비밀번호가 일치하는 지 확인함)
         // const hashedPassword = await crypto
@@ -77,6 +78,7 @@ exports.postSignIn = async function (id, password) {
         // const selectUserPasswordParams = [selectEmail, hashedPassword];
         const selectUserPasswordParams = [selectId, password];
         const passwordRows = await userProvider.passwordCheck(selectUserPasswordParams);
+        // console.log(passwordRows);
 
         // if (passwordRows[0].password !== hashedPassword) {
         //     return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
@@ -92,7 +94,7 @@ exports.postSignIn = async function (id, password) {
             return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
         }
 
-        console.log(userInfoRows[0].id) // DB의 userId
+        // console.log(userInfoRows[0].user_id) // DB의 userId
 
         //토큰 생성 Service
         let token = await jwt.sign(
