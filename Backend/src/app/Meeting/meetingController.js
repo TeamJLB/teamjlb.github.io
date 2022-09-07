@@ -17,32 +17,9 @@ exports.getAllMeetings = async function (req, res) {
     // console.log(userIdxFromJWT);
     // return res.send(response(baseResponse.SUCCESS, {'verified_user_id' : userIdxFromJWT}));
 
+    const meetingListResponse = await meetingProvider.retrieveAllMeeting(userIdxFromJWT);
 
-    /**
-     * Body: name, id, password, email, phone
-     */
-    // const {name, id, password, email, phone} = req.body;
-    //
-    // // [Validation Check]
-    // // 빈 값 체크
-    // if (!name || !id || !password || !email)
-    //     return res.send(response(baseResponse.SIGNUP_EMPTY));
-    //
-    // // 이메일 형식 체크 (by 정규표현식)
-    // if (!regexEmail.test(email))
-    //     return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
-
-    // 이메일 길이 체크
-    // if (email.length > 30)
-    //     return res.send(response(baseResponse.SIGNUP_EMAIL_LENGTH));
-
-    // ------
-
-    // createmeeting 함수 실행을 통한 결과 값을 signUpResponse에 저장
-    // const signUpResponse = await meetingService.createmeeting(name, id, password, email, phone);
-    //
-    // // signUpResponse 값을 json으로 전달
-    return res.send(signInResponse);
+    return res.send(meetingListResponse);
 };
 
 // TODO: After 로그인 인증 방법 (JWT)

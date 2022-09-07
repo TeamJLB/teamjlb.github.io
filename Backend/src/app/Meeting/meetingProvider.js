@@ -9,15 +9,13 @@ const meetingDao = require("./meetingDao");
 
 // Provider: Read 비즈니스 로직 처리
 
-exports.retrieveAllmeeting = async function () {
-  // connection 은 db와의 연결을 도와줌
+exports.retrieveAllMeeting = async function (userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
-  // Dao 쿼리문의 결과를 호출
-  const meetingListResult = await meetingDao.selectmeeting(connection);
+  const allMeetingListResult = await meetingDao.selectAllMeetingByUserId(connection, userIdx);
   // connection 해제
   connection.release();
 
-  return meetingListResult;
+  return allMeetingListResult;
 };
 
 exports.retrievemeeting = async function (meetingId) {
