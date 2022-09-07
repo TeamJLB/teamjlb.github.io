@@ -1,0 +1,16 @@
+.loginForm{
+    width: 30%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    margin : auto;
+    transform: translate(0, 20%);
+}
+.btndiv{
+    display: flex;
+
+    justify-content: space-between;
+}
