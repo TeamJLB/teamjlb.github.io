@@ -93,7 +93,7 @@ async function updatemeetingInfo(connection, id, nickname) {
 
 
 module.exports = {
-  selectAllMeetingByUserId
+  selectAllMeetingByUserId,
 
   insertmeetingInfo,
   selectmeetingId,
