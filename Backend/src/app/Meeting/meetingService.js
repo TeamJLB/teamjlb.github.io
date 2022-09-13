@@ -43,7 +43,7 @@ exports.addNewMeeting = async function (userIdx, meeting_name, first_topic) {
 
             // [정상적으로 처리되면 트랜잭션 완료]
             await connection.commit();
-            return response(baseResponse.SUCCESS);
+            return response(baseResponse.SUCCESS, {"added_meeting_id" : added_meeting_id, "added_subMeeting_id" : added_subMeeting_id});
         } catch (err) {
             // [비정상적으로 처리되면 트랜잭션 롤백]
             await connection.rollback();
@@ -79,7 +79,7 @@ exports.addNewSubMeeting = async function (userIdx, meeting_id, new_topic) {
 
             // [정상적으로 처리되면 트랜잭션 완료]
             await connection.commit();
-            return response(baseResponse.SUCCESS);
+            return response(baseResponse.SUCCESS, {"added_subMeeting_id": added_subMeeting_id});
         } catch (err) {
             // [비정상적으로 처리되면 트랜잭션 롤백]
             await connection.rollback();
