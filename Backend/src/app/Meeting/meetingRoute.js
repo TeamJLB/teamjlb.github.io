@@ -11,9 +11,15 @@ module.exports = function(app){
     // 3. 새 회의 개설 API
     app.post('/meetings/newMeeting', jwtMiddleware, meeting.postNewMeeting);
 
-    // 4. 새 회의 참가 API
+    // 4. 기존 회의 다시 개설 API
+    app.post('/meetings/openMeeting/:meetingId', jwtMiddleware, meeting.postNewSubMeeting);
+
+    // 5. 새 회의 참가 API
     app.post('/meetings/newMeeting/:meetingId', jwtMiddleware, meeting.joinNewMeeting);
 
-    // 5. 회의 삭제
+    // 6. 회의 삭제 API
+    app.delete('/meetings/myMeeting/:meetingId', jwtMiddleware, meeting.deleteMeeting);
 
+    // 7. 회의 히스토리 리스트 API
+    app.get('/meetings/meetingHistory', jwtMiddleware, meeting.getSubMeetingHistoryById);
 };

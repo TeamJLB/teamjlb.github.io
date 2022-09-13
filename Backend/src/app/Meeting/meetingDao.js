@@ -75,65 +75,66 @@ async function selectSubMeetingById(connection, meeting_id) {
   return subMeetingRow[0];
 }
 
-
-// 패스워드 체크
-async function selectmeetingPassword(connection, selectmeetingPasswordParams) {
-  const selectmeetingPasswordQuery = `
-        SELECT *
-        FROM meeting
-        WHERE id = ? AND password = ?;
+// 회원과 회의 사이의 매칭 id 체크
+async function findAllMatchingId(connection, selectMatchingParams) {
+  const selectMatchingIdQuery = `
+    SELECT MC.match_id
+    FROM SubMeeting SM INNER JOIN Meeting MT on SM.meeting_id = MT.meeting_id INNER JOIN Matching MC on SM.sub_meeting_id = MC.sub_meeting_id
+    WHERE MC.user_id = ? AND MT.meeting_id = ?;
   `;
-  const selectmeetingPasswordRow = await connection.query(
-      selectmeetingPasswordQuery,
-      selectmeetingPasswordParams
-  );
-
-  return selectmeetingPasswordRow[0];
+  const [matchingRows] = await connection.query(selectMatchingIdQuery, selectMatchingParams);
+  return matchingRows;
 }
 
-// 이메일로 회원 조회
-async function selectmeetingEmail(connection, email) {
-  const selectmeetingEmailQuery = `
-                SELECT email
-                FROM meeting 
-                WHERE email = ?;
-                `;
-  const [emailRows] = await connection.query(selectmeetingEmailQuery, email);
-  return emailRows;
+// 회원 id와 회의 id 를 포함한 매칭 id 삭제
+async function deleteAllMatchingIds(connection, deleteMatchingParams) {
+  const deleteAllMatchingIdQuery = `
+    DELETE FROM Matching
+    WHERE match_id IN (
+      SELECT match_id
+      FROM (
+             SELECT MC.match_id
+             FROM SubMeeting SM INNER JOIN Meeting MT on SM.meeting_id = MT.meeting_id INNER JOIN Matching MC on SM.sub_meeting_id = MC.sub_meeting_id
+             WHERE MC.user_id = ? AND MT.meeting_id = ?
+           ) AS TMP
+    );
+  `;
+  const deleteMatchingInfoRow = await connection.query(deleteAllMatchingIdQuery, deleteMatchingParams);
+  return deleteMatchingInfoRow;
 }
 
-// 유저 계정 상태 체크 (jwt 생성 위해 id 값도 가져온다.)
-async function selectmeetingAccount(connection, id) {
-  const selectmeetingAccountQuery = `
-        SELECT status, meeting_id
-        FROM meeting
-        WHERE id = ?;`;
-  const selectmeetingAccountRow = await connection.query(
-      selectmeetingAccountQuery,
-      id
-  );
-  return selectmeetingAccountRow[0];
+// 회의 id로 서브 회의 히스토리 조회
+async function selectAllSubMeetingHistory(connection, meeting_id) {
+  const selectAllSubMeetingHistoryQuery = `
+    SELECT DISTINCT MC.sub_meeting_id, SM.createdAt, SM.topic
+    FROM Matching MC INNER JOIN SubMeeting SM on MC.sub_meeting_id = SM.sub_meeting_id INNER JOIN Meeting M on SM.meeting_id = M.meeting_id
+    WHERE M.meeting_id = ?;
+  `;
+  const [historyRows] = await connection.query(selectAllSubMeetingHistoryQuery, meeting_id);
+  return historyRows;
 }
 
-// 모든 유저 조회
-async function selectmeeting(connection) {
-  const selectmeetingListQuery = `
-                SELECT * 
-                FROM meeting;
-                `;
-  const [meetingRows] = await connection.query(selectmeetingListQuery);
-  return meetingRows;
+// 서브회의 id로 참가자 조회
+async function selectAllParticipantBySubMeetingId(connection, sub_meeting_id) {
+  const selectAllParticipantBySubMeetingIdQuery = `
+    SELECT U.user_name
+    FROM User U INNER JOIN Matching MC on U.user_id = MC.user_id
+    WHERE MC.sub_meeting_id = ?;
+  `;
+  const [participantRows] = await connection.query(selectAllParticipantBySubMeetingIdQuery, sub_meeting_id);
+  return participantRows;
 }
 
-async function updatemeetingInfo(connection, id, nickname) {
-  const updatemeetingQuery = `
-  UPDATE meetingInfo 
-  SET nickname = ?
-  WHERE id = ?;`;
-  const updatemeetingRow = await connection.query(updatemeetingQuery, [nickname, id]);
-  return updatemeetingRow[0];
+// 서브회의 id로 키워드 조회
+async function selectAllKeywordBySubMeetingId(connection, sub_meeting_id) {
+  const selectAllKeywordBySubMeetingIdQuery = `
+    SELECT DISTINCT K.keyword_content
+    FROM Keyword K INNER JOIN Memo MM on K.memo_id = MM.memo_id INNER JOIN Matching MC on MM.sub_meeting_id = MC.sub_meeting_id
+    WHERE MM.sub_meeting_id = ?;
+  `;
+  const [keywordRows] = await connection.query(selectAllKeywordBySubMeetingIdQuery, sub_meeting_id);
+  return keywordRows;
 }
-
 
 module.exports = {
   selectAllMeetingByUserId,
@@ -143,10 +144,10 @@ module.exports = {
   makeMatching,
   findMeetingId,
   selectSubMeetingById,
+  findAllMatchingId,
+  deleteAllMatchingIds,
+  selectAllSubMeetingHistory,
+  selectAllParticipantBySubMeetingId,
+  selectAllKeywordBySubMeetingId,
 
-  selectmeetingPassword,
-  selectmeetingEmail,
-  selectmeeting,
-  selectmeetingAccount,
-  updatemeetingInfo,
 };

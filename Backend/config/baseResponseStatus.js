@@ -51,6 +51,7 @@ module.exports = {
 
     MEETING_ID_NOT_EXISTS : { "isSuccess": false, "code": 3100, "message": "해당 ID의 회의가 존재하지 않습니다." },
     MEETING_REDUNDANT_NAME : { "isSuccess": false, "code": 3101, "message": "중복된 회의 이름입니다." },
+    MEETING_NO_MATCHING : { "isSuccess": false, "code": 3102, "message": "삭제할 매칭 정보(회의)가 없습니다." },
 
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
