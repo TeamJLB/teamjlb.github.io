@@ -35,6 +35,11 @@ module.exports = {
 
     USER_STATUS_EMPTY : { "isSuccess": false, "code": 2018, "message": "회원 상태값을 입력해주세요" },
 
+    // ---
+    MEETING_ID_EMPTY : { "isSuccess": false, "code": 2100, "message": "회의 ID를 입력해주세요" },
+    MEETING_NAME_EMPTY : { "isSuccess": false, "code": 2101, "message": "회의 이름을 입력해주세요" },
+    MEETING_TOPIC_EMPTY : { "isSuccess": false, "code": 2102, "message": "회의 주제를 입력해주세요" },
+
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 아이디입니다." },
@@ -44,9 +49,13 @@ module.exports = {
     SIGNIN_INACTIVE_ACCOUNT : { "isSuccess": false, "code": 3005, "message": "비활성화 된 계정입니다. 고객센터에 문의해주세요." },
     SIGNIN_WITHDRAWAL_ACCOUNT : { "isSuccess": false, "code": 3006, "message": "탈퇴 된 계정입니다. 고객센터에 문의해주세요." },
 
+    MEETING_ID_NOT_EXISTS : { "isSuccess": false, "code": 3100, "message": "해당 ID의 회의가 존재하지 않습니다." },
+    MEETING_REDUNDANT_NAME : { "isSuccess": false, "code": 3101, "message": "중복된 회의 이름입니다." },
+    MEETING_NO_MATCHING : { "isSuccess": false, "code": 3102, "message": "삭제할 매칭 정보(회의)가 없습니다." },
+
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},
- 
+    TRANSACTION_ERROR : { "isSuccess": false, "code": 4002, "message": "트랜잭션 도중 에러"},
  
 }

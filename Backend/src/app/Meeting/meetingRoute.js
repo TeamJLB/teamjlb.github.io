@@ -5,29 +5,21 @@ module.exports = function(app){
     // 1. 전체 회의 리스트 API
     app.get('/meetings/allList', jwtMiddleware, meeting.getAllMeetings);
 
-    // 1. 유저 생성 (회원가입) API
-    // app.post('/meetings/signup', meeting.postmeetings);
+    // 2. 본인이 속한 회의 검색 API
+    app.get('/meetings/myMeeting', jwtMiddleware, meeting.getMeetingById);
 
-    // 2. 로그인 하기 (JWT 생성) API
-    // app.post('/meetings/login', meeting.login);
+    // 3. 새 회의 개설 API
+    app.post('/meetings/newMeeting', jwtMiddleware, meeting.postNewMeeting);
 
-    // 3. 중복 아이디 체크하기 API
-    // app.get('/meetings', meeting.getmeetingById);
+    // 4. 기존 회의 다시 개설 API
+    app.post('/meetings/openMeeting/:meetingId', jwtMiddleware, meeting.postNewSubMeeting);
 
-    // 회원 정보 수정 API (JWT 검증 및 Validation - 메소드 체이닝 방식으로 jwtMiddleware 사용)
-    // app.patch('/app/meetings/:meetingId', jwtMiddleware, meeting.patchmeetings)
+    // 5. 새 회의 참가 API
+    app.post('/meetings/newMeeting/:meetingId', jwtMiddleware, meeting.joinNewMeeting);
 
-    // 유저 조회 API (+ 검색)
-    // app.get('/app/meetings',meeting.getmeetings);
+    // 6. 회의 삭제 API
+    app.delete('/meetings/myMeeting/:meetingId', jwtMiddleware, meeting.deleteMeeting);
 
-    // 특정 유저 조회 API
-    // app.get('/app/meetings/:meetingId', meeting.getmeetingById);
-
+    // 7. 회의 히스토리 리스트 API
+    app.get('/meetings/meetingHistory', jwtMiddleware, meeting.getSubMeetingHistoryById);
 };
-
-
-// TODO: 자동로그인 API (JWT 검증 및 Payload 내뱉기)
-// JWT 검증 API
-// app.get('/app/auto-login', jwtMiddleware, meeting.check);
-
-// TODO: 탈퇴하기 API

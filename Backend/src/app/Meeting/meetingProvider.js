@@ -15,78 +15,77 @@ exports.retrieveAllMeeting = async function (userIdx) {
   // connection 해제
   connection.release();
 
-  return allMeetingListResult;
+  return response(baseResponse.SUCCESS, allMeetingListResult);
 };
 
-exports.retrievemeeting = async function (meetingId) {
+exports.retrieveMeeting = async function (userIdx, meetingId) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const meetingResult = await meetingDao.selectmeetingId(connection, meetingId);
+  const meetingResult = await meetingDao.selectMeetingById(connection, [userIdx, meetingId]);
 
   connection.release();
 
   if (meetingResult.length > 0)
-    return response(baseResponse.SUCCESS, {'unique': false});
+    return response(baseResponse.SUCCESS, meetingResult);
   else
-    return response(baseResponse.SUCCESS, {'unique': true});
+    return errResponse(baseResponse.MEETING_ID_NOT_EXISTS);
 
   // return meetingResult[0]; // 한 명의 유저 정보만을 불러오므로 배열 타입을 리턴하는 게 아닌 0번 인덱스를 파싱해서 오브젝트 타입 리턴
 };
 
-exports.retrievemeetingList = async function (email) {
-
-  //email을 인자로 받는 경우와 받지 않는 경우를 구분하여 하나의 함수에서 두 가지 기능을 처리함
-
-  if (!email) {
-    // connection 은 db와의 연결을 도와줌
-    const connection = await pool.getConnection(async (conn) => conn);
-    // Dao 쿼리문의 결과를 호출
-    const meetingListResult = await meetingDao.selectmeeting(connection);
-    // connection 해제
-    connection.release();
-
-    return meetingListResult;
-
-  } else {
-    const connection = await pool.getConnection(async (conn) => conn);
-    const meetingListResult = await meetingDao.selectmeetingEmail(connection, email);
-    connection.release();
-
-    return meetingListResult;
-  }
-};
-
-exports.idCheck = async function (id) {
+exports.meetingCheckById = async function (meeting_id) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const idCheckResult = await meetingDao.selectmeetingId(connection, id);
+  const idCheckResult = await meetingDao.findMeetingId(connection, meeting_id);
   connection.release();
 
   return idCheckResult;
 };
 
-exports.emailCheck = async function (email) {
+exports.matchingCheck = async function (userIdx, meeting_id) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const emailCheckResult = await meetingDao.selectmeetingEmail(connection, email);
+  const matchCheckResult = await meetingDao.findAllMatchingId(connection, [userIdx, meeting_id]);
   connection.release();
 
-  return emailCheckResult;
+  return matchCheckResult;
 };
 
-exports.passwordCheck = async function (selectmeetingPasswordParams) {
+exports.retrieveAllSubMeetingHistory = async function (userIdx, meeting_id) {
   const connection = await pool.getConnection(async (conn) => conn);
-  // 쿼리문에 여러개의 인자를 전달할 때 selectmeetingPasswordParams와 같이 사용합니다.
-  const passwordCheckResult = await meetingDao.selectmeetingPassword(
-      connection,
-      selectmeetingPasswordParams
-  );
-  connection.release();
-  // return passwordCheckResult[0];
-  return passwordCheckResult;
-};
 
-exports.accountCheck = async function (id) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const meetingAccountResult = await meetingDao.selectmeetingAccount(connection, id);
+  // 서브 회의 리스트 가져오기
+  const allSubMeetingHistoryResult = await meetingDao.selectAllSubMeetingHistory(connection, meeting_id);
+  console.log(allSubMeetingHistoryResult);
+
+  let sub_meeting_id;
+  for (const result of allSubMeetingHistoryResult) {
+    sub_meeting_id = result.sub_meeting_id;
+    // console.log(sub_meeting_id);
+
+    // 각 서브회의 id 들로 참가자들 가져오기
+    let participants = []
+    const getAllParticipantResult = await meetingDao.selectAllParticipantBySubMeetingId(connection, sub_meeting_id);
+    // console.log(`sub_id : ${sub_meeting_id}, participants : ${getAllParticipantResult}`);
+    // console.log(getAllParticipantResult);
+    getAllParticipantResult.forEach((participant) => {
+      participants.push(participant.user_name);
+    })
+    // console.log(participants);
+
+    // 각 서브회의 id 들로 키워드들 가져오기
+    let keywords = []
+    const getAllKeywordResult = await meetingDao.selectAllKeywordBySubMeetingId(connection, sub_meeting_id);
+    // console.log(`sub_id : ${sub_meeting_id}, keywords : ${getAllKeywordResult}`);
+    // console.log(getAllKeywordResult);
+    getAllKeywordResult.forEach((keyword) => {
+      keywords.push(keyword.keyword_content);
+    })
+    // console.log(keywords);
+
+    result['participants'] = participants;
+    result['keywords'] = keywords;
+  }
+  // console.log(allSubMeetingHistoryResult);
+
   connection.release();
 
-  return meetingAccountResult;
+  return response(baseResponse.SUCCESS, allSubMeetingHistoryResult);
 };
