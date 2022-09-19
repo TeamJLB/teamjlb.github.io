@@ -77,3 +77,23 @@ exports.getAllMemos = async function (req, res) {
 
     return res.send(memoListResponse);
 };
+
+
+/**
+ * API No. 5
+ * API Name : 키워드 추가 API
+ * [POST] '/memos/keywords'
+ * header : x-access-token
+ * body : memo_id, keywords
+ */
+exports.postKeywords = async function (req, res) {
+    const userIdxFromJWT = req.verifiedToken.user_id;
+
+    const memo_id = req.body.memo_id;
+    const keywords = req.body.keywords;
+
+    if (!memo_id) return res.send(errResponse(baseResponse.MEMO_ID_EMPTY));
+
+    const addKeywordInfo = await memoService.addKeywords(userIdxFromJWT, memo_id, keywords);
+    return res.send(addKeywordInfo);
+};

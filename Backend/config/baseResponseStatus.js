@@ -43,6 +43,12 @@ module.exports = {
     // ---
     SUBMEETING_ID_EMPTY : { "isSuccess": false, "code": 2200, "message": "서브회의 ID를 입력해주세요" },
 
+    // ---
+    MATCH_ID_EMPTY : { "isSuccess": false, "code": 2300, "message": "매칭 ID를 입력해주세요" },
+
+    // ---
+    MEMO_ID_EMPTY : { "isSuccess": false, "code": 2400, "message": "매모 ID를 입력해주세요" },
+
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 아이디입니다." },
@@ -55,6 +61,8 @@ module.exports = {
     MEETING_ID_NOT_EXISTS : { "isSuccess": false, "code": 3100, "message": "해당 ID의 회의가 존재하지 않습니다." },
     MEETING_REDUNDANT_NAME : { "isSuccess": false, "code": 3101, "message": "중복된 회의 이름입니다." },
     MEETING_NO_MATCHING : { "isSuccess": false, "code": 3102, "message": "삭제할 매칭 정보(회의)가 없습니다." },
+
+    MATCHING_NO_RESULT : { "isSuccess": false, "code": 3200, "message": "해당 match_id의 매칭 정보가 없습니다." },
 
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
