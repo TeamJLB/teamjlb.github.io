@@ -40,6 +40,9 @@ module.exports = {
     MEETING_NAME_EMPTY : { "isSuccess": false, "code": 2101, "message": "회의 이름을 입력해주세요" },
     MEETING_TOPIC_EMPTY : { "isSuccess": false, "code": 2102, "message": "회의 주제를 입력해주세요" },
 
+    // ---
+    SUBMEETING_ID_EMPTY : { "isSuccess": false, "code": 2200, "message": "서브회의 ID를 입력해주세요" },
+
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 아이디입니다." },
