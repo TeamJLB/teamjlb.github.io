@@ -75,11 +75,12 @@ exports.addNewSubMeeting = async function (userIdx, meeting_id, new_topic) {
 
             // 서브 회의와 회원 매칭하기
             const matchMeetingWithUser = await meetingDao.makeMatching(connection, [userIdx, added_subMeeting_id]);
-            console.log(`매칭된 id : ${matchMeetingWithUser[0].insertId}`);
+            const added_match_id = matchMeetingWithUser[0].insertId;
+            console.log(`매칭된 id : ${added_match_id}`);
 
             // [정상적으로 처리되면 트랜잭션 완료]
             await connection.commit();
-            return response(baseResponse.SUCCESS, {"added_subMeeting_id": added_subMeeting_id});
+            return response(baseResponse.SUCCESS, {"added_subMeeting_id": added_subMeeting_id, "added_match_id" : added_match_id});
         } catch (err) {
             // [비정상적으로 처리되면 트랜잭션 롤백]
             await connection.rollback();

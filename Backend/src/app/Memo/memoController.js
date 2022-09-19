@@ -7,7 +7,7 @@ const {response, errResponse} = require("../../../config/response");
 /**
  * API No. 1
  * API Name : 새 메모 추가 API
- * [POST] '/memos/newMemo'
+ * [POST] '/memos/memo'
  * header : x-access-token
  * body : subMeeting_id, content
  */
@@ -26,13 +26,13 @@ exports.postNewMemo = async function (req, res) {
 /**
  * API No. 2
  * API Name : 메모 조회 API
- * [GET] /memos/memo/?subMeetingId=
+ * [GET] /memos/memo/:subMeetingId
  * header : x-access-token
- * query string : subMeetingId
+ * path variable : subMeetingId
  */
 exports.getMemoById = async function (req, res) {
     const userIdxFromJWT = req.verifiedToken.user_id;
-    const sub_meeting_id = req.query.subMeetingId;
+    const sub_meeting_id = req.params.subMeetingId;
 
     if (!sub_meeting_id) return res.send(errResponse(baseResponse.SUBMEETING_ID_EMPTY));
 

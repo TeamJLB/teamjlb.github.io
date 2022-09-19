@@ -7,13 +7,13 @@ const {response, errResponse} = require("../../../config/response");
 /**
  * API No. 1
  * API Name : 요약 내용 조회 API
- * [GET] /summaries/summary/:subMeetingId=
+ * [GET] /summaries/summary/:subMeetingId
  * header : x-access-token
- * query string : subMeetingId
+ * path variable : subMeetingId
  */
 exports.getSummaryById = async function (req, res) {
     const userIdxFromJWT = req.verifiedToken.user_id;
-    const sub_meeting_id = req.query.subMeetingId;
+    const sub_meeting_id = req.params.subMeetingId;
 
     if (!sub_meeting_id) return res.send(errResponse(baseResponse.SUBMEETING_ID_EMPTY));
 
@@ -45,7 +45,7 @@ exports.postSummary = async function (req, res) {
 /**
  * API No. 3
  * API Name : 요약 수정 API
- * [POST] '/summaries/summary'
+ * [PATCH] '/summaries/summary'
  * header : x-access-token
  * body : match_id, summary_content
  */
