@@ -14,4 +14,8 @@ module.exports = function(app){
     // 4. 한 회의에 대한 모든 메모리스트 조회 API
     app.get('/memos/memoList/:meetingId', jwtMiddleware, memo.getAllMemos);
 
+
+    // TODO 메모 추가 시, 바로 키워드를 뽑아서 keyword db에 넣기?
+    // 5. 키워드 추가 API
+    app.post('/memos/keywords', jwtMiddleware, memo.postKeywords);
 };

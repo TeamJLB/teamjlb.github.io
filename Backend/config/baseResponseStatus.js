@@ -46,6 +46,9 @@ module.exports = {
     // ---
     MATCH_ID_EMPTY : { "isSuccess": false, "code": 2300, "message": "매칭 ID를 입력해주세요" },
 
+    // ---
+    MEMO_ID_EMPTY : { "isSuccess": false, "code": 2400, "message": "매모 ID를 입력해주세요" },
+
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 아이디입니다." },

@@ -11,6 +11,7 @@ module.exports = function(app){
     // 3. 새 회의 개설 API
     app.post('/meetings/newMeeting', jwtMiddleware, meeting.postNewMeeting);
 
+    // TODO 회의가 열려있는지 확인하고, 안 열려있으면 새로 만들고, 열려있으면 참가
     // 4. 기존 회의 다시 개설 API
     app.post('/meetings/openMeeting/:meetingId', jwtMiddleware, meeting.postNewSubMeeting);
 

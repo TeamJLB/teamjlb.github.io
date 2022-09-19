@@ -44,10 +44,22 @@ async function selectAllMemoById(connection, meeting_id) {
 }
 
 
+// 키워드 추가
+async function insertKeywordInfo(connection, insertKeywordParams) {
+    const insertKeywordInfoQuery = `
+        INSERT INTO Keyword (memo_id, keyword_content) 
+        VALUE (?, ?);
+  `;
+    const insertKeywordInfoRow = await connection.query(insertKeywordInfoQuery, insertKeywordParams);
+
+    return insertKeywordInfoRow;
+}
+
 module.exports = {
     insertMemoInfo,
     selectMemoById,
     updateMemoInfo,
     selectAllMemoById,
+    insertKeywordInfo,
 
 };
