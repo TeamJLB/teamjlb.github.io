@@ -1,0 +1,76 @@
+.chatRoom {
+  position: relative;
+  width: 24%;
+  height: 100%;
+  background-color: #e9f2f9;
+  border-left: 2px solid #c8c8c8;
+}
+
+.chatView h3 {
+  font-size: 20px;
+  padding: 20px 10px 10px 10px;
+  font-weight: 500;
+  align-content: center;
+  text-align: center;
+}
+
+.chatRoom .chatBox {
+  position: absolute;
+  bottom: 150px;
+  left: 0;
+
+  width: 100%;
+  height: calc(100% - 150px);
+  padding: 5px 10px;
+
+  display: flex;
+  flex-direction: column-reverse;
+
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  color: var(--eerie-black);
+}
+
+.chatRoom .chatBox li {
+  letter-spacing: 1px;
+  margin-bottom: 7px;
+}
+
+.chatRoom .chatForm {
+  position: absolute;
+  bottom: 1px;
+  left: 0;
+
+  width: 100%;
+  height: 150px;
+  background-color: white;
+  border-top: 1px solid silver;
+}
+
+.chatRoom .chatForm input {
+  position: relative;
+
+  width: 80%;
+  height: 100%;
+  padding: 8px 10px;
+
+  letter-spacing: 1px;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 15px;
+
+  background-color: white;
+}
+
+.chatRoom .chatForm button {
+  position: absolute;
+  width: 20%;
+  height: 100%;
+  text-align: center;
+  background: none;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 3px;
+  border: none;
+  transition: all 0.25s ease-in-out;
+  background-color: white;
+}
