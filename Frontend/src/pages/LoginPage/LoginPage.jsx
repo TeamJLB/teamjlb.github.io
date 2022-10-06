@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Button,Typography , Link} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import './LoginPage.css';
+import meetingListPage from '../MeetingListPage/MeetingListPage';
 
 
 const LoginPage = ()=> {
@@ -21,7 +22,7 @@ const LoginPage = ()=> {
     const handleLogin = (e) => {
 
         setLoading(true);
-        axios.post("http://3.39.169.146/app/users/login",{
+        axios.post("http://3.39.169.146/users/login",{
             id: loginid,
             password: loginpw
         })
@@ -31,7 +32,17 @@ const LoginPage = ()=> {
                 console.log("code : " + res.data.code);
                 switch (res.data.code){
                     case 1000 : {
-                        alert("로그인 성공");
+                        alert('로그인 성공');
+                        const userToken = res.data.result.jwt;
+                        console.log(userToken);
+                        localStorage.setItem('refresh-token',userToken['refresh-token']);
+                        if(userToken){
+                            axios.defaults.headers.common['Authorization'] = `Bearer ${userToken}`;
+                        }else{
+                            delete axios.defaults.headers.common['Authorization']
+                        }
+                        navigate('/meetingList',{state : {userToken}});
+                        // meetingListPage(userToken);
                         break;
                     }
                     case 3003 : {

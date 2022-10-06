@@ -8,6 +8,7 @@ const RegisterPage = () =>{
         id : "",
         checkid : false,
         password : "",
+        validationPW : false,
         checkpw : "",
         email : "",
         phone : ""
@@ -22,9 +23,9 @@ const RegisterPage = () =>{
         tel2: "",
         tel3: ""
     })
-    const navigator = useNavigate();
+    const navigate = useNavigate();
     const handleIDDuplicate = (e) =>{
-        const url = `http://3.39.169.146/app/users?id=${userInfo.id}`
+        const url = `http://3.39.169.146/users?id=${userInfo.id}`
         axios.get(url)
             .then(function (res){
                 console.log(res);
@@ -67,6 +68,7 @@ const RegisterPage = () =>{
             console.log(...emaildata);
             setEmailData({
                 ...emaildata,
+                emaildata : "",
                 emailwriter : true
             });
         }else{
@@ -84,6 +86,7 @@ const RegisterPage = () =>{
             email : `${emaildata.emaildata1}@${emaildata.emaildata2}`
         });
     },[emaildata]);
+
     const changeEmail = (e) =>{
         setEmailData({
             ...emaildata,
@@ -102,7 +105,7 @@ const RegisterPage = () =>{
     }
     const handleCancel = () =>{
         if(window.confirm("회원가입을 취소하시겠습니까?")){
-            navigator('/Login');
+            navigate('/Login');
         }else{
             console.log("cancel");
         }
@@ -112,6 +115,36 @@ const RegisterPage = () =>{
            ...userInfo,
            [e.target.id] : e.target.value
         });
+        if (e.target.id == "password"){
+            validatePassword(e.target.value);
+        }
+        if (e.target.id == "checkpw"){
+            checkpassword(e.target.value);
+        }
+    }
+    const checkpassword = (value)=>{
+        const checkpwPTag = document.getElementById("checkpwPTag");
+        if(userInfo.password == userInfo.checkpw){
+            checkpwPTag.innerText=""
+        }
+        else{
+            checkpwPTag.innerText="비밀번호와 일치하지 않습니다."
+        }
+    }
+    const validatePassword = (value) =>{
+        var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/
+        // 형식에 맞는 경우 true 리턴
+        console.log('비밀번호 유효성 검사 :: ', regExp.test(value));
+        const vaildationTagP = document.getElementById("validation password");
+        if(!regExp.test(value)){
+            vaildationTagP.innerText = "8-10자리 영어, 숫자조합으로 입력해주세요";
+        }else{
+            setUserInfo({
+                ...userInfo,
+                validationPW : true
+            })
+            vaildationTagP.innerText = "";
+        }
     }
     const inputtelChange = (e) => {
         setTeldata({
@@ -154,8 +187,8 @@ const RegisterPage = () =>{
 
     const handleSubmit = () =>{
         console.log(userInfo);
-        if(userInfo.checkid){
-            axios.post("http://3.39.169.146/app/users/signup",{
+        if(userInfo.checkid && userInfo.validationPW && userInfo.password == userInfo.checkpw){
+            axios.post("http://3.39.169.146/users/signup",{
                 name : userInfo.name,
                 id : userInfo.id,
                 password : userInfo.password,
@@ -168,7 +201,7 @@ const RegisterPage = () =>{
                         switch (res.data.code){
                             case 1000 : {
                                 alert("회원가입이 완료되었습니다");
-                                navigator('/Login');
+                                navigate('/Login');
                                 break;
                             }
                             case 2001 : {
@@ -193,7 +226,7 @@ const RegisterPage = () =>{
                             }
                             case 4000 : {
                                 alert("서버에러 404 Nor Found");
-                                navigator('/Login');
+                                navigate('/Login');
                                 break;
                             }
 
@@ -228,9 +261,12 @@ const RegisterPage = () =>{
             <b>비밀번호</b>
             <input id="password" type="password" required value={userInfo.password} onChange={inputChange}/>
             <br/>
+            <p>8-10자리 영문,숫자 조합</p>
+            <p id="validation password"></p>
             <b>비밀번호 확인</b>
             <input id="checkpw" type="password" required value={userInfo.checkpw} onChange={inputChange}/>
             <br/>
+            <p id="checkpwPTag"></p>
             <b>이메일</b>
             <input type="text" required value={emaildata.emaildata1} onChange={changeEmail}/>@
             { emaildata.emailwriter ? <input type='text' name='signup_email_write' maxLength='20' value={emaildata.emaildata2} onChange={changeEmaildata2}/>

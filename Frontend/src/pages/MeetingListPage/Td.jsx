@@ -2,7 +2,7 @@ import React from 'react';
 
 const Td = ({item, handleEnterHistory, handleEnterMeeting, handleRemove}) =>{
     const onRemove = () =>{
-        handleRemove(item.id);
+        handleRemove(item.meeting_id);
     }
     const onEnterHistory = () => {
         handleEnterHistory(item);
@@ -12,9 +12,9 @@ const Td = ({item, handleEnterHistory, handleEnterMeeting, handleRemove}) =>{
     }
     return(
         <tr>
-            <td>{item.id}</td>
-            <td>{item.name}</td>
-            <td>{item.email}</td>
+            <td>{item.createdAt.split('T')[0]}</td>
+            <td>{item.meeting_id}</td>
+            <td>{item.meeting_name}</td>
             <td>
                 <button onClick={onEnterHistory}>회의 히스토리</button>
             </td>

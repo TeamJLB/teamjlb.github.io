@@ -5,9 +5,9 @@ const Tr = ({info, handleEnterHistory, handleEnterMeeting, handleRemove}) => {
     return(
         <>
         {
-            info.map(item =>{
+            info?.map(item =>{
                 return(
-                    <Td key={item.id} item={item} handleEnterHistory={handleEnterHistory} handleEnterMeeting={handleEnterMeeting} handleRemove={handleRemove}/>
+                    <Td key={item.meeting_id} item={item} handleEnterHistory={handleEnterHistory} handleEnterMeeting={handleEnterMeeting} handleRemove={handleRemove}/>
                 )
             })
         }

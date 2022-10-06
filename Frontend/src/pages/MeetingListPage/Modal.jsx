@@ -25,6 +25,7 @@ const Modal = ({handleAddCancel, handleAddSubmit, handleJoinSubmit}) =>{
     const handleJoinMeetingCancel = () =>{
         setJoinMeetingModalOn(false);
     }
+    console.log('modal');
 return(
     <div className="modal-bg">
         <div className="modal">
