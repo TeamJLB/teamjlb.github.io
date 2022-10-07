@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import HistoryTable from "../../components/HistoryTable";
-import SummaryModal from "../../components/SummaryModal";
+import HistoryTable from "../../components/History/HistoryTable";
 import Modal from "../../components/Modal";
 
 const HistoryPage = () => {
