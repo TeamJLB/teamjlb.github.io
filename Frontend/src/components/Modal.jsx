@@ -1,11 +1,11 @@
 import React from "react";
-import "./Modal.css";
+import styles from "./Modal.module.css";
 
 const Modal = (props) => {
   const { isOpen, close, header, body } = props;
 
   return (
-    <div className={isOpen ? "opened modal" : "modal"}>
+    <div className={`${styles.modal} ${isOpen && styles.opened}`}>
       {isOpen ? (
         <section>
           <header>

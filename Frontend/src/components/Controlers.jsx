@@ -1,19 +1,19 @@
-import "./Controlers.css";
+import styles from "./Controlers.module.css";
 
 const Controlers = () => {
   return (
-    <div className="controlers">
-      <div className="controlers_col">
-        <div className="controlers_col1">
-          <div className="buttons">
-            <button className="muteBtn">뮤트</button>
-            <button className="cameraBtn">카메라</button>
-            <button className="chatBtn">채팅</button>
-            <button className="memoBtn">메모</button>
+    <div className={styles.controlers}>
+      <div className={styles.controlers_col}>
+        <div className={styles.controlers_col1}>
+          <div className={styles.buttons}>
+            <button className={styles.muteBtn}>뮤트</button>
+            <button className={styles.cameraBtn}>카메라</button>
+            <button className={styles.chatBtn}>채팅</button>
+            <button className={styles.memoBtn}>메모</button>
           </div>
         </div>
-        <div className="controlers_col2">
-          <button className="leave">회의 나가기</button>
+        <div className={styles.controlers_col2}>
+          <button className={styles.leave}>회의 나가기</button>
         </div>
       </div>
     </div>

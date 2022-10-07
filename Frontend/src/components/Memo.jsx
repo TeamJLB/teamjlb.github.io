@@ -1,14 +1,14 @@
-import "./Memo.css";
+import styles from "./Memo.module.css";
 
 const Memo = () => {
   return (
-    <div className="memo">
-      <div className="memoView">
-        <div className="memoTitle">
+    <div className={styles.memo}>
+      <div className={styles.memoView}>
+        <div className={styles.memoTitle}>
           <h3>Memo</h3>
         </div>
-        <div className="memoArea">
-          <textarea className="memoText" placeholder="메모 작성" />
+        <div className={styles.memoArea}>
+          <textarea className={styles.memoText} placeholder="메모 작성" />
         </div>
       </div>
     </div>
