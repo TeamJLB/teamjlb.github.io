@@ -4,8 +4,9 @@ import { MeetingListPage } from "./pages/MeetingListPage";
 import { HistoryPage } from "./pages/HistoryPage";
 import { SummaryPage } from "./pages/HistoryPage";
 import { MemoPage } from "./pages/HistoryPage";
-import { RegisterPage } from "./pages/RegisterPage"
-import { LoginPage } from "./pages/LoginPage"
+import { RegisterPage } from "./pages/RegisterPage";
+import { LoginPage } from "./pages/LoginPage";
+import { MeetingRoomPage } from "./pages/MeetingRoomPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/history/memo" element={<MemoPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/meetingRoom" element={<MeetingRoomPage />} />
       </Routes>
     </Router>
   );

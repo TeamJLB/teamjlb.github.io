@@ -6,7 +6,11 @@
   bottom: 0;
   left: 0;
   z-index: 99;
-  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  /* 팝업이 열릴때 스르륵 열리는 효과 */
+  animation: modal-bg-show 0.3s;
+  opacity: 0.8;
 }
 .modal button {
   outline: none;
@@ -41,11 +45,4 @@
   padding: 16px;
   border-bottom: 1px solid #dee2e6;
   border-top: 1px solid #dee2e6;
-}
-
-.modal.opened {
-  display: flex;
-  align-items: center;
-  /* 팝업이 열릴때 스르륵 열리는 효과 */
-  animation: modal-bg-show 0.3s;
 }

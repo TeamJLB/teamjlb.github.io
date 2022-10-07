@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import HistoryTable from "../../components/HistoryTable";
-import SummaryModal from "../../components/SummaryModal";
-import Modal from "../../components/Modal";
+import HistoryTable from "../../components/History/HistoryTable";
+import Modal from "../../components/UI/Modal";
 
 const HistoryPage = () => {
   const [meetingInfo, setMeetingInfo] = useState();
@@ -18,14 +17,6 @@ const HistoryPage = () => {
     console.log(`아이디 ${id}의 회의 메모`);
   };
 
-  const closeModal = () => {
-    setModalOn(false);
-  };
-
-  const clickModal = () => {
-    setModalOn(true);
-  };
-
   useEffect(() => {
     axios
       .get("https://jsonplaceholder.typicode.com/users")
@@ -39,12 +30,13 @@ const HistoryPage = () => {
         clickSummary={clickSummary}
         clickMemo={clickMemo}
       />
-      <Modal
-        isOpen={modalOn}
-        close={closeModal}
-        header="모달 테스트"
-        body="모달 테스트"
-      />
+      {modalOn && (
+        <Modal
+          setModalOn={setModalOn}
+          header="모달 테스트"
+          body="모달 테스트"
+        />
+      )}
     </>
   );
 };
