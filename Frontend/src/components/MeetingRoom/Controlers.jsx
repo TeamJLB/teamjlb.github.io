@@ -1,15 +1,22 @@
 import styles from "./Controlers.module.css";
 
-const Controlers = () => {
+const Controlers = (props) => {
+  const { setChatOn } = props;
+
+  const chatHandler = () => {
+    setChatOn((prev) => !prev);
+  };
+
   return (
     <div className={styles.controlers}>
       <div className={styles.controlers_col}>
         <div className={styles.controlers_col1}>
           <div className={styles.buttons}>
-            <button className={styles.muteBtn}>뮤트</button>
+            <button className={styles.muteBtn}>마이크</button>
             <button className={styles.cameraBtn}>카메라</button>
-            <button className={styles.chatBtn}>채팅</button>
-            <button className={styles.memoBtn}>메모</button>
+            <button className={styles.chatBtn} onClick={chatHandler}>
+              채팅
+            </button>
           </div>
         </div>
         <div className={styles.controlers_col2}>

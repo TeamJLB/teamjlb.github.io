@@ -7,7 +7,7 @@
 
 .streamBox .streams {
   width: 100%;
-  height: calc(100% - 58px);
+  height: 50%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;

@@ -19,7 +19,8 @@
   padding: 20px 10px;
   align-content: center;
   text-align: center;
-  height: 50px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .memoArea {
@@ -34,4 +35,8 @@
   outline: none;
   letter-spacing: 1px;
   padding: 20px;
+}
+
+.logBtn {
+  height: 30px;
 }
