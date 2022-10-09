@@ -1,4 +1,4 @@
-.controlers {
+.controllers {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -12,7 +12,7 @@
   justify-content: space-between;
 }
 
-.controlers .controlers_col {
+.controllers .controllers_col {
   width: 100%;
   height: 100%;
 
@@ -20,21 +20,21 @@
   align-items: center;
 }
 
-.controlers_col1 {
+.controllers_col1 {
   padding-left: 50px;
   width: 80%;
 }
 
-.controlers_col2 {
+.controllers_col2 {
   width: 20%;
 }
 
-.controlers .buttons {
+.controllers .buttons {
   display: flex;
   justify-content: center;
 }
 
-.controlers .buttons button {
+.controllers .buttons button {
   padding: 5px 15px;
   margin-right: 10px;
   background: none;
@@ -43,7 +43,7 @@
   transition: all 0.2s ease-in-out;
 }
 
-.controlers .leave {
+.controllers .leave {
   padding: 10px;
   font-size: 14px;
   border: none;

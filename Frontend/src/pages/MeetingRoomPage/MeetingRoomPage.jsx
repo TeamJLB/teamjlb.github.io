@@ -6,10 +6,8 @@ import styles from "./MeetingRoomPage.module.css";
 const MeetingRoomPage = () => {
   return (
     <div className={styles.meetingRoomPage}>
-      <div className={styles.room}>
-        <StreamBox />
-        <Memo />
-      </div>
+      <StreamBox />
+      <Memo />
     </div>
   );
 };
