@@ -6,15 +6,19 @@ import Modal from "../../components/UI/Modal";
 const HistoryPage = () => {
   const [meetingInfo, setMeetingInfo] = useState();
   const [modalOn, setModalOn] = useState(false);
+  const [header, setHeader] = useState("");
+  const [contents, setContents] = useState("");
 
   const clickSummary = (id) => {
     setModalOn(true);
-    console.log(`아이디 ${id}의 회의 요약본`);
+    setHeader("회의 요약본");
+    setContents("회의 요약본 내용");
   };
 
   const clickMemo = (id) => {
     setModalOn(true);
-    console.log(`아이디 ${id}의 회의 메모`);
+    setHeader("메모");
+    setContents("메모 내용");
   };
 
   useEffect(() => {
@@ -22,6 +26,10 @@ const HistoryPage = () => {
       .get("https://jsonplaceholder.typicode.com/users")
       .then((res) => setMeetingInfo(res.data));
   }, []);
+
+  const closeHandler = () => {
+    setModalOn(false);
+  };
 
   return (
     <>
@@ -31,11 +39,7 @@ const HistoryPage = () => {
         clickMemo={clickMemo}
       />
       {modalOn && (
-        <Modal
-          setModalOn={setModalOn}
-          header="모달 테스트"
-          body="모달 테스트"
-        />
+        <Modal onClose={closeHandler} header={header} contents={contents} />
       )}
     </>
   );

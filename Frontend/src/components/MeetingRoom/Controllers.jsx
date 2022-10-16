@@ -1,32 +1,20 @@
 import styles from "./Controllers.module.css";
 
 const controllers = (props) => {
-  const { onSoundClick, onCameraClick, setChatOn } = props;
-
-  const chatHandler = () => {
-    setChatOn((prev) => !prev);
-  };
-
-  const soundHandler = () => {
-    onSoundClick();
-  };
-
-  const cameraHandler = () => {
-    onCameraClick();
-  };
+  const { mute, cameraOn, onMuteClick, onCameraClick, onChatClick } = props;
 
   return (
     <div className={styles.controllers}>
       <div className={styles.controllers_col}>
         <div className={styles.controllers_col1}>
           <div className={styles.buttons}>
-            <button className={styles.muteBtn} onClick={soundHandler}>
-              마이크
+            <button className={styles.muteBtn} onClick={onMuteClick}>
+              {mute ? "마이크 켜기" : "마이크 끄기"}
             </button>
-            <button className={styles.cameraBtn} onClick={cameraHandler}>
-              카메라
+            <button className={styles.cameraBtn} onClick={onCameraClick}>
+              {cameraOn ? "카메라 끄기" : "카메라 켜기"}
             </button>
-            <button className={styles.chatBtn} onClick={chatHandler}>
+            <button className={styles.chatBtn} onClick={onChatClick}>
               채팅
             </button>
           </div>
