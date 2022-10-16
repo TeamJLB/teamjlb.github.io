@@ -1,24 +1,21 @@
 import React from "react";
-import { useState } from "react";
+import Button from "./Button";
+import Card from "./Card";
 import styles from "./Modal.module.css";
 
 const Modal = (props) => {
-  const { setModalOn, header, body } = props;
-
-  const closeHandler = () => {
-    setModalOn(false);
-  };
-
+  const { onClose, header, contents } = props;
   return (
-    <div className={styles.modal}>
-      <section>
-        <header>
-          {header}
-          <button onClick={closeHandler}>닫기</button>
-        </header>
-        <main>{body}</main>
-      </section>
-    </div>
+    <>
+      <div className={styles.backdrop} onClick={onClose}></div>
+      <Card className={styles.modal}>
+        <header className={styles.header}>{header}</header>
+        <div className={styles.content}>{contents}</div>
+        <footer className={styles.actions}>
+          <Button onClick={onClose}>닫기</Button>
+        </footer>
+      </Card>
+    </>
   );
 };
 
