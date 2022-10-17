@@ -4,7 +4,8 @@ import HistoryTd from "./HistoryTd";
 const HistoryTable = ({ meetingInfo, clickSummary, clickMemo }) => {
   return (
     <div>
-      <h2>회의 히스토리</h2>
+      {console.log(meetingInfo)}
+      {/* <h2>회의 히스토리</h2>
       <table>
         <thead>
           <tr>
@@ -30,7 +31,7 @@ const HistoryTable = ({ meetingInfo, clickSummary, clickMemo }) => {
               );
             })}
         </tbody>
-      </table>
+      </table> */}
     </div>
   );
 };

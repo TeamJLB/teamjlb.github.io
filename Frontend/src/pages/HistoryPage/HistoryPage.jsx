@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import HistoryTable from "../../components/History/HistoryTable";
 import Modal from "../../components/UI/Modal";
 
 const HistoryPage = () => {
+  const location = useLocation();
+  const config = location.state;
+  const meetingId = location.id;
+
   const [meetingInfo, setMeetingInfo] = useState();
   const [modalOn, setModalOn] = useState(false);
   const [header, setHeader] = useState("");
@@ -23,7 +28,10 @@ const HistoryPage = () => {
 
   useEffect(() => {
     axios
-      .get("https://jsonplaceholder.typicode.com/users")
+      .get(
+        `http://3.39.169.146/meetings/meetingHistory/?meetingId=${meetingId}`,
+        config
+      )
       .then((res) => setMeetingInfo(res.data));
   }, []);
 
