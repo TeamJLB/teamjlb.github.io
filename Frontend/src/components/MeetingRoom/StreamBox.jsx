@@ -11,7 +11,6 @@ const StreamBox = (props) => {
   const [myStream, setMyStream] = useState(null);
   const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
-  const [modalOn, setModalOn] = useState(true);
   // const [roomName, setRoomName] = useState("");
 
   // 임시 데이터
@@ -38,7 +37,7 @@ const StreamBox = (props) => {
         myVideo.current.srcObject = currentStream;
       });
 
-    socket.emit("join_room", roomName, confirm);
+    socket.emit("join-room", roomName, confirm);
 
     socket.on("welcome", () => {
       console.log("누군가 들어옴");

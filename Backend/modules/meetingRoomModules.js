@@ -1,6 +1,6 @@
-exports.createRoom = async (req, res) => {
-  // await
-};
+// exports.createRoom = async (req, res) => {
+//   // await
+// };
 
 exports.io = (socket) => {
   socket.on("join-room", (roomName, done) => {
