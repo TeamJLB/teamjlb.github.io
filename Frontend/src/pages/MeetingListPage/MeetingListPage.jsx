@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 import Meetings from '../../components/Meetings';
 import NewMeeingModal from '../../components/NewMeetingModal';
 import style from './MeetingListPage.module.css';
@@ -10,6 +11,7 @@ const MeetingListPage = () => {
     const location = useLocation();
     const USER_TOKEN = location.state.userToken;
     console.log("meetingList : "+USER_TOKEN);
+    const navigate = useNavigate();
     const [info, setInfo] = useState([]);
     const [modalOn, setModalOn] = useState(false);
     const config = {
@@ -28,7 +30,7 @@ const MeetingListPage = () => {
     }, []);
 
     const handleEnterHistory = (item) =>{
-        alert('enter History');
+        navigate('/history',{state : config});
     }
     const handleEnterMeeting = (item) => {
         alert('enter Meeting');
@@ -44,9 +46,18 @@ const MeetingListPage = () => {
     const handleAddCancel = () =>{
         setModalOn(false);
     }
-    const handleAddSubmit = () =>{
+    const handleAddSubmit = (meetingName, topic) =>{
         setModalOn(false);
-        alert('add hh');
+        // console.log("회의 명 : ",meetingName);
+        // console.log("주제: ",topic)
+        // axios.post("http://3.39.169.146/meetings/newMeeting",{
+        //     metting_name: meetingName,
+        //     topic: topic
+        // },config)
+        //     .then((res)=>{
+        //         console.log(res)
+        //     })
+        // alert('add hh');
     }
 
   return (

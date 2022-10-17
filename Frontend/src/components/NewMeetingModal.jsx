@@ -6,6 +6,10 @@ const NewMeetingModal = ({handleAddCancel, handleAddSubmit}) =>{
     const [todayMonth, setTodayMonth] = useState();
     const [todayDay, setTodayDay] = useState();
     const [dayOfWeek, setDayOfWeek] = useState();
+    const [newInfo, setNewInfo] = useState({
+        meetingName: "",
+        topic: ""
+    })
 
     useEffect(() =>{
         const week = ['일','월','화','수','목','금','토'];
@@ -23,7 +27,14 @@ const NewMeetingModal = ({handleAddCancel, handleAddSubmit}) =>{
 
     const onAddSubmit = (e) =>{
         e.preventDefault();
-        handleAddSubmit();
+        
+        handleAddSubmit(newInfo.meetingName,newInfo.topic);
+    }
+    const inputChange = (e) =>{
+        setNewInfo({
+           ...newInfo,
+           [e.target.id] : e.target.value
+        });
     }
 return(
      <>
@@ -39,9 +50,9 @@ return(
                 <b>회의 개설 날짜</b>
                 &nbsp; <span>{`${todayYear}/${todayMonth}/${todayDay}(${dayOfWeek})`}</span><br/>
                 <b>회의명</b>
-                &nbsp;&nbsp;&nbsp;<input type='text' required/><br/>
+                &nbsp;&nbsp;&nbsp;<input id="meetingName" type='text' required onChange={inputChange}/><br/>
                 <b>회의 주제</b>
-                &nbsp;&nbsp;&nbsp;<input type='text'/><br/>
+                &nbsp;&nbsp;&nbsp;<input id="topic" type='text'onChange={inputChange}/><br/>
             </div>
             <div>
                 <button onClick={onCancel}>취소</button>
