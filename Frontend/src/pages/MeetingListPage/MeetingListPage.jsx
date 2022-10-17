@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import Tr from './Tr';
-import Modal from './Modal';
-import './MeetingListPage.css';
+import Meetings from '../../components/Meetings';
+import NewMeeingModal from '../../components/NewMeetingModal';
+import style from './MeetingListPage.module.css';
 import {useLocation} from 'react-router-dom';
+import Sidebar from "./Sidebar";
 
 const MeetingListPage = () => {
     const location = useLocation();
@@ -37,6 +38,7 @@ const MeetingListPage = () => {
         setInfo(info => info.filter(item => item.meeting_id !== id));
     }
     const handleAddMeeting = () =>{
+        console.log("click")
         setModalOn(true);
     }
     const handleAddCancel = () =>{
@@ -46,37 +48,29 @@ const MeetingListPage = () => {
         setModalOn(false);
         alert('add hh');
     }
-    const handleJoinSubmit = () =>{
-        setModalOn(false);
-        alert('join hh');
-    }
+
   return (
-
-    <div>
-        <div>
-        <h1>전체 회의 리스트</h1>
+    <div className="body">
+        <div className="sidebar">
+            side
         </div>
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>회의 개설 날짜</th>
-                        <th>회의 ID</th>
-                        <th>회의명</th>
-                        <th>회의 히스토리</th>
-                        <th>회의 참가</th>
-                        <th>회의 삭제</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <Tr info={info} handleEnterHistory={handleEnterHistory} handleEnterMeeting={handleEnterMeeting} handleRemove={handleRemove}/>
-                    <tr>
-                        <td onClick={handleAddMeeting}>➕ 새 회의 추가</td>
-                    </tr>
-                </tbody>
-            </table>
-            {modalOn && <Modal handleAddCancel={handleAddCancel} handleAddSubmit={handleAddSubmit} handleJoinSubmit={handleJoinSubmit}/>}
-
+        <div className="content">
+            <div>
+            <h1>전체 회의 리스트</h1>
+            </div>
+            <div>
+                <form>
+                    <input type='text'/>
+                    <button>참가</button>
+                </form>
+            </div>
+            <div className={style.gridscroll}>
+                <div className={style.grid}>
+                    <Meetings info={info} handleEnterHistory={handleEnterHistory} handleEnterMeeting={handleEnterMeeting} handleRemove={handleRemove}/>
+                    <p className={style.makeNewMeetingBtn} onClick={handleAddMeeting}>➕ 회의 만들기</p>
+                </div>
+                {modalOn && <NewMeeingModal handleAddCancel={handleAddCancel} handleAddSubmit={handleAddSubmit}/>}
+            </div>
         </div>
     </div>
   );

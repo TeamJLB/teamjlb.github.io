@@ -10,7 +10,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Button,Typography , Link} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import './LoginPage.css';
-import meetingListPage from '../MeetingListPage/MeetingListPage';
 
 
 const LoginPage = ()=> {
