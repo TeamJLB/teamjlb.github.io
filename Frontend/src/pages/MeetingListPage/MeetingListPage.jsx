@@ -29,8 +29,8 @@ const MeetingListPage = () => {
             .catch(err => console.log(err));
     }, []);
 
-    const handleEnterHistory = (item) =>{
-        navigate('/history',{state : config});
+    const handleEnterHistory = (meetingid) =>{
+        navigate('/history',{state : config, id: meetingid});
     }
     const handleEnterMeeting = (item) => {
         alert('enter Meeting');

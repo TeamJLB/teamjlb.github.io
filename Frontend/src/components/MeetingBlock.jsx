@@ -9,7 +9,7 @@ const MeetingBlock = ({item, handleEnterHistory, handleEnterMeeting, handleRemov
         handleEnterHistory(item);
     }
     const onEnterMeeting = () =>{
-        handleEnterMeeting(item);
+        handleEnterMeeting(item.meeting_id);
     }
     return(
         <div className={style.meetingBlock}>
