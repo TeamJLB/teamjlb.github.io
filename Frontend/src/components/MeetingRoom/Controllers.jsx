@@ -1,7 +1,7 @@
 import styles from "./Controllers.module.css";
 
 const controllers = (props) => {
-  const { mute, cameraOn, onMuteClick, onCameraClick, onChatClick } = props;
+  const { mute, cameraOn, onMuteClick, onCameraClick } = props;
 
   return (
     <div className={styles.controllers}>
@@ -13,9 +13,6 @@ const controllers = (props) => {
             </button>
             <button className={styles.cameraBtn} onClick={onCameraClick}>
               {cameraOn ? "카메라 끄기" : "카메라 켜기"}
-            </button>
-            <button className={styles.chatBtn} onClick={onChatClick}>
-              채팅
             </button>
           </div>
         </div>

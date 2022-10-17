@@ -10,22 +10,20 @@ const Memo = () => {
   };
 
   return (
-    <div className={styles.memo}>
-      <div className={styles.memoView}>
-        <div className={styles.memoTitle}>
-          <div>Memo</div>
-          <button
-            type="button"
-            onClick={clickLogHandler}
-            className={styles.logBtn}
-          >
-            Memo Log
-          </button>
-          {modalOn && <MemoLog setModalOn={setModalOn} />}
-        </div>
-        <div className={styles.memoArea}>
-          <textarea className={styles.memoText} placeholder="메모 작성" />
-        </div>
+    <div className={styles.memoView}>
+      <div className={styles.memoTitle}>
+        <div>Memo</div>
+        <button
+          type="button"
+          onClick={clickLogHandler}
+          className={styles.logBtn}
+        >
+          Memo Log
+        </button>
+        {modalOn && <MemoLog setModalOn={setModalOn} />}
+      </div>
+      <div className={styles.memoArea}>
+        <textarea className={styles.memoText} placeholder="메모 작성" />
       </div>
     </div>
   );
