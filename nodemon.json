@@ -1,0 +1,4 @@
+{
+  "ignore": ["Frontend/*"],
+  "exec": "babel-node ./testServer.js"
+}

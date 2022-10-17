@@ -7,6 +7,9 @@
 }
 
 .memoView {
+  position: relative;
+  width: 40%;
+  border-left: 2px solid #c8c8c8;
   height: 100%;
   align-content: center;
   border: none;
