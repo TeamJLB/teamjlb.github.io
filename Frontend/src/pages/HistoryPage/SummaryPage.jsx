@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const HistoryPage = () => {
+const SummaryPage = () => {
   return (
     <div>
       <h1>요약페이지</h1>
@@ -8,4 +8,4 @@ const HistoryPage = () => {
   );
 };
 
-export default HistoryPage;
+export default SummaryPage;

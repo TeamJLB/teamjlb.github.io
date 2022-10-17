@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import HistoryTable from "../../components/HistoryTable";
-import SummaryModal from "../../components/SummaryModal";
-import Modal from "../../components/Modal";
+import HistoryTable from "../../components/History/HistoryTable";
+import Modal from "../../components/UI/Modal";
 
 const HistoryPage = () => {
   const [meetingInfo, setMeetingInfo] = useState();
   const [modalOn, setModalOn] = useState(false);
+  const [header, setHeader] = useState("");
+  const [contents, setContents] = useState("");
 
   const clickSummary = (id) => {
     setModalOn(true);
-    console.log(`아이디 ${id}의 회의 요약본`);
+    setHeader("회의 요약본");
+    setContents("회의 요약본 내용");
   };
 
   const clickMemo = (id) => {
     setModalOn(true);
-    console.log(`아이디 ${id}의 회의 메모`);
-  };
-
-  const closeModal = () => {
-    setModalOn(false);
-  };
-
-  const clickModal = () => {
-    setModalOn(true);
+    setHeader("메모");
+    setContents("메모 내용");
   };
 
   useEffect(() => {
@@ -32,6 +27,10 @@ const HistoryPage = () => {
       .then((res) => setMeetingInfo(res.data));
   }, []);
 
+  const closeHandler = () => {
+    setModalOn(false);
+  };
+
   return (
     <>
       <HistoryTable
@@ -39,12 +38,9 @@ const HistoryPage = () => {
         clickSummary={clickSummary}
         clickMemo={clickMemo}
       />
-      <Modal
-        isOpen={modalOn}
-        close={closeModal}
-        header="모달 테스트"
-        body="모달 테스트"
-      />
+      {modalOn && (
+        <Modal onClose={closeHandler} header={header} contents={contents} />
+      )}
     </>
   );
 };
