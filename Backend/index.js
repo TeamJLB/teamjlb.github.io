@@ -12,7 +12,7 @@ const io = require("socket.io")(server, {
   },
 });
 
-const PORT = 3000;
+const PORT = 4000;
 
 app.get("/", (req, res) => {
   res.send("Server is Running");
@@ -20,10 +20,18 @@ app.get("/", (req, res) => {
 
 // express().listen(port);
 io.on("connection", (socket) => {
-  socket.on("join-room", (roomName, done) => {
+  socket.on("join-room", (roomName, userId, done) => {
+    if (typeof done === "function") done(userId);
     socket.join(roomName);
     done();
-    socket.to(roomName).emit("welcome");
+
+    // broadcast 추가해야 함
+    socket.to(roomName).emit("user-connected", userId);
+
+    socket.on("disconnect", () => {
+      // broadcast 추가해야함
+      socket.to(roomName).emit("user-disconnected", userId);
+    });
   });
 });
 
