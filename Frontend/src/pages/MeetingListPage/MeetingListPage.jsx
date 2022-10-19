@@ -12,7 +12,8 @@ const MeetingListPage = () => {
     const USER_TOKEN = location.state.userToken;
     const navigate = useNavigate();
     const [info, setInfo] = useState([]);
-    const [inputID, setInputID] = useState('');
+    const [enterID, setEnterID] = useState('');
+    const [searchID, setSearchID] = useState('');
     const [modalOn, setModalOn] = useState(false);
     const config = {
         headers :{
@@ -21,6 +22,7 @@ const MeetingListPage = () => {
     }
     useEffect(()=>{
         loadList();
+        console.log(config);
     }, []);
 
     const loadList = () =>{
@@ -29,8 +31,11 @@ const MeetingListPage = () => {
                 if(res.data.isSuccess){
                     setInfo(res.data.result);
                 }
+                else{
+                    alert(res.data.message);
+                }
             })
-            .catch(err => console.log(err));
+            .catch(err => alert(err));
     }
 
     const handleEnterHistory = (meetingid) =>{
@@ -40,8 +45,17 @@ const MeetingListPage = () => {
         navigate('/meetingRoom', {state: {config : config, meeting_id: meetingID}});
     }
     const handleRemove = (id) =>{
-        alert(`${id} Remove`);
-        setInfo(info => info.filter(item => item.meeting_id !== id));
+        axios.delete(`http://3.39.169.146/meetings/myMeeting/${id}`,config)
+            .then((res)=>{
+                console.log(res);
+                if (res.data.isSuccess){
+                    loadList();
+                }
+                else{
+                    alert(res.data.message);
+                }
+            })
+            .catch(err => alert(err));
 
     }
     const handleAddMeeting = () =>{
@@ -63,17 +77,49 @@ const MeetingListPage = () => {
                 if (res.data.isSuccess){
                     loadList();
                 }
+                else{
+                    alert(res.data.message);
+                }
              })
              
     }
 
-    const searchMeeting = () =>{
-        axios.post(`http://3.39.169.146/meetings/newMeeting/${inputID}`,'',config)
+    const enterMeeting = () =>{
+        axios.post(`http://3.39.169.146/meetings/newMeeting/${enterID}`,'',config)
             .then((res)=>{
                 if (res.data.isSuccess){
-                    handleEnterMeeting(inputID);
+                    handleEnterMeeting(enterID);
+                }
+                else{
+                    alert(res.data.message);
                 }
             })
+    }
+
+    const searchMeeting = () => {
+        if (searchID === ''){
+            loadList();
+        }
+        else{
+            axios.get('http://3.39.169.146/meetings/myMeeting', {
+                params: { meetingId: searchID },
+                headers :{
+                    'x-access-token' : USER_TOKEN
+                    }
+                } )
+                .then((res)=>{
+                    if (res.data.isSuccess){
+                        setInfo(res.data.result);
+                    }
+                    else{
+                        alert(res.data.message);
+                    }
+                    setSearchID('');
+                })
+
+        }
+        
+
     }
 
   return (
@@ -86,9 +132,14 @@ const MeetingListPage = () => {
             <h1>전체 회의 리스트</h1>
             </div>
             <div>
-                ID로 회의 입장하기 
-                <input id="inputMeetingID" type='text' onChange={e=>{setInputID(e.target.value); console.log(inputID)}}/>
-                <button onClick={searchMeeting}>입장</button>
+                내 회의 검색  
+                <input type="text" value={searchID} onChange={e=>setSearchID(e.target.value)}/>
+                <button onClick={searchMeeting}>검색</button>
+            </div>
+            <div>
+                ID로 회의 입장하기   
+                <input id="inputMeetingID" type='text' onChange={e=>setEnterID(e.target.value)}/>
+                <button onClick={enterMeeting}>입장</button>
             </div>
             <div className={style.gridscroll}>
                 <div className={style.grid}>
