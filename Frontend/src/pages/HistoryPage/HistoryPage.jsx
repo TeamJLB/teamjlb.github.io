@@ -6,8 +6,8 @@ import Modal from "../../components/UI/Modal";
 
 const HistoryPage = () => {
   const location = useLocation();
-  const config = location.state;
-  const meetingId = location.id;
+  const config = location.state.config;
+  const meetingId = location.state.meeting_id;
 
   const [meetingInfo, setMeetingInfo] = useState();
   const [modalOn, setModalOn] = useState(false);
