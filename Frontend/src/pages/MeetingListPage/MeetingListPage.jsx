@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
-import Meetings from '../../components/Meetings';
-import NewMeeingModal from '../../components/NewMeetingModal';
+import Meetings from '../../components/MeetingListBlock/Meetings';
+import NewMeeingModal from '../../components/MeetingListBlock/NewMeetingModal';
 import style from './MeetingListPage.module.css';
 import {useLocation} from 'react-router-dom';
 import Sidebar from "./Sidebar";
@@ -19,15 +19,19 @@ const MeetingListPage = () => {
         }
     }
     useEffect(()=>{
+        loadList();
+    }, []);
+
+    const loadList = () =>{
         axios.get('http://3.39.169.146/meetings/allList',config)
             .then(res => {
                 setInfo(res.data.result);
             })
             .catch(err => console.log(err));
-    }, []);
+    }
 
     const handleEnterHistory = (meetingid) =>{
-        navigate('/history',{state : {config : config, id: meetingid}});
+        navigate('/history',{state : {config : config, meeting_id: meetingid}});
     }
     const handleEnterMeeting = (meetingID) => {
         navigate('/meetingRoom', {state: {config : config, meeting_id: meetingID}});
@@ -53,8 +57,7 @@ const MeetingListPage = () => {
              topic: topic
          },config)
              .then((res)=>{
-                 console.log(res);
-                 location.reload();
+                 loadList();
              })
              
     }
