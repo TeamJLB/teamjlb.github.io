@@ -6,7 +6,7 @@ const MeetingBlock = ({item, handleEnterHistory, handleEnterMeeting, handleRemov
         handleRemove(item.meeting_id);
     }
     const onEnterHistory = () => {
-        handleEnterHistory(item);
+        handleEnterHistory(item.meeting_id);
     }
     const onEnterMeeting = () =>{
         handleEnterMeeting(item.meeting_id);

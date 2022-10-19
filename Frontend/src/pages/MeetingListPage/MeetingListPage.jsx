@@ -27,11 +27,11 @@ const MeetingListPage = () => {
     }, []);
 
     const handleEnterHistory = (meetingid) =>{
-        navigate('/history',{state : config, id: meetingid});
+        navigate('/history',{state : {config : config, id: meetingid}});
     }
     const handleEnterMeeting = (meetingID) => {
-        navigate('/meetingRoom',{state: config, meeting_id: meetingID});
-        alert('enter Meeting');
+        navigate('/meetingRoom', {state: {config : config, meeting_id: meetingID}});
+        console.log(meetingID);
     }
     const handleRemove = (id) =>{
         alert(`${id} Remove`);
@@ -49,14 +49,14 @@ const MeetingListPage = () => {
         console.log("회의 명 : ",meetingName);
         console.log("주제: ",topic)
         axios.post("http://3.39.169.146/meetings/newMeeting",{
-        data: {
-             metting_name: meetingName,
+             meeting_name: meetingName,
              topic: topic
-         }},config)
+         },config)
              .then((res)=>{
-                 console.log(res)
+                 console.log(res);
+                 location.reload();
              })
-         alert('add hh');
+             
     }
 
   return (
