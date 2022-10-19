@@ -30,7 +30,7 @@ const MeetingListPage = () => {
         navigate('/history',{state : config, id: meetingid});
     }
     const handleEnterMeeting = (meetingID) => {
-        navigate('/meetingRoom',{meeting_id: meetingID});
+        navigate('/meetingRoom',{state: config, meeting_id: meetingID});
         alert('enter Meeting');
     }
     const handleRemove = (id) =>{
