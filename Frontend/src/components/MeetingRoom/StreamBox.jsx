@@ -1,31 +1,37 @@
 import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
-import Peer from "simple-peer";
+import Peer from "peerjs";
 import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import Modal from "../UI/Modal";
 
-const socket = io.connect("http://localhost:3000/");
+const socket = io.connect("http://localhost:4000/");
 
 const StreamBox = (props) => {
+  const location = useLocation();
+  const userToken = location.state.config.headers["x-access-token"];
+  const roomName = location.state.meeting_id;
+
   const [myStream, setMyStream] = useState(null);
+  const [streamId, setStreamId] = useState("");
+  const [peerId, setPeerId] = useState("");
+
   const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
-  // const [roomName, setRoomName] = useState("");
-
-  // 임시 데이터
-  const roomName = "123";
 
   const videoGrid = useRef();
   const myVideo = useRef();
 
-  const confirm = () => {
-    console.log(roomName);
-    console.log("연결 완료 !!!");
+  let peer;
+  const peers = {};
+
+  const confirm = (userid) => {
+    console.log(roomName, userid, "✅ 연결됨");
   };
 
   useEffect(() => {
-    // const peer = new Peer()
+    peer = new Peer();
 
     navigator.mediaDevices
       .getUserMedia({
@@ -33,16 +39,55 @@ const StreamBox = (props) => {
         video: true,
       })
       .then((currentStream) => {
+        setStreamId(currentStream.id);
         setMyStream(currentStream);
-        myVideo.current.srcObject = currentStream;
+        addVideoStream(myVideo.current, currentStream);
+
+        peer.on("call", (call) => {
+          call.answer(currentStream);
+          const video = document.createElement("video");
+
+          call.on("stream", (userVideoStream) => {
+            addVideoStream(video, userVideoStream);
+          });
+        });
+
+        socket.on("user-connected", (userId) => {
+          console.log("User connected : ", userId);
+          connectNewUser(userId, currentStream);
+        });
       });
 
-    socket.emit("join-room", roomName, confirm);
+    socket.on("user-disconnected", (userId) => {
+      console.log("User disconnectd : ", userId);
+      if (peers[userId]) peers[userId].close();
+    });
 
-    socket.on("welcome", () => {
-      console.log("누군가 들어옴");
+    peer.on("open", (id) => {
+      socket.emit("join-room", roomName, id, confirm);
     });
   }, []);
+
+  const connectNewUser = (userId, stream) => {
+    const call = peer.call(userId, stream);
+    const video = document.createElement("video");
+
+    call.on("stream", (videoStream) => {
+      addVideoStream(video, videoStream);
+    });
+
+    call.on("close", () => {
+      video.remove();
+    });
+
+    peers[userId] = call;
+  };
+
+  const addVideoStream = (video, stream) => {
+    video.srcObject = stream;
+    video.addEventListener("loadedmetadata", () => video.play());
+    videoGrid.current.append(video);
+  };
 
   const handleMuteClick = () => {
     myStream
@@ -58,57 +103,12 @@ const StreamBox = (props) => {
     setCameraOn((prev) => !prev);
   };
 
-  ///// TEMP /////////////////////
-  // const EnteredRoomName = useRef();
-
-  // const closeHandler = () => {
-  //   setModalOn(false);
-  // };
-
-  // const startMedia = () => {
-  //   navigator.mediaDevices
-  //     .getUserMedia({
-  //       audio: true,
-  //       video: true,
-  //     })
-  //     .then((currentStream) => {
-  //       setMyStream(currentStream);
-  //       myVideo.current.srcObject = currentStream;
-  //     });
-
-  //   console.log("연결완료");
-  // };
-
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   console.log(EnteredRoomName.current.value);
-  //   setRoomName(EnteredRoomName.current.value);
-  //   EnteredRoomName.current.value = "";
-  //   setModalOn(false);
-  // };
-
-  // const header = "방 입장하기";
-  // const contents = (
-  //   <div>
-  //     <form onSubmit={handleSubmit}>
-  //       <input
-  //         placeholder="방 이름"
-  //         required
-  //         type="text"
-  //         ref={EnteredRoomName}
-  //       />
-  //       <button>입장</button>
-  //     </form>
-  //   </div>
-  // );
-  // ////////////////
-
   return (
     <>
       <div className={styles.streamBox}>
         <div className={styles.streams}>
           <div ref={videoGrid}>
-            <video ref={myVideo} autoPlay className={styles.myFace} />
+            <video ref={myVideo} muted autoPlay className={styles.myFace} />
             <h3 className={styles.userNickname} />
           </div>
         </div>
