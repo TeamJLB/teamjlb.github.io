@@ -10,7 +10,6 @@ import Sidebar from "./Sidebar";
 const MeetingListPage = () => {
     const location = useLocation();
     const USER_TOKEN = location.state.userToken;
-    console.log("meetingList : "+USER_TOKEN);
     const navigate = useNavigate();
     const [info, setInfo] = useState([]);
     const [modalOn, setModalOn] = useState(false);
@@ -22,9 +21,7 @@ const MeetingListPage = () => {
     useEffect(()=>{
         axios.get('http://3.39.169.146/meetings/allList',config)
             .then(res => {
-                console.log(res.data.result);
                 setInfo(res.data.result);
-                console.log(info);
             })
             .catch(err => console.log(err));
     }, []);
@@ -32,7 +29,8 @@ const MeetingListPage = () => {
     const handleEnterHistory = (meetingid) =>{
         navigate('/history',{state : config, id: meetingid});
     }
-    const handleEnterMeeting = (item) => {
+    const handleEnterMeeting = (meetingID) => {
+        navigate('/meetingRoom',{meeting_id: meetingID});
         alert('enter Meeting');
     }
     const handleRemove = (id) =>{
@@ -48,16 +46,17 @@ const MeetingListPage = () => {
     }
     const handleAddSubmit = (meetingName, topic) =>{
         setModalOn(false);
-        // console.log("회의 명 : ",meetingName);
-        // console.log("주제: ",topic)
-        // axios.post("http://3.39.169.146/meetings/newMeeting",{
-        //     metting_name: meetingName,
-        //     topic: topic
-        // },config)
-        //     .then((res)=>{
-        //         console.log(res)
-        //     })
-        // alert('add hh');
+        console.log("회의 명 : ",meetingName);
+        console.log("주제: ",topic)
+        axios.post("http://3.39.169.146/meetings/newMeeting",{
+        data: {
+             metting_name: meetingName,
+             topic: topic
+         }},config)
+             .then((res)=>{
+                 console.log(res)
+             })
+         alert('add hh');
     }
 
   return (
