@@ -12,6 +12,7 @@ const MeetingListPage = () => {
     const USER_TOKEN = location.state.userToken;
     const navigate = useNavigate();
     const [info, setInfo] = useState([]);
+    const [inputID, setInputID] = useState('');
     const [modalOn, setModalOn] = useState(false);
     const config = {
         headers :{
@@ -25,7 +26,9 @@ const MeetingListPage = () => {
     const loadList = () =>{
         axios.get('http://3.39.169.146/meetings/allList',config)
             .then(res => {
-                setInfo(res.data.result);
+                if(res.data.isSuccess){
+                    setInfo(res.data.result);
+                }
             })
             .catch(err => console.log(err));
     }
@@ -35,11 +38,11 @@ const MeetingListPage = () => {
     }
     const handleEnterMeeting = (meetingID) => {
         navigate('/meetingRoom', {state: {config : config, meeting_id: meetingID}});
-        console.log(meetingID);
     }
     const handleRemove = (id) =>{
         alert(`${id} Remove`);
         setInfo(info => info.filter(item => item.meeting_id !== id));
+
     }
     const handleAddMeeting = () =>{
         console.log("click")
@@ -57,9 +60,20 @@ const MeetingListPage = () => {
              topic: topic
          },config)
              .then((res)=>{
-                 loadList();
+                if (res.data.isSuccess){
+                    loadList();
+                }
              })
              
+    }
+
+    const searchMeeting = () =>{
+        axios.post(`http://3.39.169.146/meetings/newMeeting/${inputID}`,'',config)
+            .then((res)=>{
+                if (res.data.isSuccess){
+                    handleEnterMeeting(inputID);
+                }
+            })
     }
 
   return (
@@ -72,10 +86,9 @@ const MeetingListPage = () => {
             <h1>전체 회의 리스트</h1>
             </div>
             <div>
-                <form>
-                    <input type='text'/>
-                    <button>참가</button>
-                </form>
+                ID로 회의 입장하기 
+                <input id="inputMeetingID" type='text' onChange={e=>{setInputID(e.target.value); console.log(inputID)}}/>
+                <button onClick={searchMeeting}>입장</button>
             </div>
             <div className={style.gridscroll}>
                 <div className={style.grid}>
