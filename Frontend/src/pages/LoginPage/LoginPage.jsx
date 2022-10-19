@@ -41,7 +41,6 @@ const LoginPage = ()=> {
                             delete axios.defaults.headers.common['Authorization']
                         }
                         navigate('/meetingList',{state : {userToken}});
-                        // meetingListPage(userToken);
                         break;
                     }
                     case 3003 : {
