@@ -12,7 +12,7 @@ const io = require("socket.io")(server, {
   },
 });
 
-const PORT = 4000;
+const PORT = 3000;
 
 app.get("/", (req, res) => {
   res.send("Server is Running");

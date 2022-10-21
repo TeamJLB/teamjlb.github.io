@@ -6,7 +6,10 @@ import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import Modal from "../UI/Modal";
 
-const socket = io.connect("http://localhost:4000/");
+// [로컬 서버에서 테스트용]
+// const socket = io.connect("http://localhost:3000/");
+// [실제 서버에서 원격용]
+const socket = io.connect("http://3.39.169.146:3000/");
 
 const StreamBox = (props) => {
   const location = useLocation();
