@@ -112,18 +112,34 @@ const RegisterPage = () =>{
         }
     }
     const inputChange = (e) =>{
-        setUserInfo({
-           ...userInfo,
-           [e.target.id] : e.target.value
-        });
+        
         if (e.target.id == "password"){
-            validatePassword(e.target.value);
+            if(validatePassword(e.target.value)){
+                console.log(userInfo)
+                setUserInfo({
+                    ...userInfo,
+                    validationPW: true,
+                    [e.target.id] : e.target.value
+                 });
+            }else{
+                setUserInfo({
+                    ...userInfo,
+                    [e.target.id] : e.target.value
+                 });
+            }
+        }else{
+            setUserInfo({
+                ...userInfo,
+                [e.target.id] : e.target.value
+             });
+             if (e.target.id == "checkpw"){
+                checkpassword(e.target.value);
+            }
         }
-        if (e.target.id == "checkpw"){
-            checkpassword(e.target.value);
-        }
+        
     }
     const checkpassword = (value)=>{
+        console.log(value);
         const checkpwPTag = document.getElementById("checkpwPTag");
         if(userInfo.password === value){
             checkpwPTag.innerText=""
@@ -133,19 +149,18 @@ const RegisterPage = () =>{
         }
     }
     const validatePassword = (value) =>{
-        var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/
+        console.log(value);
+        var regExp = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,10}$/;
         // 형식에 맞는 경우 true 리턴
         console.log('비밀번호 유효성 검사 :: ', regExp.test(value));
         const vaildationTagP = document.getElementById("validation password");
         if(!regExp.test(value)){
             vaildationTagP.innerText = "8-10자리 영어, 숫자조합으로 입력해주세요";
         }else{
-            setUserInfo({
-                ...userInfo,
-                validationPW : true
-            })
             vaildationTagP.innerText = "";
+            return true
         }
+        return false
     }
     const inputtelChange = (e) => {
         setTeldata({
