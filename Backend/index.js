@@ -25,10 +25,10 @@ io.on("connection", (socket) => {
     socket.join(roomName);
     done(userId);
 
-    socket.broadcast.to(roomName).emit("user-connected", userId);
+    socket.to(roomName).emit("user-connected", userId);
 
     socket.on("disconnect", () => {
-      socket.broadcast.to(roomName).emit("user-disconnected", userId);
+      socket.to(roomName).emit("user-disconnected", userId);
     });
   });
 });
