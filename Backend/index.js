@@ -23,22 +23,12 @@ io.on("connection", (socket) => {
   socket.on("join-room", (roomName, userId, done) => {
     if (typeof done === "function") done(userId);
     socket.join(roomName);
-<<<<<<< Updated upstream
     done(userId);
-=======
-    done(socket.id);
->>>>>>> Stashed changes
 
     socket.broadcast.to(roomName).emit("user-connected", userId);
 
     socket.on("disconnect", () => {
-<<<<<<< Updated upstream
       socket.broadcast.to(roomName).emit("user-disconnected", userId);
-=======
-      socket.broadcast
-        .to(roomName)
-        .emit("user-disconnected", userId, socket.id);
->>>>>>> Stashed changes
     });
   });
 });
