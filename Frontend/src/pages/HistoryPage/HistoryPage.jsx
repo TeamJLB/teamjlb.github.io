@@ -32,7 +32,9 @@ const HistoryPage = () => {
         `http://3.39.169.146/meetings/meetingHistory/?meetingId=${meetingId}`,
         config
       )
-      .then((res) => setMeetingInfo(res.data));
+      .then((res) => {
+        setMeetingInfo(res.data.result);
+      });
   }, []);
 
   const closeHandler = () => {
