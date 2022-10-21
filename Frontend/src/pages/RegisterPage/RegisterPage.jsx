@@ -33,14 +33,15 @@ const RegisterPage = () =>{
                     case 1000 : {
                         if(res.data.result.unique){
                             alert("사용가능한 아이디 입니다.");
+                            setUserInfo({
+                                ...userInfo,
+                                checkid : true
+                            })
 
                         }else{
                             alert("이미 존재하는 아이디 입니다.");
                         }
-                        setUserInfo({
-                            ...userInfo,
-                            checkid : true
-                        })
+                        
 
                         break;
                     }
@@ -124,7 +125,7 @@ const RegisterPage = () =>{
     }
     const checkpassword = (value)=>{
         const checkpwPTag = document.getElementById("checkpwPTag");
-        if(userInfo.password == userInfo.checkpw){
+        if(userInfo.password === value){
             checkpwPTag.innerText=""
         }
         else{
@@ -187,7 +188,7 @@ const RegisterPage = () =>{
 
     const handleSubmit = () =>{
         console.log(userInfo);
-        if(userInfo.checkid && userInfo.validationPW && userInfo.password == userInfo.checkpw){
+        if(userInfo.checkid && userInfo.validationPW && (userInfo.password === userInfo.checkpw)){
             axios.post("http://3.39.169.146/users/signup",{
                 name : userInfo.name,
                 id : userInfo.id,
