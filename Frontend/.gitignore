@@ -2,6 +2,10 @@
 /log/*
 /package-lock.json
 package-lock.json
+/.idea
+.idea
+./.idea
+.idea/*
 
 # Logs
 logs
