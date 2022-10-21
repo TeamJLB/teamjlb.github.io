@@ -6,34 +6,33 @@ import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import Modal from "../UI/Modal";
 
+// [로컬 서버에서 테스트용]
+// const socket = io.connect("http://localhost:3000/");
+// [실제 서버에서 원격용]
+const socket = io.connect("http://3.39.169.146:3000/");
+
 const StreamBox = (props) => {
   const location = useLocation();
   const userToken = location.state.config.headers["x-access-token"];
   const roomName = location.state.meeting_id;
-  
-  const [myStream, setMyStream] = useState(null);
-  const [streamId, setStreamId] = useState("");
   const [peerId, setPeerId] = useState("");
-  
+
   const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
-  
+
   const videoGrid = useRef();
   const myVideo = useRef();
-  
+
+  let myStream;
   let peer;
   // const peer = new Peer();
   const peers = {};
-  
+
   const confirm = (userid) => {
     console.log(roomName, userid, "✅ 연결됨");
   };
-  
+
   useEffect(() => {
-    // [로컬 서버에서 테스트용]
-    // const socket = io.connect("http://localhost:3000/");
-    // [실제 서버에서 원격용]
-    const socket = io.connect("http://3.39.169.146:3000/");
     peer = new Peer();
 
     navigator.mediaDevices
@@ -42,57 +41,62 @@ const StreamBox = (props) => {
         video: true,
       })
       .then((currentStream) => {
-        setStreamId(currentStream.id);
-        setMyStream(currentStream);
+        let streamId = currentStream.id;
+        myStream = currentStream;
         addVideoStream(myVideo.current, currentStream);
         videoGrid.current.append(myVideo.current);
+
+        peer.on("open", (peerId) => {
+          setPeerId(peerId);
+          console.log(streamId);
+          socket.emit("join-room", roomName, peerId, confirm);
+        });
 
         peer.on("call", (call) => {
           call.answer(currentStream);
           const video = document.createElement("video");
+          video.setAttribute("autoplay", "playsinline");
+          video.id = peerId;
 
           call.on("stream", (userVideoStream) => {
             addVideoStream(video, userVideoStream);
             videoGrid.current.append(video);
           });
+
+          call.on("close", () => {
+            video.remove();
+          });
         });
 
         socket.on("user-connected", (userId) => {
           console.log("User connected : ", userId);
-          connectNewUser(userId, currentStream);
+          const call = peer.call(userId, currentStream);
+          const video = document.createElement("video");
+          video.setAttribute("autoplay", "playsinline");
+          video.id = userId;
+
+          call.on("stream", (videoStream) => {
+            addVideoStream(video, videoStream, userId);
+            videoGrid.current.append(video);
+          });
+        });
+
+        socket.on("user-disconnected", (id) => {
+          const video = document.querySelectorAll("video");
+          let removeVideo;
+          for (let i = 0; i < video.length; i++) {
+            if (video[i].id === id) {
+              removeVideo = video[i];
+            }
+          }
+          removeVideo.remove();
         });
       });
+  }, []);
 
-    socket.on("user-disconnected", (userId) => {
-      console.log("User disconnectd : ", userId);
-      if (peers[userId]) peers[userId].close();
-    });
-
-    peer.on("open", (id) => {
-      socket.emit("join-room", roomName, id, confirm);
-    });
-  }, [roomName]);
-
-  const connectNewUser = (userId, stream) => {
-    const call = peer.call(userId, stream);
-    const video = document.createElement("video");
-
-    call.on("stream", (videoStream) => {
-      addVideoStream(video, videoStream);
-      videoGrid.current.append(video);
-    });
-
-    call.on("close", () => {
-      video.remove();
-    });
-
-    peers[userId] = call;
-  };
-
-  const addVideoStream = (video, stream) => {
+  const addVideoStream = (video, stream, peerId) => {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => video.play());
-    // videoGrid.current.append(video);
   };
 
   const handleMuteClick = () => {
@@ -109,12 +113,36 @@ const StreamBox = (props) => {
     setCameraOn((prev) => !prev);
   };
 
+  const handleLeaveClick = () => {
+    socket.disconnect();
+
+    myStream.getTracks().forEach((track) => track.stop());
+    myVideo.srcObject = null;
+    clearAllVideos();
+  };
+
+  const clearAllVideos = () => {
+    const videoGrid = document.querySelector("#videos");
+    const videos = document.querySelectorAll("video");
+    videos.forEach((video) => {
+      if (video.id != myVideo) {
+        videoGrid.removeChile(video);
+      }
+    });
+  };
+
   return (
     <>
       <div className={styles.streamBox}>
         <div className={styles.streams}>
-          <div ref={videoGrid}>
-            <video ref={myVideo} muted autoPlay className={styles.myFace} />
+          <div id="videos" ref={videoGrid}>
+            <video
+              id="myVideo"
+              ref={myVideo}
+              muted
+              autoPlay
+              className={styles.myFace}
+            />
             <h3 className={styles.userNickname} />
           </div>
         </div>
@@ -123,6 +151,7 @@ const StreamBox = (props) => {
           cameraOn={cameraOn}
           onMuteClick={handleMuteClick}
           onCameraClick={handleCameraClick}
+          onLeaveClick={handleLeaveClick}
         />
       </div>
     </>
