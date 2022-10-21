@@ -31,9 +31,9 @@ const StreamBox = (props) => {
   
   useEffect(() => {
     // [로컬 서버에서 테스트용]
-    const socket = io.connect("http://localhost:3000/");
+    // const socket = io.connect("http://localhost:3000/");
     // [실제 서버에서 원격용]
-    // const socket = io.connect("http://3.39.169.146:3000/");
+    const socket = io.connect("http://3.39.169.146:3000/");
     peer = new Peer();
 
     navigator.mediaDevices
