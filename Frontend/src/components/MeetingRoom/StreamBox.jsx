@@ -6,34 +6,34 @@ import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import Modal from "../UI/Modal";
 
-// [로컬 서버에서 테스트용]
-// const socket = io.connect("http://localhost:3000/");
-// [실제 서버에서 원격용]
-const socket = io.connect("http://3.39.169.146:3000/");
-
 const StreamBox = (props) => {
   const location = useLocation();
   const userToken = location.state.config.headers["x-access-token"];
   const roomName = location.state.meeting_id;
-
+  
   const [myStream, setMyStream] = useState(null);
   const [streamId, setStreamId] = useState("");
   const [peerId, setPeerId] = useState("");
-
+  
   const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
-
+  
   const videoGrid = useRef();
   const myVideo = useRef();
-
+  
   let peer;
+  // const peer = new Peer();
   const peers = {};
-
+  
   const confirm = (userid) => {
     console.log(roomName, userid, "✅ 연결됨");
   };
-
+  
   useEffect(() => {
+    // [로컬 서버에서 테스트용]
+    const socket = io.connect("http://localhost:3000/");
+    // [실제 서버에서 원격용]
+    // const socket = io.connect("http://3.39.169.146:3000/");
     peer = new Peer();
 
     navigator.mediaDevices
@@ -45,6 +45,7 @@ const StreamBox = (props) => {
         setStreamId(currentStream.id);
         setMyStream(currentStream);
         addVideoStream(myVideo.current, currentStream);
+        videoGrid.current.append(myVideo.current);
 
         peer.on("call", (call) => {
           call.answer(currentStream);
@@ -52,6 +53,7 @@ const StreamBox = (props) => {
 
           call.on("stream", (userVideoStream) => {
             addVideoStream(video, userVideoStream);
+            videoGrid.current.append(video);
           });
         });
 
@@ -69,7 +71,7 @@ const StreamBox = (props) => {
     peer.on("open", (id) => {
       socket.emit("join-room", roomName, id, confirm);
     });
-  }, []);
+  }, [roomName]);
 
   const connectNewUser = (userId, stream) => {
     const call = peer.call(userId, stream);
@@ -77,6 +79,7 @@ const StreamBox = (props) => {
 
     call.on("stream", (videoStream) => {
       addVideoStream(video, videoStream);
+      videoGrid.current.append(video);
     });
 
     call.on("close", () => {
@@ -89,7 +92,7 @@ const StreamBox = (props) => {
   const addVideoStream = (video, stream) => {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => video.play());
-    videoGrid.current.append(video);
+    // videoGrid.current.append(video);
   };
 
   const handleMuteClick = () => {
