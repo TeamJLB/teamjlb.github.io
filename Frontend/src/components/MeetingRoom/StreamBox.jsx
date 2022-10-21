@@ -27,7 +27,11 @@ const StreamBox = (props) => {
   const videoGrid = useRef();
   const myVideo = useRef();
 
+<<<<<<< Updated upstream
   // let myStream;
+=======
+  let myStream;
+>>>>>>> Stashed changes
   let peer;
   // const peer = new Peer();
   const peers = {};
@@ -46,6 +50,7 @@ const StreamBox = (props) => {
       })
       .then((currentStream) => {
         let streamId = currentStream.id;
+<<<<<<< Updated upstream
         setMyStream(currentStream);
         addVideoStream(myVideo.current, currentStream, streamId);
         videoGrid.current.append(myVideo.current);
@@ -67,6 +72,10 @@ const StreamBox = (props) => {
             videoGrid.current.append(video);
           });
         });
+=======
+        myStream = currentStream;
+        addVideoStream(myVideo.current, currentStream);
+>>>>>>> Stashed changes
 
         peer.on("call", (call) => {
           call.answer(currentStream);
@@ -83,6 +92,7 @@ const StreamBox = (props) => {
           });
         });
 
+<<<<<<< Updated upstream
         socket.on("user-disconnected", (id) => {
           console.log("User disconnected : ", id);
           const video = document.querySelectorAll("video");
@@ -98,9 +108,61 @@ const StreamBox = (props) => {
   }, []);
 
   const addVideoStream = (video, stream, peerId) => {
+=======
+        socket.on("user-connected", (userId) => {
+          console.log("User connected : ", userId);
+          const call = peer.call(userId, currentStream);
+          const video = document.createElement("video");
+
+          call.on("stream", (videoStream) => {
+            addVideoStream(video, videoStream);
+          });
+        });
+      });
+
+    peer.on("open", (id) => {
+      socket.emit("join-room", roomName, id, confirm);
+    });
+
+    socket.on("user-disconnected", (userId) => {
+      console.log("User disconnectd : ", userId);
+      const video = document.querySelectorAll("video");
+      let removeVideo;
+      for (let i = 0; i < video.length; i++) {
+        if (video[i].srcObject.id === userId) {
+          removeVideo = video[i];
+        }
+      }
+
+      removeVideo.remove();
+    });
+  }, []);
+
+  // const connectNewUser = (userId, stream) => {
+  //   const call = peer.call(userId, stream);
+  //   const video = document.createElement("video");
+
+  //   call.on("stream", (videoStream) => {
+  //     addVideoStream(video, videoStream);
+  //   });
+
+  //   call.on("close", () => {
+  //     video.remove();
+  //   });
+
+  //   peers[userId] = call;
+  // };
+
+  const addVideoStream = (video, stream) => {
+>>>>>>> Stashed changes
     video.srcObject = stream;
     video.id = peerId;
     video.addEventListener("loadedmetadata", () => video.play());
+<<<<<<< Updated upstream
+=======
+    videoGrid.current.append(video);
+    console.log(video.srcObject);
+>>>>>>> Stashed changes
   };
 
   const handleMuteClick = () => {
@@ -119,6 +181,7 @@ const StreamBox = (props) => {
 
   const handleLeaveClick = () => {
     socket.disconnect();
+<<<<<<< Updated upstream
     peer?.destroy();
     myStream.getTracks().forEach((track) => track.stop());
     setMyStream(null);
@@ -126,6 +189,12 @@ const StreamBox = (props) => {
     clearAllVideos();
     navigate("/meetingList", { state: { userToken } });
     window.location.reload();
+=======
+
+    myStream.getTracks().forEach((track) => track.stop());
+    myVideo.srcObject = null;
+    clearAllVideos();
+>>>>>>> Stashed changes
   };
 
   const clearAllVideos = () => {
@@ -133,7 +202,11 @@ const StreamBox = (props) => {
     const videos = document.querySelectorAll("video");
     videos.forEach((video) => {
       if (video.id != myVideo) {
+<<<<<<< Updated upstream
         videoGrid.removeChild(video);
+=======
+        videoGrid.removeChile(video);
+>>>>>>> Stashed changes
       }
     });
   };
