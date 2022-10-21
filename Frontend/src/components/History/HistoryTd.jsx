@@ -1,26 +1,35 @@
 import React from "react";
 
-const HistoryTd = ({ id, item, clickSummary, clickMemo }) => {
+const HistoryTd = ({
+  subMeetingId,
+  date,
+  topic,
+  participants,
+  keywords,
+  clickSummary,
+  clickMemo,
+}) => {
   const onSummary = () => {
-    clickSummary(id);
+    clickSummary(subMeetingId);
   };
   const onMemo = () => {
-    clickMemo(id);
+    clickMemo(subMeetingId);
   };
 
   return (
     <>
-      <tr key={id}>
-        <td>{item.id}</td>
-        <td>{item.name}</td>
-        <td>{item.email}</td>
+      <tr key={subMeetingId}>
+        <td>{subMeetingId}</td>
+        <td>{date}</td>
+        <td>{topic}</td>
+        <td>{participants}</td>
+        <td>{keywords}</td>
         <td>
           <button onClick={onSummary}>회의 요약본</button>
         </td>
         <td>
           <button onClick={onMemo}>메모</button>
         </td>
-        <td>{item.username}</td>
       </tr>
     </>
   );

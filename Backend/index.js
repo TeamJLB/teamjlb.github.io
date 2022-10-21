@@ -23,13 +23,11 @@ io.on("connection", (socket) => {
   socket.on("join-room", (roomName, userId, done) => {
     if (typeof done === "function") done(userId);
     socket.join(roomName);
-    done();
+    done(userId);
 
-    // broadcast 추가해야 함
     socket.to(roomName).emit("user-connected", userId);
 
     socket.on("disconnect", () => {
-      // broadcast 추가해야함
       socket.to(roomName).emit("user-disconnected", userId);
     });
   });
