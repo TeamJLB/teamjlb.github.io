@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import HistoryTable from "../../components/History/HistoryTable";
 import Modal from "../../components/UI/Modal";
+import HistoryContents from "../../components/History/HistoryContents";
 
 const HistoryPage = () => {
   const location = useLocation();
@@ -14,10 +15,15 @@ const HistoryPage = () => {
   const [header, setHeader] = useState("");
   const [contents, setContents] = useState("");
 
-  const clickSummary = (id) => {
+  const clickSummary = (subMeetingId) => {
     setModalOn(true);
     setHeader("회의 요약본");
     setContents("회의 요약본 내용");
+    axios
+      .get(`http://3.39.169.146/summaries/summary/${subMeetingId}`, config)
+      .then((res) => {
+        setContents(<HistoryContents items={res.data.result} />);
+      });
   };
 
   const clickMemo = (id) => {
