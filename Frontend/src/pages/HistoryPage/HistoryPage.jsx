@@ -4,6 +4,7 @@ import axios from "axios";
 import HistoryTable from "../../components/History/HistoryTable";
 import Modal from "../../components/UI/Modal";
 import HistoryContents from "../../components/History/HistoryContents";
+import MemoContents from "../../components/History/MemoContents";
 
 const HistoryPage = () => {
   const location = useLocation();
@@ -18,7 +19,6 @@ const HistoryPage = () => {
   const clickSummary = (subMeetingId) => {
     setModalOn(true);
     setHeader("회의 요약본");
-    setContents("회의 요약본 내용");
     axios
       .get(`http://3.39.169.146/summaries/summary/${subMeetingId}`, config)
       .then((res) => {
@@ -26,10 +26,14 @@ const HistoryPage = () => {
       });
   };
 
-  const clickMemo = (id) => {
+  const clickMemo = (subMeetingId) => {
     setModalOn(true);
     setHeader("메모");
-    setContents("메모 내용");
+    axios
+      .get(`http://3.39.169.146/memos/memo/${subMeetingId}`, config)
+      .then((res) => {
+        setContents(<MemoContents item={res.data.result[0]} />);
+      });
   };
 
   useEffect(() => {
