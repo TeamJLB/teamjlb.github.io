@@ -2,13 +2,15 @@
 const express = require("./config/express");
 // const { logger } = require("./config/winston");
 
+const cors = require("cors");
 const app = express();
 const server = require("http").createServer(app);
 
+app.use(cors());
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
@@ -28,7 +30,7 @@ io.on("connection", (socket) => {
     socket.to(roomName).emit("user-connected", userId);
 
     socket.on("disconnect", () => {
-      socket.to(roomName).emit("user-disconnected", userId);
+      socket.to(roomName).emit("user-disconnected", userId, streamId);
     });
   });
 });
