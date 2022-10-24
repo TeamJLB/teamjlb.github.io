@@ -20,17 +20,20 @@ app.get("/", (req, res) => {
   res.send("Server is Running");
 });
 
+let userId;
+let streamId;
 // express().listen(port);
 io.on("connection", (socket) => {
-  socket.on("join-room", (roomName, userId, done) => {
-    if (typeof done === "function") done(userId);
+  socket.on("join-room", (roomName, userStream, done) => {
+    // userId = userStream["user"];
+    // streamId = userStream["stream"];
+    if (typeof done === "function") done(userStream);
     socket.join(roomName);
-    done(userId);
 
-    socket.to(roomName).emit("user-connected", userId);
+    socket.to(roomName).emit("user-connected", userStream);
 
     socket.on("disconnect", () => {
-      socket.to(roomName).emit("user-disconnected", userId, streamId);
+      socket.to(roomName).emit("user-disconnected", userStream);
     });
   });
 });

@@ -32,8 +32,8 @@ const StreamBox = (props) => {
   // const peer = new Peer();
   const peers = {};
 
-  const confirm = (userid) => {
-    console.log(roomName, userid, "✅ 연결됨");
+  const confirm = (userstream) => {
+    console.log(roomName, userstream["user"], "✅ 연결됨");
   };
 
   useEffect(() => {
@@ -52,20 +52,29 @@ const StreamBox = (props) => {
 
         peer.on("open", (peerId) => {
           setPeerId(peerId);
-          socket.emit("join-room", roomName, peerId, confirm);
+          socket.emit(
+            "join-room",
+            roomName,
+            { user: peerId, stream: streamId },
+            confirm
+          );
         });
 
-        socket.on("user-connected", (userId) => {
+        socket.on("user-connected", (userStream) => {
+          const userId = userStream["user"];
           console.log("User connected : ", userId);
           const call = peer.call(userId, currentStream);
           const video = document.createElement("video");
           video.setAttribute("autoplay", "playsinline");
-          video.id = userId;
 
           call.on("stream", (videoStream) => {
             addVideoStream(video, videoStream, userId);
             videoGrid.current.append(video);
           });
+
+          // call.on("close", () => {
+          //   video.remove();
+          // });
         });
 
         peer.on("call", (call) => {
@@ -77,29 +86,26 @@ const StreamBox = (props) => {
             addVideoStream(video, userVideoStream, peerId);
             videoGrid.current.append(video);
           });
-
-          call.on("close", () => {
-            video.remove();
-          });
         });
 
-        socket.on("user-disconnected", (id) => {
-          console.log("User disconnected : ", id);
+        socket.on("user-disconnected", (userStream) => {
+          const userId = userStream["user"];
+          const streamId = userStream["stream"];
+          console.log("User disconnected : ", userId);
           const video = document.querySelectorAll("video");
-          const removeVideo = [];
+          let removeVideo;
           for (let i = 0; i < video.length; i++) {
-            if (video[i].id === id) {
-              removeVideo.push(video[i]);
+            if (video[i].srcObject.id === streamId) {
+              removeVideo = video[i];
             }
           }
-          removeVideo.forEach((item) => item.remove());
+          removeVideo.remove();
         });
       });
   }, []);
 
   const addVideoStream = (video, stream, peerId) => {
     video.srcObject = stream;
-    video.id = peerId;
     video.addEventListener("loadedmetadata", () => video.play());
   };
 
