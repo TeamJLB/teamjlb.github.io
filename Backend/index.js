@@ -1,7 +1,4 @@
-// import roomModule from "./modules/meetingRoomModules";
 const express = require("./config/express");
-// const { logger } = require("./config/winston");
-
 const cors = require("cors");
 const app = express();
 const server = require("http").createServer(app);
@@ -20,13 +17,8 @@ app.get("/", (req, res) => {
   res.send("Server is Running");
 });
 
-let userId;
-let streamId;
-// express().listen(port);
 io.on("connection", (socket) => {
   socket.on("join-room", (roomName, userStream, done) => {
-    // userId = userStream["user"];
-    // streamId = userStream["stream"];
     if (typeof done === "function") done(userStream);
     socket.join(roomName);
 
@@ -41,5 +33,3 @@ io.on("connection", (socket) => {
 server.listen(PORT, () =>
   console.log(`✅ Listening on http://localhost:${PORT}`)
 );
-
-// logger.info(`${process.env.NODE_ENV} - API Server Start At Port ${port}`);
