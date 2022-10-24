@@ -1,7 +1,7 @@
 import styles from "./Controllers.module.css";
 
 const controllers = (props) => {
-  const { mute, cameraOn, onMuteClick, onCameraClick } = props;
+  const { mute, cameraOn, onMuteClick, onCameraClick, onLeaveClick } = props;
 
   return (
     <div className={styles.controllers}>
@@ -17,7 +17,9 @@ const controllers = (props) => {
           </div>
         </div>
         <div className={styles.controllers_col2}>
-          <button className={styles.leave}>회의 나가기</button>
+          <button className={styles.leave} onClick={onLeaveClick}>
+            회의 나가기
+          </button>
         </div>
       </div>
     </div>
