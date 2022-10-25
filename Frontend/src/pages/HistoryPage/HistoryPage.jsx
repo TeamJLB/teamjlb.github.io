@@ -5,6 +5,7 @@ import HistoryTable from "../../components/History/HistoryTable";
 import Modal from "../../components/UI/Modal";
 import HistoryContents from "../../components/History/HistoryContents";
 import MemoContents from "../../components/History/MemoContents";
+import styles from "./HistoryPage.module.css";
 
 const HistoryPage = () => {
   const location = useLocation();
@@ -52,7 +53,7 @@ const HistoryPage = () => {
   };
 
   return (
-    <>
+    <div className={styles.history}>
       <HistoryTable
         meetingInfo={meetingInfo}
         clickSummary={clickSummary}
@@ -61,7 +62,7 @@ const HistoryPage = () => {
       {modalOn && (
         <Modal onClose={closeHandler} header={header} contents={contents} />
       )}
-    </>
+    </div>
   );
 };
 
