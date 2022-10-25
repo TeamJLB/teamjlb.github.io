@@ -27,16 +27,15 @@ span {
   height: 600px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, auto));
-  grid-template-rows: repeat(auto-fill, minmax(150px, auto));
-  column-gap: 20px;
-  place-content: space-between center;
+  grid-template-rows: repeat(auto-fill, minmax(150px, 160px));
+  gap: 20px;
   padding: 20px;
 }
 
 .gridscroll {
   position: relative;
   width: 70%;
-  height: 70vh;
+  height: 562px;
   background-color: gainsboro;
   overflow-x: auto;
   white-space: nowrap;
