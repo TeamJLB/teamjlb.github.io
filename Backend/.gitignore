@@ -4,6 +4,10 @@
 /log/*
 /package-lock.json
 package-lock.json
+/.idea
+.idea
+./.idea
+.idea/*
 
 # refactor for later
 /middlewares
