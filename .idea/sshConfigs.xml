@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="SshConfigs">
-    <configs>
-      <sshConfig host="3.39.169.146" id="c64f0655-f217-4818-b2bd-38fab9dffe11" keyPath="$PROJECT_DIR$/../../../../Authentications/JB_aws_keypair.pem" port="22" nameFormat="DESCRIPTIVE" username="ubuntu" useOpenSSHConfig="true" />
-    </configs>
-  </component>
-</project>
