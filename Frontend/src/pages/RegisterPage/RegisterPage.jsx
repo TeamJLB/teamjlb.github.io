@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import host_config from "../../config/serverHost";
 
 const RegisterPage = () =>{
     const [userInfo, setUserInfo] = useState({
@@ -25,7 +26,7 @@ const RegisterPage = () =>{
     })
     const navigate = useNavigate();
     const handleIDDuplicate = (e) =>{
-        const url = `http://3.39.169.146/users?id=${userInfo.id}`
+        const url = `http://${host_config.current_host}:${host_config.current_port}/users?id=${userInfo.id}`
         axios.get(url)
             .then(function (res){
                 console.log(res);
@@ -204,7 +205,7 @@ const RegisterPage = () =>{
     const handleSubmit = () =>{
         console.log(userInfo);
         if(userInfo.checkid && userInfo.validationPW && (userInfo.password === userInfo.checkpw)){
-            axios.post("http://3.39.169.146/users/signup",{
+            axios.post(`http://${host_config.current_host}:${host_config.current_port}/users/signup`,{
                 name : userInfo.name,
                 id : userInfo.id,
                 password : userInfo.password,

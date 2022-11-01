@@ -7,6 +7,7 @@ import style from "./MeetingListPage.module.css";
 import { useLocation } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
+import host_config from "../../config/serverHost";
 
 const MeetingListPage = () => {
   const location = useLocation();
@@ -28,7 +29,7 @@ const MeetingListPage = () => {
 
   const loadList = () => {
     axios
-      .get("http://3.39.169.146/meetings/allList", config)
+      .get(`http://${host_config.current_host}:${host_config.current_port}/meetings/allList`, config)
       .then((res) => {
         if (res.data.isSuccess) {
           setInfo(res.data.result);
@@ -49,7 +50,7 @@ const MeetingListPage = () => {
   };
   const handleRemove = (id) => {
     axios
-      .delete(`http://3.39.169.146/meetings/myMeeting/${id}`, config)
+      .delete(`http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting/${id}`, config)
       .then((res) => {
         console.log(res);
         if (res.data.isSuccess) {
@@ -73,7 +74,7 @@ const MeetingListPage = () => {
     console.log("주제: ", topic);
     axios
       .post(
-        "http://3.39.169.146/meetings/newMeeting",
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/newMeeting`,
         {
           meeting_name: meetingName,
           topic: topic,
@@ -91,7 +92,7 @@ const MeetingListPage = () => {
 
   const enterMeeting = () => {
     axios
-      .post(`http://3.39.169.146/meetings/newMeeting/${enterID}`, "", config)
+      .post(`http://${host_config.current_host}:${host_config.current_port}/meetings/newMeeting/${enterID}`, "", config)
       .then((res) => {
         if (res.data.isSuccess) {
           handleEnterMeeting(enterID);
@@ -106,7 +107,7 @@ const MeetingListPage = () => {
       loadList();
     } else {
       axios
-        .get("http://3.39.169.146/meetings/myMeeting", {
+        .get(`http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting`, {
           params: { meetingId: searchID },
           headers: {
             "x-access-token": USER_TOKEN,
