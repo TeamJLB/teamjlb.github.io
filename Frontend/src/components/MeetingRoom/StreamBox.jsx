@@ -7,12 +7,12 @@ import styles from "./StreamBox.module.css";
 import Modal from "../UI/Modal";
 import host_config from "../../config/serverHost";
 
-// [로컬 서버에서 테스트]
-// const socket = io.connect("http://localhost:3000/");
-// [실제 서버에서 테스트]
-const socket = io.connect(`http://${host_config.current_host}:${host_config.current_port}/`);
 
 const StreamBox = (props) => {
+  // [로컬 서버에서 테스트]
+  // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
+  // [실제 서버에서 테스트]
+  const socket = io.connect(`http://${host_config.current_host}:${host_config.socket_port}/`);
   const location = useLocation();
   const navigate = useNavigate();
 
