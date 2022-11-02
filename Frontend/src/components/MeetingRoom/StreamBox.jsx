@@ -7,12 +7,13 @@ import styles from "./StreamBox.module.css";
 import Modal from "../UI/Modal";
 import host_config from "../../config/serverHost";
 
-
 const StreamBox = (props) => {
   // [로컬 서버에서 테스트]
   // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
   // [실제 서버에서 테스트]
-  const socket = io.connect(`http://${host_config.current_host}:${host_config.socket_port}/`);
+  const socket = io.connect(
+    `http://${host_config.current_host}:${host_config.socket_port}/`
+  );
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -28,10 +29,7 @@ const StreamBox = (props) => {
   const videoGrid = useRef();
   const myVideo = useRef();
 
-  // let myStream;
   let peer;
-  // const peer = new Peer();
-  const peers = {};
 
   const confirm = (userstream) => {
     console.log(roomName, userstream["user"], "✅ 연결됨");
@@ -72,10 +70,6 @@ const StreamBox = (props) => {
             addVideoStream(video, videoStream, userId);
             videoGrid.current.append(video);
           });
-
-          // call.on("close", () => {
-          //   video.remove();
-          // });
         });
 
         peer.on("call", (call) => {
@@ -140,7 +134,7 @@ const StreamBox = (props) => {
     const videos = document.querySelectorAll("video");
     videos.forEach((video) => {
       if (video.id != myVideo) {
-        videoGrid.removeChild(video);
+        videoGrid?.removeChild(video);
       }
     });
   };
