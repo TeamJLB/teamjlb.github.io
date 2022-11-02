@@ -19,7 +19,7 @@ const HistoryTable = (props) => {
   const classes = useStyles();
   return (
     <div className={styles.historyTable}>
-      <h2>회의 히스토리</h2>
+      <h2 className={styles.historyTitle}>회의 히스토리</h2>
       <div className={styles.table}>
         <Table className={classes.root} aria-label="simple table">
           <TableHead>
