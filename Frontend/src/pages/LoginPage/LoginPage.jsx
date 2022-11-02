@@ -15,6 +15,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import CssBaseline from '@mui/material/CssBaseline';
 import './LoginPage.css';
+import host_config from "../../config/serverHost";
 
 
 const LoginPage = ()=> {
@@ -27,7 +28,7 @@ const LoginPage = ()=> {
     const handleLogin = (e) => {
 
         setLoading(true);
-        axios.post("http://3.39.169.146/users/login",{
+        axios.post(`http://${host_config.current_host}:${host_config.current_port}/users/login`,{
             id: loginid,
             password: loginpw
         })

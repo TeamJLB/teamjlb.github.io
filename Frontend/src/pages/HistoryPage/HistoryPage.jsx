@@ -6,6 +6,7 @@ import Modal from "../../components/UI/Modal";
 import HistoryContents from "../../components/History/HistoryContents";
 import MemoContents from "../../components/History/MemoContents";
 import styles from "./HistoryPage.module.css";
+import host_config from "../../config/serverHost";
 
 const HistoryPage = () => {
   const location = useLocation();
@@ -21,7 +22,7 @@ const HistoryPage = () => {
     setModalOn(true);
     setHeader("회의 요약본");
     axios
-      .get(`http://3.39.169.146/summaries/summary/${subMeetingId}`, config)
+      .get(`http://${host_config.current_host}:${host_config.current_port}/summaries/summary/${subMeetingId}`, config)
       .then((res) => {
         setContents(<HistoryContents items={res.data.result} />);
       });
@@ -31,7 +32,7 @@ const HistoryPage = () => {
     setModalOn(true);
     setHeader("메모");
     axios
-      .get(`http://3.39.169.146/memos/memo/${subMeetingId}`, config)
+      .get(`http://${host_config.current_host}:${host_config.current_port}/memos/memo/${subMeetingId}`, config)
       .then((res) => {
         setContents(<MemoContents item={res.data.result[0]} />);
       });
@@ -40,7 +41,7 @@ const HistoryPage = () => {
   useEffect(() => {
     axios
       .get(
-        `http://3.39.169.146/meetings/meetingHistory/?meetingId=${meetingId}`,
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/meetingHistory/?meetingId=${meetingId}`,
         config
       )
       .then((res) => {

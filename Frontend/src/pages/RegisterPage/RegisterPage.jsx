@@ -11,12 +11,16 @@ import { LoadingButton } from '@mui/lab';
 import CallIcon from '@mui/icons-material/Call';
 import InputLabel from '@mui/material/InputLabel';
 import axios from 'axios';
+<<<<<<< HEAD
 import Select from '@mui/material/Select';
 import './RegisterPage.css';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+=======
+import host_config from "../../config/serverHost";
+>>>>>>> 0a0e28141b53971f4cbafda5cbb9ac98ab43c316
 
 const RegisterPage = () =>{
     const theme = createTheme();
@@ -43,7 +47,7 @@ const RegisterPage = () =>{
     });
     const navigate = useNavigate();
     const handleIDDuplicate = (e) =>{
-        const url = `http://3.39.169.146/users?id=${userInfo.id}`
+        const url = `http://${host_config.current_host}:${host_config.current_port}/users?id=${userInfo.id}`
         axios.get(url)
             .then(function (res){
                 console.log(res);
@@ -238,7 +242,7 @@ const RegisterPage = () =>{
     const handleSubmit = () =>{
         console.log(userInfo);
         if(userInfo.checkid && userInfo.validationPW && (userInfo.password === userInfo.checkpw)){
-            axios.post("http://3.39.169.146/users/signup",{
+            axios.post(`http://${host_config.current_host}:${host_config.current_port}/users/signup`,{
                 name : userInfo.name,
                 id : userInfo.id,
                 password : userInfo.password,
