@@ -31,16 +31,19 @@ const Memo = () => {
     setModalOn((prev) => !prev);
   };
 
+  const memoCloseHandler = () => {
+    setMemoOn(false);
+  };
+
   return (
     <div className={styles.memoView}>
       <div className={styles.memoTitle}>
-        <Button
-          sx={{ color: "black" }}
-          variant="outlined"
+        <button
+          className={`${styles.memoListBtn} ${modalOn && styles.clicked}`}
           onClick={clickLogHandler}
         >
-          NOTE LIST
-        </Button>
+          NOTE
+        </button>
         {modalOn && (
           <MemoList
             memoList={memoList}
@@ -53,9 +56,12 @@ const Memo = () => {
       </div>
       {memoOn && memoItem && (
         <div className={styles.selectedMemo}>
-          <div>{memoItem.date}</div>
-          <div>{memoItem.topic}</div>
-          <div>{memoItem.content}</div>
+          <span className={styles.memoTopic}>{memoItem.topic}</span>
+          <span className={styles.memoDate}>{memoItem.date}에 작성됨</span>
+          <button className={styles.closeBtn} onClick={memoCloseHandler}>
+            <img width="15px" height="15px" src="img/close.png"></img>
+          </button>
+          <div className={styles.memoContent}>{memoItem.content}</div>
         </div>
       )}
       <div className={styles.memoArea}>

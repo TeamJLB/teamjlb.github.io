@@ -24,3 +24,12 @@
   font-style: normal;
   font-weight: thin;
 }
+
+.memoDate {
+  font-size: 12px;
+  padding-left: 10px;
+  color: gray;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: light;
+}
