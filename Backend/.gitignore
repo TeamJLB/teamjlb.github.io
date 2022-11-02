@@ -4,11 +4,17 @@
 /log/*
 /package-lock.json
 package-lock.json
+/.idea
+.idea
+./.idea
+.idea/*
 
 # refactor for later
 /middlewares
 
 # Logs
+log
+./log
 logs
 *.log
 npm-debug.log*
