@@ -22,11 +22,11 @@
 
 .controllers_col1 {
   padding-left: 50px;
-  width: 80%;
+  width: 85%;
 }
 
 .controllers_col2 {
-  width: 20%;
+  width: 15%;
 }
 
 .controllers .buttons {
@@ -50,7 +50,6 @@
   font-weight: 500;
   border-radius: 10px;
   background: #ffb3a3;
-  margin-right: 15px;
   margin-bottom: 5px;
   transition: all 0.2s ease-in-out;
   letter-spacing: 1px;
