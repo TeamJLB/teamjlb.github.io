@@ -24,20 +24,20 @@ exports.getAllMeetings = async function (req, res) {
 /**
  * API No. 2
  * API Name : 본인이 속한 회의 검색 API
- * [GET] /meetings/myMeeting/?meetingId=
+ * [GET] /meetings/myMeeting/?search=
  * header : x-access-token
- * query string : meetingId
+ * query string : search
  */
 exports.getMeetingById = async function (req, res) {
     const userIdxFromJWT = req.verifiedToken.user_id;
-    const meeting_id = req.query.meetingId;
+    const search = req.query.search;
 
     // errResponse 전달
-    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
+    if (!search) return res.send(errResponse(baseResponse.MEETING_SEARCH_EMPTY));
 
     // meetingId를 통한 유저 검색 함수 호출 및 결과 저장
-    const meetingIdResponse = await meetingProvider.retrieveMeeting(userIdxFromJWT, meeting_id);
-    return res.send(meetingIdResponse);
+    const meetingSearchResponse = await meetingProvider.retrieveMeetingSearch(userIdxFromJWT, search);
+    return res.send(meetingSearchResponse);
 };
 
 /**

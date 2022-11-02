@@ -32,6 +32,19 @@ exports.retrieveMeeting = async function (userIdx, meetingId) {
   // return meetingResult[0]; // 한 명의 유저 정보만을 불러오므로 배열 타입을 리턴하는 게 아닌 0번 인덱스를 파싱해서 오브젝트 타입 리턴
 };
 
+exports.retrieveMeetingSearch = async function (userIdx, search) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  search = '%' + search + '%'   // 해당 검색어를 포함하는 모든 결과를 찾기 위해
+  const meetingResult = await meetingDao.selectMeetingSearch(connection, [userIdx, search]);
+
+  connection.release();
+
+  if (meetingResult.length > 0)
+    return response(baseResponse.SUCCESS, meetingResult);
+  else
+    return errResponse(baseResponse.MEETING_SEARCH_NOT_EXISTS);
+};
+
 exports.meetingCheckById = async function (meeting_id) {
   const connection = await pool.getConnection(async (conn) => conn);
   const idCheckResult = await meetingDao.findMeetingId(connection, meeting_id);

@@ -20,6 +20,17 @@ async function selectMeetingById(connection, selectMeetingParams) {
   return meetingRow[0];
 }
 
+// 회원 id의 검색어로 회의 검색
+async function selectMeetingSearch(connection, selectMeetingParams) {
+  const searchMeetingSearchQuery = `
+    SELECT DISTINCT M.meeting_id, M.meeting_name, M.createdAt
+    FROM Matching MC INNER JOIN SubMeeting SM on MC.sub_meeting_id = SM.sub_meeting_id INNER JOIN Meeting M on SM.meeting_id = M.meeting_id
+    WHERE MC.user_id = ? AND M.meeting_name like ?;
+  `;
+  const meetingRow = await connection.query(searchMeetingSearchQuery, selectMeetingParams);
+  return meetingRow[0];
+}
+
 // 새 회의 개설
 async function insertMeetingInfo(connection, meeting_name) {
   const insertMeetingInfoQuery = `
@@ -139,6 +150,7 @@ async function selectAllKeywordBySubMeetingId(connection, sub_meeting_id) {
 module.exports = {
   selectAllMeetingByUserId,
   selectMeetingById,
+  selectMeetingSearch,
   insertMeetingInfo,
   insertSubMeetingInfo,
   makeMatching,

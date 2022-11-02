@@ -89,31 +89,43 @@ exports.getUserById = async function (req, res) {
     return res.send(checkUserIdResponse);
 };
 
+/**
+ * API No. 4
+ * API Name : 로그인한 회원 정보 불러오기 API
+ * [GET] /app/users/userInfo
+ */
+exports.getUser = async function (req, res) {
+    const userIdxFromJWT = req.verifiedToken.user_id;
+
+    // userId를 통한 유저 검색 함수 호출 및 결과 저장
+    const userInfoListResponse = await userProvider.retrieveUserList(userIdxFromJWT);
+    return res.send(userInfoListResponse);
+};
+
 
 /**
  * API No.
  * API Name : 유저 조회 API (+ 이메일로 검색 조회)
  * [GET] /app/users
  */
-exports.getUsers = async function (req, res) {
+// exports.getUsers = async function (req, res) {
 
-    /**
-     * Path Variable: email
-     */
-    const email = req.params.email;
+//     /**
+//      * Path Variable: email
+//      */
+//     const email = req.params.email;
 
-    if (!email) {
-        // 유저 전체 조회
-        const userListResult = await userProvider.retrieveUserList();
-        // SUCCESS : { "isSuccess": true, "code": 1000, "message":"성공" }, 메세지와 함께 userListResult 호출
-        return res.send(response(baseResponse.SUCCESS, userListResult));
-    } else {
-        // 아메일을 통한 유저 검색 조회
-        const userListByEmail = await userProvider.retrieveUserList(email);
-        return res.send(response(baseResponse.SUCCESS, userListByEmail));
-    }
-};
-
+//     if (!email) {
+//         // 유저 전체 조회
+//         const userListResult = await userProvider.retrieveUserList();
+//         // SUCCESS : { "isSuccess": true, "code": 1000, "message":"성공" }, 메세지와 함께 userListResult 호출
+//         return res.send(response(baseResponse.SUCCESS, userListResult));
+//     } else {
+//         // 아메일을 통한 유저 검색 조회
+//         const userListByEmail = await userProvider.retrieveUserList(email);
+//         return res.send(response(baseResponse.SUCCESS, userListByEmail));
+//     }
+// };
 
 /**
  * API No.
@@ -122,25 +134,25 @@ exports.getUsers = async function (req, res) {
  * path variable : userId
  * body : nickname
  */
-exports.patchUsers = async function (req, res) {
+// exports.patchUsers = async function (req, res) {
 
-    // jwt - userId, path variable :userId
+//     // jwt - userId, path variable :userId
 
-    const userIdFromJWT = req.verifiedToken.userId
+//     const userIdFromJWT = req.verifiedToken.userId
 
-    const userId = req.params.userId;
-    const nickname = req.body.nickname;
+//     const userId = req.params.userId;
+//     const nickname = req.body.nickname;
 
-    // JWT는 이 후 주차에 다룰 내용
-    if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {
-        if (!nickname) return res.send(errResponse(baseResponse.USER_NICKNAME_EMPTY));
+//     // JWT는 이 후 주차에 다룰 내용
+//     if (userIdFromJWT != userId) {
+//         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+//     } else {
+//         if (!nickname) return res.send(errResponse(baseResponse.USER_NICKNAME_EMPTY));
 
-        const editUserInfo = await userService.editUser(userId, nickname)
-        return res.send(editUserInfo);
-    }
-};
+//         const editUserInfo = await userService.editUser(userId, nickname)
+//         return res.send(editUserInfo);
+//     }
+// };
 
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login

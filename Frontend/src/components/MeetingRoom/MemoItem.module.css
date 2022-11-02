@@ -1,0 +1,35 @@
+.memoItem {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  box-shadow: 1px 1px 5px 1px gray;
+  border-radius: 10px;
+}
+
+.memoItem:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.memoTopic {
+  padding-bottom: 5px;
+  font-size: 17px;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: medium;
+}
+
+.memoContent {
+  font-size: 13px;
+  color: rgb(70, 70, 70);
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: thin;
+}
+
+.memoDate {
+  font-size: 12px;
+  padding-left: 10px;
+  color: gray;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: light;
+}
