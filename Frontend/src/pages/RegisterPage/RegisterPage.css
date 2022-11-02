@@ -1,6 +1,6 @@
-.loginForm{
-    width: 90%;
-    height: 20%;
+.registerForm{
+    width: 93%;
+    height: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,9 +8,4 @@
     position: relative;
     margin : auto;
     transform: translate(0, 20%);
-}
-.btndiv{
-    display: flex;
-
-    justify-content: space-between;
 }

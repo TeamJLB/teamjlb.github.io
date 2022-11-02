@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -9,10 +10,15 @@ import IconButton from '@mui/material/IconButton';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Button,Typography , Link} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import CssBaseline from '@mui/material/CssBaseline';
 import './LoginPage.css';
 
 
 const LoginPage = ()=> {
+    const theme = createTheme();
     const [loginid, setLoginid] = useState("");
     const [loginpw, setLoginpw] = useState("");
     const [showPW, setShowPW] = useState(false);
@@ -91,35 +97,66 @@ const LoginPage = ()=> {
     }
     
     return (
-        <div className="loginForm">
-            <LockOutlinedIcon/>
-            <Typography component="h1" variant="h5" >Login</Typography>
-            <TextField id="userid" margin="normal" label="ID" variant="outlined" required fullWidth value={loginid} onChange={e=> setLoginid(e.target.value)}/>
-            <TextField
-                id="userpw"
-                margin="normal"
-                label="Password"
-                type = {showPW ? 'text' : 'password'}
-                variant="outlined"
-                required
-                fullWidth
-                value={loginpw}
-                InputProps={{endAdornment: (
-                <InputAdornment position='end'>
-                    <IconButton onClick={handleShowPW}>
-                        {showPW ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                </InputAdornment>)}}
-                onChange={e=> setLoginpw(e.target.value)}/>
-            <Button sx={{ mt: 1, mb: 2 }} fullWidth variant="outlined" onClick={handleLoginCancel}>취소</Button>
-            <LoadingButton
-                    fullWidth
-                    loading={loading}
-                    variant="contained"
-                    sx={{ mb: 2 }}
-                    onClick={handleLogin}>login</LoadingButton>
-            <Link href="/register">아직 계정이 없다면? 회원가입</Link>
-        </div>
+        <ThemeProvider theme={theme}>
+            <Grid container component="main" sx={{ height: '100vh' }}>
+                <CssBaseline />
+                <Grid
+                    item
+                    xs={false}
+                    sm={4}
+                    md={7}
+                    sx={{
+                        backgroundImage: 'url(https://source.unsplash.com/random)',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundColor: (t) =>
+                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                    }}
+                />
+                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                    <Box
+                        sx={{
+                            my: 8,
+                            mx: 4,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
+                    </Box>
+                    <div className="loginForm">
+                        <LockOutlinedIcon/>
+                        <Typography component="h1" variant="h5" >Login</Typography>
+                        <TextField id="userid" margin="normal" label="ID" variant="outlined" required fullWidth value={loginid} onChange={e=> setLoginid(e.target.value)}/>
+                        <TextField
+                            id="userpw"
+                            margin="normal"
+                            label="Password"
+                            variant="outlined"
+                            type = {showPW ? 'text' : 'password'}
+                            fullWidth
+                            required
+                            value={loginpw}
+                            InputProps={{endAdornment: (
+                                    <InputAdornment position='end'>
+                                        <IconButton onClick={handleShowPW}>
+                                            {showPW ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>)}}
+                            onChange={e=> setLoginpw(e.target.value)}/>
+                        <Button sx={{ mt: 1, mb: 2 }} fullWidth variant="outlined" onClick={handleLoginCancel}>취소</Button>
+                        <LoadingButton
+                            fullWidth
+                            loading={loading}
+                            sx={{ mb: 2 }}
+                            variant="contained"
+                            onClick={handleLogin}>login</LoadingButton>
+                        <Link href="/register">아직 계정이 없다면? 회원가입</Link>
+                    </div>
+                </Grid>
+            </Grid>
+        </ThemeProvider>
     );
 }
 
