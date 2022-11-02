@@ -39,6 +39,7 @@ module.exports = {
     MEETING_ID_EMPTY : { "isSuccess": false, "code": 2100, "message": "회의 ID를 입력해주세요" },
     MEETING_NAME_EMPTY : { "isSuccess": false, "code": 2101, "message": "회의 이름을 입력해주세요" },
     MEETING_TOPIC_EMPTY : { "isSuccess": false, "code": 2102, "message": "회의 주제를 입력해주세요" },
+    MEETING_SEARCH_EMPTY : { "isSuccess": false, "code": 2103, "message": "검색어를 입력해 입력해주세요" },
 
     // ---
     SUBMEETING_ID_EMPTY : { "isSuccess": false, "code": 2200, "message": "서브회의 ID를 입력해주세요" },
@@ -61,6 +62,7 @@ module.exports = {
     MEETING_ID_NOT_EXISTS : { "isSuccess": false, "code": 3100, "message": "해당 ID의 회의가 존재하지 않습니다." },
     MEETING_REDUNDANT_NAME : { "isSuccess": false, "code": 3101, "message": "중복된 회의 이름입니다." },
     MEETING_NO_MATCHING : { "isSuccess": false, "code": 3102, "message": "삭제할 매칭 정보(회의)가 없습니다." },
+    MEETING_SEARCH_NOT_EXISTS : { "isSuccess": false, "code": 3103, "message": "해당 검색어를 포함한 회의가 존재하지 않습니다." },
 
     MATCHING_NO_RESULT : { "isSuccess": false, "code": 3200, "message": "해당 match_id의 매칭 정보가 없습니다." },
 
