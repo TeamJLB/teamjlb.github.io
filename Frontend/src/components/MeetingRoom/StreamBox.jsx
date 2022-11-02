@@ -29,10 +29,7 @@ const StreamBox = (props) => {
   const videoGrid = useRef();
   const myVideo = useRef();
 
-  // let myStream;
   let peer;
-  // const peer = new Peer();
-  const peers = {};
 
   const confirm = (userstream) => {
     console.log(roomName, userstream["user"], "✅ 연결됨");
@@ -49,7 +46,7 @@ const StreamBox = (props) => {
       .then((currentStream) => {
         let streamId = currentStream.id;
         setMyStream(currentStream);
-        addVideoStream(myVideo.current, currentStream, streamId);
+        addVideoStream(myVideo.current, currentStream);
         videoGrid.current.append(myVideo.current);
 
         peer.on("open", (peerId) => {
@@ -70,13 +67,9 @@ const StreamBox = (props) => {
           video.setAttribute("autoplay", "playsinline");
 
           call.on("stream", (videoStream) => {
-            addVideoStream(video, videoStream, userId);
+            addVideoStream(video, videoStream);
             videoGrid.current.append(video);
           });
-
-          // call.on("close", () => {
-          //   video.remove();
-          // });
         });
 
         peer.on("call", (call) => {
@@ -85,7 +78,7 @@ const StreamBox = (props) => {
           video.setAttribute("autoplay", "playsinline");
 
           call.on("stream", (userVideoStream) => {
-            addVideoStream(video, userVideoStream, peerId);
+            addVideoStream(video, userVideoStream);
             videoGrid.current.append(video);
           });
         });
@@ -106,7 +99,7 @@ const StreamBox = (props) => {
       });
   }, []);
 
-  const addVideoStream = (video, stream, peerId) => {
+  const addVideoStream = (video, stream) => {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => video.play());
   };
@@ -141,7 +134,7 @@ const StreamBox = (props) => {
     const videos = document.querySelectorAll("video");
     videos.forEach((video) => {
       if (video.id != myVideo) {
-        videoGrid.removeChild(video);
+        videoGrid?.removeChild(video);
       }
     });
   };
@@ -150,15 +143,16 @@ const StreamBox = (props) => {
     <>
       <div className={styles.streamBox}>
         <div className={styles.streams}>
-          <div className={styles.videoContainer} id="videos" ref={videoGrid}>
-            <video
-              id="myVideo"
-              ref={myVideo}
-              muted
-              autoPlay
-              className={styles.myFace}
-            />
-            <h3 className={styles.userNickname} />
+          <div id="videos" ref={videoGrid} className={styles.videos}>
+            <div>
+              <video
+                id="myVideo"
+                ref={myVideo}
+                muted
+                autoPlay
+                className={styles.myFace}
+              />
+            </div>
           </div>
         </div>
         <Controllers
