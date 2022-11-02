@@ -1,6 +1,5 @@
 .memo {
-  position: relative;
-  width: 40%;
+  width: 50%;
   height: 100%;
   background-color: #e9f2f9;
   border-left: 2px solid #c8c8c8;
@@ -8,7 +7,9 @@
 
 .memoView {
   position: relative;
-  width: 40%;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
   border-left: 2px solid #c8c8c8;
   height: 100%;
   align-content: center;
@@ -17,27 +18,33 @@
 }
 
 .memoTitle {
-  font-size: 20px;
-  font-weight: 500;
-  padding: 20px 10px;
-  align-content: center;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
+  padding: 20px;
 }
 
 .memoArea {
   width: 100%;
+  height: 100%;
+}
+
+.selectedMemo {
+  height: 70%;
+  border-bottom: 1px solid rgb(212, 212, 212);
 }
 
 .memoText {
-  font-size: 15px;
-  width: calc(100% - 40px);
+  width: 100%;
+  height: 100%;
   border: none;
   background-color: transparent;
   outline: none;
-  letter-spacing: 1px;
-  padding: 20px;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  padding: 10px 40px 10px 20px;
+  resize: none;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: light;
+  color: rgb(55, 55, 55);
 }
 
 .logBtn {
