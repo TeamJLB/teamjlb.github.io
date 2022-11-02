@@ -9,9 +9,9 @@ import host_config from "../../config/serverHost";
 
 const StreamBox = (props) => {
   // [로컬 서버에서 테스트]
-  // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
+  const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
   // [실제 서버에서 테스트]
-  const socket = io.connect(`http://${host_config.current_host}:${host_config.socket_port}/`);
+  // const socket = io.connect(`http://${host_config.current_host}:${host_config.socket_port}/`);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -147,6 +147,9 @@ const StreamBox = (props) => {
 
   return (
     <>
+      <div className={styles.sttBox}>
+        <textarea className={styles.sttText} placeholder="stt 내용" />
+      </div>
       <div className={styles.streamBox}>
         <div className={styles.streams}>
           <div id="videos" ref={videoGrid}>

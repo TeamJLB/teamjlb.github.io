@@ -6,9 +6,6 @@ import styles from "./MeetingRoomPage.module.css";
 const MeetingRoomPage = () => {
   return (
     <div className={styles.meetingRoomPage}>
-      <div className={styles.sttBox}>
-        <textarea className={styles.sttText} placeholder="stt 내용" />
-      </div>
       <StreamBox />
       <Memo />
     </div>
