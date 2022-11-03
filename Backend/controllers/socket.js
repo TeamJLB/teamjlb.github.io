@@ -1,53 +1,74 @@
 /**
  * Websocket handler
- * @param http
+ * @param server
  */
- module.exports = (http) => {
-    const io = require('socket.io')(http);
-    const {spawn} = require('child_process');
+ module.exports = (server) => {
+     // const io = require('socket.io')(server);
+    const {spawn} = require('child_process');   // python 파일을 읽어오기 위해
+    const io = require("socket.io")(server, {
+        cors: {
+          origin: "*",
+          credentials: true,
+        },
+      });
     
-    let rooms = {};
+    // --- (오픈 소스 설계 방식) ---
+    // let rooms = {};
+    // /**
+    //  * SocketId로 방을 탐색 합니다.
+    //  * @param value
+    //  * @returns {*}
+    //  */
+    // function findRoomBySocketId(value) {
+    //   const arr = Object.keys(rooms);
+    //   let result = null;
   
-    /**
-     * SocketId로 방을 탐색 합니다.
-     * @param value
-     * @returns {*}
-     */
-    function findRoomBySocketId(value) {
-      const arr = Object.keys(rooms);
-      let result = null;
+    //   for (let i = 0; i < arr.length; i++) {
+    //     if (rooms[arr[i]][value]) {
+    //       result = arr[i];
+    //       break;
+    //     }
+    //   }
   
-      for (let i = 0; i < arr.length; i++) {
-        if (rooms[arr[i]][value]) {
-          result = arr[i];
-          break;
-        }
-      }
-  
-      return result;
-    }
+    //   return result;
+    // }
+    // -------------------------
   
     /**
      * 소켓 연결
      */
-    io.on('connection', (socket) => {
-      // test for front-back communication
-      // console.log("Client: Connected to Socket.io");
-      socket.emit("connection", "connection ready");
+    io.on("connection", (socket) => {
+        socket.on("join-room", (roomName, userStream, done) => {
+            if (typeof done === "function") done(userStream);
+            socket.join(roomName);
+        
+            socket.to(roomName).emit("user-connected", userStream);
+        
+            socket.on("disconnect", () => {
+            socket.to(roomName).emit("user-disconnected", userStream);
+            });
+        });
+
+        // [문서 요약]
+        // socket.on("stt_data", (text) => {
+        //     console.log(text);
+        //     const python = spawn('python3', ["../../Text Summarization/KoreanReviewSummarizer/ks4r/__init__.py", text]);
+        //     python.stdout.on('data', (data) => {
+        //     // console.log(data.toString());
+        //     socket.emit("result", data.toString());
+        //     });
+        // });
+
+    // });    
+    // io.on('connection', (socket) => {
+    //     // test for front-back communication
+    //     // console.log("Client: Connected to Socket.io");
+    //     socket.emit("connection", "connection ready");
+        
+    //     socket.emit("test", "testing");
       
-      socket.emit("test", "testing");
-      
-      socket.on("stt_data", (text) => {
-        console.log(text);
-        const python = spawn('python3', ["/Users/jaehobyun/JB/Coding/school/graduation project/TextRank_test/KoreanReviewSummarizer/ks4r/__init__.py", text]);
-        python.stdout.on('data', (data) => {
-          // console.log(data.toString());
-          socket.emit("result", data.toString());
-        })
-  
-      });
-  
-  
+
+// ---------------------------------------------
       // // 룸 입장 대기 (참여자 조회)
       // socket.on('gate', (roomId) => {
       //   socket.join(roomId); // 소켓을 특정 room에  binding합니다.

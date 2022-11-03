@@ -5,6 +5,7 @@ import Peer from "peerjs";
 import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import Modal from "../UI/Modal";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import host_config from "../../config/serverHost";
 
 const StreamBox = (props) => {
@@ -27,7 +28,102 @@ const StreamBox = (props) => {
 
   const videoGrid = useRef();
   const myVideo = useRef();
+  
+  const [finalSpan, setFinalSpan] = useState('final');
+  const [interimSpan, setInterimSpan] = useState('interim');
 
+  const FIRST_CHAR = /\S/;
+  const TWO_LINE = /\n\n/g;
+  const ONE_LINE = /\n/g;
+
+  let textSummaryScript = '';
+
+  // [음성 인식 stt]
+  const recognition = SpeechRecognition;
+
+  const {
+    transcript,
+    interimTranscript,
+    finalTranscript,
+    resetTranscript,
+    listening,
+    browserSupportsSpeechRecognition,
+    isMicrophoneAvailable,
+  } = useSpeechRecognition();
+  const language = 'ko';
+
+  /**
+   * 음성 인식 결과 처리
+   */
+  // recognition.onresult = function (event) {
+  //   console.log('onresult', event);
+
+  //   let interimTranscript = '';
+  //   if (typeof event.results === 'undefined') {
+  //     recognition.onend = null;
+  //     recognition.stop();
+  //     return;
+  //   }
+
+  //   for (let i = event.resultIndex; i < event.results.length; ++i) {
+  //     const transcript = event.results[i][0].transcript;
+
+  //     if (event.results[i].isFinal) {
+  //       finalTranscript += transcript + '.';
+  //     } else {
+  //       interimTranscript += transcript + '.';
+  //     }
+  //   }
+
+  //   finalTranscript = capitalize(finalTranscript);
+    // final_span.innerHTML = linebreak(finalTranscript);
+    // interim_span.innerHTML = linebreak(interimTranscript);
+
+    // console.log('finalTranscript', finalTranscript);
+    // console.log('interimTranscript', interimTranscript);
+  // };
+
+  /**
+   * 음성 인식 트리거
+   */
+   function start() {
+    if (listening) {
+      recognition.stopListening();
+      // recognition.stop();
+      return;
+    }
+    recognition.startListening({ language : language});
+    // recognition.lang = language;
+    // recognition.start();
+    // ignoreEndProcess = false;
+
+    console.log(listening);
+    console.log(finalTranscript);
+    console.log(interimTranscript);
+    // finalTranscript = '';
+    // $final_span.innerHTML = '';
+    // $interim_span.innerHTML = '';
+  }
+
+  /**
+   * 개행 처리
+   * @param {string} s
+   */ 
+  function linebreak(s) {
+    return s.replace(TWO_LINE, '<p></p>').replace(ONE_LINE, '<br>');
+  }  
+
+  /**
+   * 첫문자를 대문자로 변환
+   * @param {string} s
+   */ 
+  function capitalize(s) {
+    return s.replace(FIRST_CHAR, function (m) {
+      return m.toUpperCase();
+    });  
+  }  
+
+  // ------------------------------------
   // let myStream;
   let peer;
   // const peer = new Peer();
@@ -39,7 +135,16 @@ const StreamBox = (props) => {
 
   useEffect(() => {
     peer = new Peer();
+    // start();
 
+    if (!browserSupportsSpeechRecognition) {
+      console.log(`Browser doesn't support speech recognition`);
+      alert(`Browser doesn't support speech recognition`);
+    } else{
+      console.log(`Browser ready for speech recognition`);
+    }
+    recognition.startListening();
+      
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
@@ -103,6 +208,7 @@ const StreamBox = (props) => {
           removeVideo.remove();
         });
       });
+
   }, []);
 
   const addVideoStream = (video, stream, peerId) => {
@@ -111,6 +217,14 @@ const StreamBox = (props) => {
   };
 
   const handleMuteClick = () => {
+    if (!mute && listening) {
+      recognition.abortListening();
+      console.log(transcript);
+    } else {
+      recognition.startListening();
+    }
+    console.log(listening);
+
     myStream
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
@@ -148,7 +262,8 @@ const StreamBox = (props) => {
   return (
     <>
       <div className={styles.sttBox}>
-        <textarea className={styles.sttText} placeholder="stt 내용" />
+        <span className={styles.final} id="final_span">{finalSpan}</span>
+        <span className={styles.interim} id="interim_span">{interimSpan}</span>
       </div>
       <div className={styles.streamBox}>
         <div className={styles.streams}>
