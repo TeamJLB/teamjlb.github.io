@@ -11,16 +11,13 @@ import { LoadingButton } from '@mui/lab';
 import CallIcon from '@mui/icons-material/Call';
 import InputLabel from '@mui/material/InputLabel';
 import axios from 'axios';
-<<<<<<< HEAD
 import Select from '@mui/material/Select';
 import './RegisterPage.css';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-=======
 import host_config from "../../config/serverHost";
->>>>>>> 0a0e28141b53971f4cbafda5cbb9ac98ab43c316
 
 const RegisterPage = () =>{
     const theme = createTheme();
