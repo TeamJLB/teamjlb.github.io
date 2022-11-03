@@ -4,3 +4,9 @@
 .table {
   display: inline-block;
 }
+
+.historyTitle {
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: bold;
+}
