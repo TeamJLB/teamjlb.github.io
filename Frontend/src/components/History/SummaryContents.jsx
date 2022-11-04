@@ -22,10 +22,10 @@ const SummaryContents = (props) => {
           <div className={styles.userContent}>
             <div className={styles.userName}>{item.user_name}</div>
             <div className={styles.summaryContent}>
-              요약 : {item.summary_content}
+              요약 | {item.summary_content}
             </div>
             <div className={styles.originalContent}>
-              원본 : {item.original_content}
+              원본 | {item.original_content}
             </div>
           </div>
         </ListItem>
