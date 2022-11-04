@@ -73,18 +73,28 @@ const HistoryItem = (props) => {
         <div className={styles.topic}>{topic}</div>
         <div className={styles.keywords}>
           {keywords.map((keyword) => {
-            return <span className={styles.keyword}>{keyword}</span>;
+            return (
+              <span key={Math.random().toString()} className={styles.keyword}>
+                {keyword}
+              </span>
+            );
           })}
         </div>
       </div>
       {isDetailsOpen && (
         <div className={styles.historyDetails}>
           <div className={styles.participants}>참가자 | {participants}</div>
-          <div className={styles.toggle} onClick={clickMemoHandler}>
+          <div
+            className={`${styles.toggle} ${isMemoOpen && styles.opened}`}
+            onClick={clickMemoHandler}
+          >
             ✍🏻 NOTE
           </div>
           {isMemoOpen && <>{memoContents}</>}
-          <div className={styles.toggle} onClick={clickSummaryHandler}>
+          <div
+            className={`${styles.toggle} ${isSummaryOpen && styles.opened}`}
+            onClick={clickSummaryHandler}
+          >
             🗒 회의 요약본
           </div>
           {isSummaryOpen && <>{summaryContents}</>}
