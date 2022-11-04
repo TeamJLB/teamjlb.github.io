@@ -1,0 +1,15 @@
+.historyList {
+  width: 60%;
+  margin: 0 auto;
+  height: auto;
+  background-color: gainsboro;
+  white-space: nowrap;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.list {
+  list-style: none;
+  padding-inline-start: 0px;
+  margin-block: 0;
+}
