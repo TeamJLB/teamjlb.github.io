@@ -66,7 +66,7 @@ exports.retrieveAllSubMeetingHistory = async function (userIdx, meeting_id) {
 
   // 서브 회의 리스트 가져오기
   const allSubMeetingHistoryResult = await meetingDao.selectAllSubMeetingHistory(connection, meeting_id);
-  console.log(allSubMeetingHistoryResult);
+  // console.log(allSubMeetingHistoryResult);
 
   let sub_meeting_id;
   for (const result of allSubMeetingHistoryResult) {
