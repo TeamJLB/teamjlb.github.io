@@ -6,11 +6,6 @@ import Typography from "@mui/material/Typography";
 import React from "react";
 import style from "./Meeting.module.css";
 import { CardActions } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles({
-  card: {},
-});
 
 const MeetingBlock = ({
   item,
@@ -18,8 +13,6 @@ const MeetingBlock = ({
   handleEnterMeeting,
   handleRemove,
 }) => {
-  const classes = useStyles();
-
   const onRemove = () => {
     handleRemove(item.meeting_id);
   };
@@ -30,10 +23,10 @@ const MeetingBlock = ({
     handleEnterMeeting(item.meeting_id);
   };
   return (
-    <Card elevation={3} sx={{ maxWidth: 345 }} className={classes.card}>
+    <Card elevation={3} sx={{ maxWidth: 345 }}>
       <CardContent>
         <Typography variant="subtitle1">{item.meeting_id}</Typography>
-        <Typography variant="h5" component="div">
+        <Typography variant="h6" component="div">
           {item.meeting_name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
