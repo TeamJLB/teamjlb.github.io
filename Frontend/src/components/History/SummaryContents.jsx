@@ -1,10 +1,9 @@
 import React from "react";
 
-const HistoryContents = (props) => {
+const SummaryContents = (props) => {
   const { items } = props;
-  console.log(items);
   return (
-    <>
+    <div>
       {items.map((item) => (
         <div key={item.match_id}>
           <div>
@@ -14,8 +13,8 @@ const HistoryContents = (props) => {
           <div>원본 : {item.original_content}</div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
-export default HistoryContents;
+export default SummaryContents;

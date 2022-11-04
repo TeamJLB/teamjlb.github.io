@@ -12,13 +12,11 @@ const MemoItem = (props) => {
   };
 
   return (
-    <>
-      <li className={styles.memoItem} onClick={memoClickHandler}>
-        <span className={styles.memoTopic}>{memo.topic}</span>
-        <span className={styles.memoDate}>{date}</span>
-        <div className={styles.memoContent}>{memo.memo_content}</div>
-      </li>
-    </>
+    <li className={styles.memoItem} onClick={memoClickHandler}>
+      <span className={styles.memoTopic}>{memo.topic}</span>
+      <span className={styles.memoDate}>{date}</span>
+      <div className={styles.memoContent}>{memo.memo_content}</div>
+    </li>
   );
 };
 
