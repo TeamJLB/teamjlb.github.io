@@ -46,7 +46,7 @@ const MemoList = (props) => {
         })}
       </ul>
     ) : (
-      <h5>이전에 작성한 노트가 없어요</h5>
+      <div className={styles.zeroNote}>이전에 작성한 노트가 없어요 😢</div>
     );
 
   return (

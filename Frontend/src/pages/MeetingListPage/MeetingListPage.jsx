@@ -29,7 +29,10 @@ const MeetingListPage = () => {
 
   const loadList = () => {
     axios
-      .get(`http://${host_config.current_host}:${host_config.current_port}/meetings/allList`, config)
+      .get(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/allList`,
+        config
+      )
       .then((res) => {
         if (res.data.isSuccess) {
           setInfo(res.data.result);
@@ -50,7 +53,10 @@ const MeetingListPage = () => {
   };
   const handleRemove = (id) => {
     axios
-      .delete(`http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting/${id}`, config)
+      .delete(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting/${id}`,
+        config
+      )
       .then((res) => {
         console.log(res);
         if (res.data.isSuccess) {
@@ -92,7 +98,11 @@ const MeetingListPage = () => {
 
   const enterMeeting = () => {
     axios
-      .post(`http://${host_config.current_host}:${host_config.current_port}/meetings/newMeeting/${enterID}`, "", config)
+      .post(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/newMeeting/${enterID}`,
+        "",
+        config
+      )
       .then((res) => {
         if (res.data.isSuccess) {
           handleEnterMeeting(enterID);
@@ -107,12 +117,15 @@ const MeetingListPage = () => {
       loadList();
     } else {
       axios
-        .get(`http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting`, {
-          params: { meetingId: searchID },
-          headers: {
-            "x-access-token": USER_TOKEN,
-          },
-        })
+        .get(
+          `http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting`,
+          {
+            params: { meetingId: searchID },
+            headers: {
+              "x-access-token": USER_TOKEN,
+            },
+          }
+        )
         .then((res) => {
           if (res.data.isSuccess) {
             setInfo(res.data.result);
@@ -127,26 +140,32 @@ const MeetingListPage = () => {
   return (
     <div className="body">
       <div className={style.content}>
-        <div>
-          <h1>전체 회의 리스트</h1>
-        </div>
-        <div>
-          내 회의 검색
-          <input
-            type="text"
-            value={searchID}
-            onChange={(e) => setSearchID(e.target.value)}
-          />
-          <button onClick={searchMeeting}>검색</button>
-        </div>
-        <div>
-          ID로 회의 입장하기
-          <input
-            id="inputMeetingID"
-            type="text"
-            onChange={(e) => setEnterID(e.target.value)}
-          />
-          <button onClick={enterMeeting}>입장</button>
+        <h1 className={style.listTitle}>🖥 MY MEETING LIST</h1>
+        <div className={style.searchGroup}>
+          <div className={style.searchbar}>
+            내 회의 검색
+            <input
+              type="text"
+              value={searchID}
+              className={style.searchMeeting}
+              onChange={(e) => setSearchID(e.target.value)}
+            />
+            <button className={style.searchBtn} onClick={searchMeeting}>
+              검색
+            </button>
+          </div>
+          <div className={style.searchbar}>
+            ID로 입장
+            <input
+              id="inputMeetingID"
+              className={style.searchMeeting}
+              type="text"
+              onChange={(e) => setEnterID(e.target.value)}
+            />
+            <button className={style.searchBtn} onClick={enterMeeting}>
+              입장
+            </button>
+          </div>
         </div>
         <div className={style.gridscroll}>
           <div className={style.grid}>
