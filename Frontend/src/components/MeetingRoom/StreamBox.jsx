@@ -6,6 +6,7 @@ import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import Modal from "../UI/Modal";
 import host_config from "../../config/serverHost";
+import axios from "axios";
 
 const StreamBox = (props) => {
   // [로컬 서버에서 테스트]
@@ -19,6 +20,8 @@ const StreamBox = (props) => {
 
   const userToken = location.state.config.headers["x-access-token"];
   const roomName = location.state.meeting_id;
+  const topic = "회의 주제";
+  const meetingId = "회의 ID";
 
   const [peerId, setPeerId] = useState("");
   const [myStream, setMyStream] = useState(null);
@@ -142,6 +145,10 @@ const StreamBox = (props) => {
   return (
     <>
       <div className={styles.streamBox}>
+        <div className={styles.meetingHeader}>
+          <span className={styles.topic}>{topic}</span>
+          <span className={styles.meetingId}>{meetingId}</span>
+        </div>
         <div className={styles.streams}>
           <div id="videos" ref={videoGrid} className={styles.videos}>
             <div>

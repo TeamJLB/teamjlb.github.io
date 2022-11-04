@@ -1,0 +1,14 @@
+div {
+  font-size: 14px;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: light;
+}
+
+.userName {
+  font-weight: bold;
+}
+
+.userContent {
+  padding-top: 10px;
+}

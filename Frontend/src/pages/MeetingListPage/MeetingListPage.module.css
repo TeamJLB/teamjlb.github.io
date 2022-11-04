@@ -7,6 +7,13 @@ span {
   font-size: 20px;
 }
 
+.listTitle {
+  padding: 10px 0;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: bold;
+}
+
 .content {
   text-align: center;
 }
@@ -40,6 +47,45 @@ span {
   overflow-x: auto;
   white-space: nowrap;
   display: inline-block;
-  margin: 20px;
+  margin: 10px;
   border-radius: 5px;
+}
+
+.searchGroup {
+  position: relative;
+  display: inline-block;
+  width: 70%;
+  display: flex;
+  margin: auto;
+}
+
+.searchMeeting {
+  border: none;
+  background-color: rgb(233, 233, 233);
+  border-radius: 10px;
+  height: 30px;
+  outline: none;
+  margin: 0 10px;
+  padding: 0 10px;
+}
+
+.searchbar {
+  padding: 0 10px;
+}
+
+.searchBtn {
+  width: 50px;
+  height: 30px;
+  background-color: rgb(233, 233, 233);
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+}
+
+.searchBtn:hover {
+  background-color: rgb(200, 200, 200);
+}
+
+.searchMeeting:focus {
+  outline: 1px solid gray;
 }
