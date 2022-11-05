@@ -113,7 +113,7 @@ exports.deleteMyMeeting = async function (req, res) {
 
 /**
  * API No. 7
- * API Name : 기존 회의 다시 개설 API
+ * API Name : (서브)회의에 입장하기 API
  * [POST] '/meetings/openMeeting/:meetingId'
  * header : x-access-token
  * path variable : meetingId
@@ -129,25 +129,54 @@ exports.postEnterMeeting = async function (req, res) {
     return res.send(enterMeetingInfo);
 };
 
-
 /**
- * API No. 5
- * API Name : 새 회의 참가 API
- * [POST] '/meetings/newMeeting/:meetingId'
+ * API No. 8
+ * API Name : (서브)회의에 퇴장하기 API
+ * [POST] '/meetings/closeMeeting/:meetingId'
  * header : x-access-token
- * path variable : meetingId
+ * path variable : meetingId, subMeetingId
+ * body : matchId
  */
-exports.joinNewMeeting = async function (req, res) {
+exports.patchExitMeeting = async function (req, res) {
     const userIdxFromJWT = req.verifiedToken.user_id;
 
     const meeting_id = req.params.meetingId;
+    const sub_meeting_id = req.params.subMeetingId;
+    const match_id = req.body.matchId;
 
-    const joinNewMeetingInfo = await meetingService.joinNewMeeting(userIdxFromJWT, meeting_id);
-    return res.send(joinNewMeetingInfo);
+    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
+    if (!sub_meeting_id) return res.send(errResponse(baseResponse.SUBMEETING_ID_EMPTY));
+    if (!match_id) return res.send(errResponse(baseResponse.MATCH_ID_EMPTY));
+
+    const exitMeetingInfo = await meetingService.exitMeeting(userIdxFromJWT, meeting_id, sub_meeting_id, match_id);
+    return res.send(exitMeetingInfo);
 };
 
 /**
- * API No. 7
+ * API No. 9
+ * API Name : (서브)회의 주제 변경(저장)하기 API
+ * [POST] '/meetings/openMeeting/:meetingId/:subMeetingId'
+ * header : x-access-token
+ * path variable : meetingId, subMeetingId
+ * body : topic
+ */
+exports.patchSubMeetingTopic = async function (req, res) {
+    const userIdxFromJWT = req.verifiedToken.user_id;
+
+    const meeting_id = req.params.meetingId;
+    const sub_meeting_id = req.params.subMeetingId;
+    const topic = req.body.topic;
+
+    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
+    if (!sub_meeting_id) return res.send(errResponse(baseResponse.SUBMEETING_ID_EMPTY));
+    // if (!topic) return res.send(errResponse(baseResponse.SUBMEETING_TOPIC_EMPTY));
+
+    const updateSubMeetingTopicInfo = await meetingService.updateSubMeetingTopic(userIdxFromJWT, meeting_id, sub_meeting_id, topic);
+    return res.send(updateSubMeetingTopicInfo);
+};
+
+/**
+ * API No. 10
  * API Name : 회의 히스토리 리스트 API
  * [GET] /meetings/meetingHistory
  * header : x-access-token

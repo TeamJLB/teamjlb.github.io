@@ -20,6 +20,17 @@ async function selectMyMeetingById(connection, selectMeetingParams) {
   return meetingRow[0];
 }
 
+// (maybe later -> selectSortedMeetingById) 회의 id로 회의 존재 여부 체크
+async function findMeetingId(connection, meeting_id) {
+  const selectMeetingIdQuery = `
+                SELECT * 
+                FROM Meeting 
+                WHERE meeting_id = ?;
+  `;
+  const meetingRow = await connection.query(selectMeetingIdQuery, meeting_id);
+  return meetingRow[0];
+}
+
 // meeting_id로 회의 검색 - 내 회의면 'isMyMeeting' = 1 else 0
 async function selectSortedMeetingById(connection, selectMeetingParams) {
   const searchSortedMeetingByIdQuery = `
@@ -157,31 +168,164 @@ async function makeMatching(connection, insertMatchingParams) {
 
 // 서브회의 입장하기3 - 매칭 상태 활성화하기 (열려있는 회의에 참여한 적이 있다가 다시 참여하는 경우)
 async function updateMatchingToActiveById(connection, match_id) {
-  const updateMatchingToActiveByidQuery = `
+  const updateMatchingToActiveByIdQuery = `
         UPDATE Matching
         SET status='active'
         WHERE match_id = ?;
   `;
-  const updateMatchingToActiveByIdRow = await connection.query(updateMatchingToActiveByidQuery, match_id);
+  const updateMatchingToActiveByIdRow = await connection.query(updateMatchingToActiveByIdQuery, match_id);
 
   return updateMatchingToActiveByIdRow;
 }
 
-// TODO 서브회의 퇴장하기부터
-
-
-// 회의 id로 회의 존재 여부 체크
-async function findMeetingId(connection, meeting_id) {
-  const selectMeetingIdQuery = `
-                SELECT * 
-                FROM Meeting 
-                WHERE meeting_id = ?;
+// meeting_id 와 match_id 가 올바르게 매칭되어있는지 확인 (맞으면 1, 아니면 0)
+async function checkMMMatch(connection, selectMMMatchParams) {
+  const selectMMMatchQuery = `
+          SELECT IF(
+             EXISTS(
+               SELECT *
+               FROM Matching MC INNER JOIN SubMeeting SM on MC.sub_meeting_id = SM.sub_meeting_id
+               WHERE SM.meeting_id = ? AND MC.match_id = ?
+             ), 1, 0) AS validation_result;
   `;
-  const meetingRow = await connection.query(selectMeetingIdQuery, meeting_id);
+  const matchResult = await connection.query(selectMMMatchQuery, selectMMMatchParams);
+  return matchResult[0];
+}
+
+// 매칭 상태 확인 (is active?)
+async function checkActiveMatchById(connection, matchId) {
+  const selectActiveMatchQuery = `
+          SELECT IF(
+             EXISTS(
+               SELECT *
+               FROM Matching
+               WHERE match_id = ? AND status = 'active'
+             ), 1, 0) AS match_result;
+  `;
+  const matchResult = await connection.query(selectActiveMatchQuery, matchId);
+  return matchResult[0];
+}
+
+// 서브회의 퇴장하기
+async function updateMatchingToInactiveById(connection, match_id) {
+  const updateMatchingToInactiveByIdQuery = `
+        UPDATE Matching
+        SET status='inactive'
+        WHERE match_id = ?;
+  `;
+  const updateMatchingToInactiveByIdRow = await connection.query(updateMatchingToInactiveByIdQuery, match_id);
+
+  return updateMatchingToInactiveByIdRow;
+}
+
+// 서브회의에 활성화 상태에 있는 매칭 있는지 확인
+async function checkAnyActiveMatchById(connection, sub_meeting_id) {
+  const checkAnyActiveMatchByIdQuery = `
+        SELECT IF(
+           EXISTS(
+             SELECT *
+             FROM Matching
+             WHERE sub_meeting_id = ? AND status='active'
+           ), 1, 0) AS left_match_result;
+  `;
+  const subMeetingResult = await connection.query(checkAnyActiveMatchByIdQuery, sub_meeting_id);
+
+  return subMeetingResult[0];
+}
+
+// 서브회의 종료(닫기)
+async function updateSubMeetingStatus(connection, sub_meeting_id) {
+  const updateSubMeetingStatusQuery = `
+        UPDATE SubMeeting
+        SET status='terminated'
+        WHERE sub_meeting_id = ?;
+  `;
+  const updateSubMeetingStatusResult = await connection.query(updateSubMeetingStatusQuery, sub_meeting_id);
+
+  return updateSubMeetingStatusResult[0];
+}
+
+// 서브회의의 모든 매칭 정보 종료(상태 변경)
+async function updateAllMatchingStatus(connection, sub_meeting_id) {
+  const updateAllMatchingStatusQuery = `
+        UPDATE Matching
+        SET status='terminated'
+        WHERE sub_meeting_id = ?;
+  `;
+  const updateAllMatchingStatusResult = await connection.query(updateAllMatchingStatusQuery, sub_meeting_id);
+
+  return updateAllMatchingStatusResult[0];
+}
+
+// sub_meeting_id로 meeting_id 알아내기
+async function selectMeetingBySubId(connection, sub_meeting_id) {
+  const selectMeetingBySubIdQuery = `
+        SELECT meeting_id
+        FROM SubMeeting
+        WHERE sub_meeting_id = ?;
+  `;
+  const meetingRow = await connection.query(selectMeetingBySubIdQuery, sub_meeting_id);
   return meetingRow[0];
 }
 
-// 회의 id로 해당 서브회의 id 검색
+// sub_meeting_id로 meeting_id 알아내기
+async function selectTopicBySubId(connection, sub_meeting_id) {
+  const selectTopicBySubIdQuery = `
+        SELECT topic
+        FROM SubMeeting
+        WHERE sub_meeting_id = ?;
+  `;
+  const topicRow = await connection.query(selectTopicBySubIdQuery, sub_meeting_id);
+  return topicRow[0];
+}
+
+// 서브회의 주제 갱신하기
+async function updateSubMeetingTopic(connection, patchTopicParams) {
+  const updateSubMeetingTopicQuery = `
+        UPDATE SubMeeting
+        SET topic=?
+        WHERE sub_meeting_id = ?;
+  `;
+  const updateSubMeetingTopicResult = await connection.query(updateSubMeetingTopicQuery, patchTopicParams);
+
+  return updateSubMeetingTopicResult[0];
+}
+
+// 회의 id로 서브 회의 히스토리 조회
+async function selectAllSubMeetingHistory(connection, meeting_id) {
+  const selectAllSubMeetingHistoryQuery = `
+        SELECT SM.sub_meeting_id, SM.createdAt, SM.topic
+        FROM SubMeeting SM INNER JOIN Meeting M on SM.meeting_id = M.meeting_id
+        WHERE M.meeting_id = ? AND SM.status = 'terminated';
+  `;
+  const [historyRows] = await connection.query(selectAllSubMeetingHistoryQuery, meeting_id);
+  return historyRows;
+}
+
+// 서브회의 id로 참가자 조회
+async function selectAllParticipantBySubMeetingId(connection, sub_meeting_id) {
+  const selectAllParticipantBySubMeetingIdQuery = `
+    SELECT U.user_name
+    FROM User U INNER JOIN Matching MC on U.user_id = MC.user_id
+    WHERE MC.sub_meeting_id = ? AND MC.status = 'terminated'
+    GROUP BY U.user_id;
+  `;
+  const [participantRows] = await connection.query(selectAllParticipantBySubMeetingIdQuery, sub_meeting_id);
+  return participantRows;
+}
+
+// 서브회의 id로 키워드 조회
+async function selectAllKeywordBySubMeetingId(connection, sub_meeting_id) {
+  const selectAllKeywordBySubMeetingIdQuery = `
+    SELECT DISTINCT K.keyword_content
+    FROM Keyword K INNER JOIN Memo MM on K.memo_id = MM.memo_id INNER JOIN Matching MC on MM.sub_meeting_id = MC.sub_meeting_id
+    WHERE MM.sub_meeting_id = ?;
+  `;
+  const [keywordRows] = await connection.query(selectAllKeywordBySubMeetingIdQuery, sub_meeting_id);
+  return keywordRows;
+}
+
+// (deprecated)회의 id로 해당 서브회의 id 검색
 async function selectSubMeetingById(connection, meeting_id) {
   const searchSubMeetingByIdQuery = `
     SELECT max(SM.sub_meeting_id) AS latest_sub_meeting_id
@@ -192,7 +336,7 @@ async function selectSubMeetingById(connection, meeting_id) {
   return subMeetingRow[0];
 }
 
-// 회원과 회의 사이의 매칭 id 체크
+// (unused)회원과 회의 사이의 매칭 id 체크
 async function findAllMatchingId(connection, selectMatchingParams) {
   const selectMatchingIdQuery = `
     SELECT MC.match_id
@@ -220,42 +364,10 @@ async function deleteAllMatchingIds(connection, deleteMatchingParams) {
   return deleteMatchingInfoRow;
 }
 
-// 회의 id로 서브 회의 히스토리 조회
-async function selectAllSubMeetingHistory(connection, meeting_id) {
-  const selectAllSubMeetingHistoryQuery = `
-    SELECT DISTINCT MC.sub_meeting_id, SM.createdAt, SM.topic
-    FROM Matching MC INNER JOIN SubMeeting SM on MC.sub_meeting_id = SM.sub_meeting_id INNER JOIN Meeting M on SM.meeting_id = M.meeting_id
-    WHERE M.meeting_id = ?;
-  `;
-  const [historyRows] = await connection.query(selectAllSubMeetingHistoryQuery, meeting_id);
-  return historyRows;
-}
-
-// 서브회의 id로 참가자 조회
-async function selectAllParticipantBySubMeetingId(connection, sub_meeting_id) {
-  const selectAllParticipantBySubMeetingIdQuery = `
-    SELECT U.user_name
-    FROM User U INNER JOIN Matching MC on U.user_id = MC.user_id
-    WHERE MC.sub_meeting_id = ?;
-  `;
-  const [participantRows] = await connection.query(selectAllParticipantBySubMeetingIdQuery, sub_meeting_id);
-  return participantRows;
-}
-
-// 서브회의 id로 키워드 조회
-async function selectAllKeywordBySubMeetingId(connection, sub_meeting_id) {
-  const selectAllKeywordBySubMeetingIdQuery = `
-    SELECT DISTINCT K.keyword_content
-    FROM Keyword K INNER JOIN Memo MM on K.memo_id = MM.memo_id INNER JOIN Matching MC on MM.sub_meeting_id = MC.sub_meeting_id
-    WHERE MM.sub_meeting_id = ?;
-  `;
-  const [keywordRows] = await connection.query(selectAllKeywordBySubMeetingIdQuery, sub_meeting_id);
-  return keywordRows;
-}
-
 module.exports = {
   selectAllMeetingByUserId,
   selectMyMeetingById,
+  findMeetingId,
   selectSortedMeetingById,
   selectMeetingSearch,
   selectMeetingById,
@@ -269,13 +381,20 @@ module.exports = {
   insertSubMeetingInfo,
   makeMatching,
   updateMatchingToActiveById,
-
-  findMeetingId,
-  selectSubMeetingById,
-  findAllMatchingId,
-  deleteAllMatchingIds,
+  checkMMMatch,
+  checkActiveMatchById,
+  updateMatchingToInactiveById,
+  checkAnyActiveMatchById,
+  updateSubMeetingStatus,
+  updateAllMatchingStatus,
+  selectMeetingBySubId,
+  selectTopicBySubId,
+  updateSubMeetingTopic,
   selectAllSubMeetingHistory,
   selectAllParticipantBySubMeetingId,
   selectAllKeywordBySubMeetingId,
 
+  selectSubMeetingById,
+  findAllMatchingId,
+  deleteAllMatchingIds,
 };

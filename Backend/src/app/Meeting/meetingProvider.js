@@ -89,6 +89,48 @@ exports.checkPreviousMatchingById = async function (userIdx, sub_meeting_id) {
   return previousMatchingCheckResult;
 };
 
+exports.checkMeetingMatchingValidation = async function (meeting_id, match_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const matchValidationResult = await meetingDao.checkMMMatch(connection, [meeting_id, match_id]);
+  connection.release();
+
+  return matchValidationResult[0];
+};
+
+exports.checkActiveMatchingById = async function (match_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+
+  const activeMatchCheckResult = await meetingDao.checkActiveMatchById(connection, match_id);
+  connection.release();
+
+  return activeMatchCheckResult[0];
+};
+
+exports.checkLeftMatchById = async function (sub_meeting_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+
+  const leftMatchResult = await meetingDao.checkAnyActiveMatchById(connection, sub_meeting_id);
+  connection.release();
+
+  return leftMatchResult[0];
+};
+
+exports.checkMeetingBySubId = async function (sub_meeting_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const meetingIdResult = await meetingDao.selectMeetingBySubId(connection, sub_meeting_id);
+  connection.release();
+
+  return meetingIdResult[0];
+};
+
+exports.checkSubMeetingTopicById = async function (sub_meeting_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const subMeetingTopicResult = await meetingDao.selectTopicBySubId(connection, sub_meeting_id);
+  connection.release();
+
+  return subMeetingTopicResult[0];
+};
+
 exports.retrieveAllSubMeetingHistory = async function (userIdx, meeting_id) {
   const connection = await pool.getConnection(async (conn) => conn);
 

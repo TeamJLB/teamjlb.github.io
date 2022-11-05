@@ -43,6 +43,7 @@ module.exports = {
 
     // ---
     SUBMEETING_ID_EMPTY : { "isSuccess": false, "code": 2200, "message": "서브회의 ID를 입력해주세요." },
+    SUBMEETING_TOPIC_EMPTY : { "isSuccess": false, "code": 2201, "message": "서브회의 주제를 입력해주세요." },
 
     // ---
     MATCH_ID_EMPTY : { "isSuccess": false, "code": 2300, "message": "매칭 ID를 입력해주세요." },
@@ -62,12 +63,15 @@ module.exports = {
     MEETING_ID_NOT_EXISTS : { "isSuccess": false, "code": 3100, "message": "해당 ID의 회의가 존재하지 않습니다." },
     MEETING_REDUNDANT_NAME : { "isSuccess": false, "code": 3101, "message": "중복된 회의 이름입니다." },
     MEETING_SEARCH_NOT_EXISTS : { "isSuccess": false, "code": 3103, "message": "해당 검색어를 포함한 회의가 존재하지 않습니다." },
+    MEETING_SUBMEETING_VALIDATION_FAIL : { "isSuccess": false, "code": 3104, "message": "회의ID와 서브회의ID가 연결되지 않습니다." },
 
     MATCHING_NO_RESULT : { "isSuccess": false, "code": 3200, "message": "해당 match_id의 매칭 정보가 없습니다." },
     UMMATCH_ALREADY_EXISTS : { "isSuccess": false, "code": 3201, "message": "이미 해당 회원은 해당 회의와 매칭 정보가 있습니다." },
     UMMATCH_NOT_EXISTS : { "isSuccess": false, "code": 3202, "message": "해당 회원과 회의간의 매칭 정보가 없습니다." },
     UMMATCH_DELETION_FAIL : { "isSuccess": false, "code": 3203, "message": "회의를 내 회의 리스트에서 제거하는데 실패했습니다." },
     MATCHING_ALREADY_EXISTS : { "isSuccess": false, "code": 3204, "message": "이미 해당 회원은 회의에 참석중입니다." },
+    MEETING_MATCH_VALIDATION_FAIL : { "isSuccess": false, "code": 3205, "message": "회의ID와 매칭ID가 연결되지 않습니다." },
+    MATCHING_CLOSE_NOT_READY : { "isSuccess": false, "code": 3206, "message": "매칭 상태가 올바르지 않습니다.(not active)" },
 
     ENTER_MEETING_FAILED : { "isSuccess": false, "code": 3250, "message": "회의에 입장하는데 실패했습니다. (자세한 내용은 개발자에게 물어보세요)" },
 
