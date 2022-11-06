@@ -5,7 +5,7 @@ const Meetings = ({
   info,
   handleEnterHistory,
   handleEnterMeeting,
-  handleRemove,
+  handleRemove, searchFlag, cancelSearch ,AddMeetingByID
 }) => {
   return (
     <>
@@ -17,6 +17,9 @@ const Meetings = ({
             handleEnterHistory={handleEnterHistory}
             handleEnterMeeting={handleEnterMeeting}
             handleRemove={handleRemove}
+            searchFlag={searchFlag}
+            cancelSearch={cancelSearch}
+            AddMeetingByID={AddMeetingByID}
           />
         );
       })}

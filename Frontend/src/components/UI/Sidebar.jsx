@@ -49,6 +49,7 @@ const Sidebar = (props) => {
   if (location.pathname === "/meetingRoom") return null;
 
   const clickLogoHandler = () => {
+    window.location.reload();
     navigate("/meetingList", { state: { userToken } });
   };
 

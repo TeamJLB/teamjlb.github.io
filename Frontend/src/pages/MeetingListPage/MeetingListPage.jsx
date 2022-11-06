@@ -13,20 +13,27 @@ const MeetingListPage = () => {
   const location = useLocation();
   const USER_TOKEN = location.state.userToken;
   const navigate = useNavigate();
-  const [info, setInfo] = useState([]);
-  const [enterID, setEnterID] = useState("");
-  const [searchID, setSearchID] = useState("");
-  const [modalOn, setModalOn] = useState(false);
+  const [info, setInfo] = useState([]); // meetingList에 보여지는 카드 정보
+  const [searchByID, setSearchByID] = useState(""); // ID로 회의 검색
+  const [searchBySTR, setSearchBySTR] = useState(""); // 내 회의 검색
+  const [modalOn, setModalOn] = useState(false); // 새 회의 추가 모달
+  const [searchFlag, setSearchFlag] = useState(false); // 외부 카드 (false -> 외부 회의)
+  const [subId, setSubId] = useState("");
+  const [matchId, setMatchId] = useState("");
+  const [currentMeetingId, setCurrentMeetingId] = useState("");
+
   const config = {
     headers: {
       "x-access-token": USER_TOKEN,
     },
   };
+
   useEffect(() => {
     loadList();
     console.log(config);
   }, []);
 
+  // user 회의 리스트 불러오기
   const loadList = () => {
     axios
       .get(
@@ -43,6 +50,10 @@ const MeetingListPage = () => {
       .catch((err) => alert(err));
   };
 
+  // [MeetingBlock Handling]
+  // 회의 카드에 존재하는 버튼 핸들링
+
+  // [MeetingBlock Handling] - 히스토리 입장
   const handleEnterHistory = (meetingid, meetingName) => {
     navigate("/history", {
       state: {
@@ -52,12 +63,53 @@ const MeetingListPage = () => {
       },
     });
   };
+
+  // [MeetingBlock Handling] - [참가] 화상회의실 입장
   const handleEnterMeeting = (meetingID) => {
-    navigate("/meetingRoom", {
-      state: { config: config, meeting_id: meetingID },
-    });
+    setCurrentMeetingId(meetingID);
+    axios
+      .post(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingID}`,
+        "",
+        config
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.isSuccess) {
+          if (res.data.result.action === "회의를 개설합니다.") {
+            setSubId(res.data.result.added_subMeeting_id);
+            setMatchId(res.data.result.added_match_id);
+          } else if (res.data.result.action === "회의에 참가합니다.") {
+            setSubId(res.data.result.opened_subMeeting_id);
+            setMatchId(res.data.result.added_match_id);
+          } else if (res.data.result.action === "회의에 재입장합니다.") {
+            setSubId(res.data.result.opened_subMeeting_id);
+            setMatchId(res.data.result.updated_match_id);
+          }
+        } else {
+          alert(res.data.message);
+        }
+      });
   };
+
+  useEffect(() => {
+    console.log(subId, matchId);
+    if (subId && matchId) {
+      console.log("subid : ", subId, "matchid :", matchId);
+      navigate("/meetingRoom", {
+        state: {
+          config: config,
+          meeting_id: currentMeetingId,
+          subMeeting_id: subId,
+          match_id: matchId,
+        },
+      });
+    }
+  }, [subId, matchId, navigate]);
+
+  // [MeetingBlock Handling] - 회의 삭제
   const handleRemove = (id) => {
+    console.log("remove", id);
     axios
       .delete(
         `http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting/${id}`,
@@ -66,6 +118,7 @@ const MeetingListPage = () => {
       .then((res) => {
         console.log(res);
         if (res.data.isSuccess) {
+          console.log(res);
           loadList();
         } else {
           alert(res.data.message);
@@ -73,13 +126,97 @@ const MeetingListPage = () => {
       })
       .catch((err) => alert(err));
   };
+
+  // [MeetingBlock Handling] - ID로 회의 검색 -> 취소 버튼
+  const cancelSearch = () => {
+    setSearchFlag(false);
+    setSearchByID("");
+    loadList();
+  };
+
+  // [MeetingBlock Handling] - ID로 회의 검색 -> 내 회의 추가 버튼
+  const AddMeetingByID = (meetingID) => {
+    //id로 회의 추가
+    axios
+      .post(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting/${meetingID}`,
+        "",
+        config
+      )
+      .then((res) => {
+        if (res.data.isSuccess) {
+          setSearchByID("");
+          setSearchFlag(false);
+          alert("✅ 회의 추가가 완료되었습니다.");
+          loadList();
+        } else {
+          alert(res.data.message);
+        }
+      });
+  };
+
+  // ID로 회의 검색
+  const searchMeetingByID = () => {
+    if (searchByID === "") {
+      setSearchFlag(false);
+      loadList();
+    } else {
+      axios
+        .get(
+          `http://${host_config.current_host}:${host_config.current_port}/meetings/search/${searchByID}`,
+          config
+        )
+        .then((res) => {
+          if (res.data.isSuccess) {
+            setInfo(res.data.result);
+            setSearchFlag(true);
+          } else {
+            alert(res.data.message);
+          }
+        });
+    }
+  };
+
+  // 내 회의 검색
+  const searchMeeting = () => {
+    if (searchBySTR === "") {
+      setSearchByID("");
+      setSearchFlag(false);
+      loadList();
+    } else {
+      axios
+        .get(
+          `http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting/`,
+          {
+            params: { search: searchBySTR },
+            headers: {
+              "x-access-token": USER_TOKEN,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.isSuccess) {
+            setInfo(res.data.result);
+          } else {
+            alert(res.data.message);
+          }
+          setSearchBySTR("");
+        });
+    }
+  };
+
+  // 새 회의 추가
   const handleAddMeeting = () => {
     console.log("click");
     setModalOn(true);
   };
+
+  // 새 회의 추가 모달 -> 취소 버튼
   const handleAddCancel = () => {
     setModalOn(false);
   };
+
+  // 새 회의 추가 모달 -> 추가 버튼
   const handleAddSubmit = (meetingName, topic) => {
     setModalOn(false);
     console.log("회의 명 : ", meetingName);
@@ -102,47 +239,6 @@ const MeetingListPage = () => {
       });
   };
 
-  const enterMeeting = () => {
-    axios
-      .post(
-        `http://${host_config.current_host}:${host_config.current_port}/meetings/newMeeting/${enterID}`,
-        "",
-        config
-      )
-      .then((res) => {
-        if (res.data.isSuccess) {
-          handleEnterMeeting(enterID);
-        } else {
-          alert(res.data.message);
-        }
-      });
-  };
-
-  const searchMeeting = () => {
-    if (searchID === "") {
-      loadList();
-    } else {
-      axios
-        .get(
-          `http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting`,
-          {
-            params: { meetingId: searchID },
-            headers: {
-              "x-access-token": USER_TOKEN,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.data.isSuccess) {
-            setInfo(res.data.result);
-          } else {
-            alert(res.data.message);
-          }
-          setSearchID("");
-        });
-    }
-  };
-
   return (
     <div className={style.body}>
       <div className={style.content}>
@@ -152,24 +248,25 @@ const MeetingListPage = () => {
             내 회의 검색
             <input
               type="text"
-              value={searchID}
+              value={searchBySTR}
               className={style.searchMeeting}
-              onChange={(e) => setSearchID(e.target.value)}
+              onChange={(e) => setSearchBySTR(e.target.value)}
             />
             <button className={style.searchBtn} onClick={searchMeeting}>
               검색
             </button>
           </div>
           <div className={style.searchbar}>
-            ID로 입장
+            ID로 회의 검색
             <input
               id="inputMeetingID"
               className={style.searchMeeting}
               type="text"
-              onChange={(e) => setEnterID(e.target.value)}
+              value={searchByID}
+              onChange={(e) => setSearchByID(e.target.value)}
             />
-            <button className={style.searchBtn} onClick={enterMeeting}>
-              입장
+            <button className={style.searchBtn} onClick={searchMeetingByID}>
+              검색
             </button>
           </div>
         </div>
@@ -180,6 +277,9 @@ const MeetingListPage = () => {
               handleEnterHistory={handleEnterHistory}
               handleEnterMeeting={handleEnterMeeting}
               handleRemove={handleRemove}
+              searchFlag={searchFlag}
+              cancelSearch={cancelSearch}
+              AddMeetingByID={AddMeetingByID}
             />
             <Card elevation={3}>
               <Button
