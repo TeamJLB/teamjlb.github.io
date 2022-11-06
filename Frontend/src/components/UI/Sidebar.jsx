@@ -11,14 +11,16 @@ const Sidebar = (props) => {
   const location = useLocation();
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const USER_TOKEN = location.state?.userToken;
+  let userToken;
+  userToken = location.state?.userToken;
   const config = {
     headers: {
-      "x-access-token": USER_TOKEN,
+      "x-access-token": userToken,
     },
   };
 
   useEffect(() => {
+    if (!userToken) return;
     axios
       .get(
         `http://${host_config.current_host}:${host_config.current_port}/users/userInfo`,
@@ -28,7 +30,7 @@ const Sidebar = (props) => {
         setUserName(res.data.result.user_name);
         setUserEmail(res.data.result.email);
       });
-  }, []);
+  }, [userToken]);
 
   if (location.pathname === "/") return null;
   if (location.pathname === "/login") return null;
