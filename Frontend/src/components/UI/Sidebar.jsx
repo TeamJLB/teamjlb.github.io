@@ -1,9 +1,14 @@
 import React from "react";
 import styles from "./Sidebar.module.css";
 import Avatar from "@mui/material/Avatar";
+import { useLocation } from "react-router-dom";
 
 const Sidebar = (props) => {
-  if (window.location.pathname === "/meetingRoom") return null;
+  const location = useLocation();
+  if (location.pathname === "/") return null;
+  if (location.pathname === "/login") return null;
+  if (location.pathname === "/meetingRoom") return null;
+
   // 나중에 추가할 것 : 유저 정보 가져오기
   const userName = "김민지";
   const userEmail = "minji@gmail.com";
