@@ -7,7 +7,12 @@ import host_config from "../../config/serverHost";
 
 const HistoryPage = () => {
   const location = useLocation();
-  const config = location.state.config;
+  const USER_TOKEN = location.state.userToken;
+  const config = {
+    headers: {
+      "x-access-token": USER_TOKEN,
+    },
+  };
   const meetingId = location.state.meeting_id;
 
   const [historyList, sethistoryList] = useState();

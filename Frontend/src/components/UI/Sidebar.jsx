@@ -11,6 +11,8 @@ const Sidebar = (props) => {
   const location = useLocation();
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [userMeetingList, setUserMeetingList] = useState([]);
+
   let userToken;
   userToken = location.state?.userToken;
   const config = {
@@ -29,6 +31,14 @@ const Sidebar = (props) => {
       .then((res) => {
         setUserName(res.data.result.user_name);
         setUserEmail(res.data.result.email);
+      });
+    axios
+      .get(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/allList`,
+        config
+      )
+      .then((res) => {
+        console.log(res.data.result);
       });
   }, [userToken]);
 

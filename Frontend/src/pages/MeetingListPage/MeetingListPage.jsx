@@ -44,7 +44,9 @@ const MeetingListPage = () => {
   };
 
   const handleEnterHistory = (meetingid) => {
-    navigate("/history", { state: { config: config, meeting_id: meetingid } });
+    navigate("/history", {
+      state: { userToken: USER_TOKEN, meeting_id: meetingid },
+    });
   };
   const handleEnterMeeting = (meetingID) => {
     navigate("/meetingRoom", {
