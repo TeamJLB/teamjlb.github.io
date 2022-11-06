@@ -18,8 +18,13 @@ const StreamBox = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const config = location.state.config
   const userToken = location.state.config.headers["x-access-token"];
   const roomName = location.state.meeting_id;
+  const subMeetingID = location.state.subMeeting_id;
+  const matchID = location.state.match_id;
+  console.log("stream");
+  console.log('sub',subMeetingID,'match',matchID);
   const topic = "회의 주제";
   const meetingId = "회의 ID";
 
@@ -122,14 +127,27 @@ const StreamBox = (props) => {
   };
 
   const handleLeaveClick = () => {
-    socket.disconnect();
-    peer?.destroy();
-    myStream.getTracks().forEach((track) => track.stop());
-    setMyStream(null);
-    myVideo.srcObject = null;
-    clearAllVideos();
-    navigate("/meetingList", { state: { userToken } });
-    window.location.reload();
+    axios
+        .patch(
+            `http://${host_config.current_host}:${host_config.current_port}/meetings/closeMeeting/${roomName}/${subMeetingID}`,
+            {matchId : matchID},config
+        )
+        .then((res)=>{
+          if (res.data.isSuccess) {
+            console.log(res.data.result);
+            socket.disconnect();
+            peer?.destroy();
+            myStream.getTracks().forEach((track) => track.stop());
+            setMyStream(null);
+            myVideo.srcObject = null;
+            clearAllVideos();
+            navigate("/meetingList", { state: { userToken } });
+            window.location.reload();
+          } else {
+            alert(res.data.message);
+          }
+        });
+
   };
 
   const clearAllVideos = () => {
