@@ -49,7 +49,8 @@ const Sidebar = (props) => {
   if (location.pathname === "/meetingRoom") return null;
 
   const clickLogoHandler = () => {
-    window.location.reload();
+    // 추후 수정할 부분 (새로고침 하지 않고 리렌더링하도록)
+    if (location.pathname === "/meetingList") window.location.reload();
     navigate("/meetingList", { state: { userToken } });
   };
 
