@@ -7,6 +7,10 @@ span {
   font-size: 20px;
 }
 
+.body {
+  padding-left: 15%;
+}
+
 .listTitle {
   padding: 10px 0;
   font-family: "Noto Sans CJK KR";
@@ -41,7 +45,7 @@ span {
 
 .gridscroll {
   position: relative;
-  width: 70%;
+  width: 85%;
   height: 562px;
   background-color: gainsboro;
   overflow-x: auto;
@@ -54,9 +58,10 @@ span {
 .searchGroup {
   position: relative;
   display: inline-block;
-  width: 70%;
+  width: 85%;
   display: flex;
   margin: auto;
+  padding: 0 190px;
 }
 
 .searchMeeting {

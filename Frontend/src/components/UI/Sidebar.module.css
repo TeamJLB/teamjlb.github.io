@@ -1,0 +1,31 @@
+.sidebar {
+  display: flex;
+  box-shadow: 1px 0 3px 1px rgb(169, 169, 169);
+  flex-direction: column;
+  align-items: center;
+  width: 15%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.logo {
+  padding: 20px 0;
+  font-size: 30px;
+}
+
+.userProfile {
+  padding-top: 10px;
+  text-align: center;
+}
+
+.userName {
+  font-size: 18px;
+}
+
+.userEmail {
+  font-size: 12px;
+  color: gray;
+}
