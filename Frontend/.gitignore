@@ -7,10 +7,6 @@ package-lock.json
 ./.idea
 .idea/*
 
-# private server setting info (local / remote)
-src/config/*
-/src/config/*
-./src/config/*
 
 # Logs
 logs
