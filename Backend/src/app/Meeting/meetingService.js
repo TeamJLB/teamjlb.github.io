@@ -68,6 +68,8 @@ exports.unMatchUserMeeting = async function (userIdx, meeting_id) {
 
             // TODO 회의에 남아있는 사람이 없으면 회의 삭제 (?)
 
+            // [정상적으로 처리되면 트랜잭션 완료]
+            await connection.commit();
             return response(baseResponse.SUCCESS);
         } catch (err) {
             // [비정상적으로 처리되면 트랜잭션 롤백]
