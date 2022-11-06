@@ -20,7 +20,7 @@ exports.retrieveAllMeeting = async function (userIdx) {
 
 exports.retrieveMeeting = async function (userIdx, meetingId) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const meetingResult = await meetingDao.selectMeetingById(connection, [userIdx, meetingId]);
+  const meetingResult = await meetingDao.selectMyMeetingById(connection, [userIdx, meetingId]);
 
   connection.release();
 
@@ -45,20 +45,90 @@ exports.retrieveMeetingSearch = async function (userIdx, search) {
     return errResponse(baseResponse.MEETING_SEARCH_NOT_EXISTS);
 };
 
-exports.meetingCheckById = async function (meeting_id) {
+exports.retrieveSortedMeetingSearch = async function (userIdx, meeting_id) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const idCheckResult = await meetingDao.findMeetingId(connection, meeting_id);
+  const meetingResult = await meetingDao.selectSortedMeetingById(connection, [userIdx, meeting_id, meeting_id]);
+
+  connection.release();
+
+  if (meetingResult.length > 0)
+    return response(baseResponse.SUCCESS, meetingResult);
+  else
+    return errResponse(baseResponse.MEETING_ID_NOT_EXISTS);
+};
+
+exports.checkMeetingById = async function (meeting_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const idCheckResult = await meetingDao.selectMeetingById(connection, meeting_id);
   connection.release();
 
   return idCheckResult;
 };
 
-exports.matchingCheck = async function (userIdx, meeting_id) {
+exports.checkUserMeetingMatch = async function (userIdx, meeting_id) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const matchCheckResult = await meetingDao.findAllMatchingId(connection, [userIdx, meeting_id]);
+  const matchCheckResult = await meetingDao.checkUMMatch(connection, [userIdx, meeting_id]);
   connection.release();
 
   return matchCheckResult;
+};
+
+exports.checkOpenSubMeetingById = async function (meeting_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const subMeetingOpenCheckResult = await meetingDao.selectOpenSubMeetingById(connection, meeting_id);
+  connection.release();
+
+  return subMeetingOpenCheckResult[0];
+};
+
+exports.checkPreviousMatchingById = async function (userIdx, sub_meeting_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const previousMatchingCheckResult = await meetingDao.checkOnceEntered(connection, [userIdx, sub_meeting_id]);
+  connection.release();
+
+  return previousMatchingCheckResult;
+};
+
+exports.checkMeetingMatchingValidation = async function (meeting_id, match_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const matchValidationResult = await meetingDao.checkMMMatch(connection, [meeting_id, match_id]);
+  connection.release();
+
+  return matchValidationResult[0];
+};
+
+exports.checkActiveMatchingById = async function (match_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+
+  const activeMatchCheckResult = await meetingDao.checkActiveMatchById(connection, match_id);
+  connection.release();
+
+  return activeMatchCheckResult[0];
+};
+
+exports.checkLeftMatchById = async function (sub_meeting_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+
+  const leftMatchResult = await meetingDao.checkAnyActiveMatchById(connection, sub_meeting_id);
+  connection.release();
+
+  return leftMatchResult[0];
+};
+
+exports.checkMeetingBySubId = async function (sub_meeting_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const meetingIdResult = await meetingDao.selectMeetingBySubId(connection, sub_meeting_id);
+  connection.release();
+
+  return meetingIdResult[0];
+};
+
+exports.checkSubMeetingTopicById = async function (sub_meeting_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const subMeetingTopicResult = await meetingDao.selectTopicBySubId(connection, sub_meeting_id);
+  connection.release();
+
+  return subMeetingTopicResult[0];
 };
 
 exports.retrieveAllSubMeetingHistory = async function (userIdx, meeting_id) {
@@ -66,7 +136,7 @@ exports.retrieveAllSubMeetingHistory = async function (userIdx, meeting_id) {
 
   // 서브 회의 리스트 가져오기
   const allSubMeetingHistoryResult = await meetingDao.selectAllSubMeetingHistory(connection, meeting_id);
-  console.log(allSubMeetingHistoryResult);
+  // console.log(allSubMeetingHistoryResult);
 
   let sub_meeting_id;
   for (const result of allSubMeetingHistoryResult) {
