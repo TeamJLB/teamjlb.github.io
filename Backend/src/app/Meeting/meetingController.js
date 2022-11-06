@@ -165,11 +165,13 @@ exports.patchSubMeetingTopic = async function (req, res) {
 
     const meeting_id = req.params.meetingId;
     const sub_meeting_id = req.params.subMeetingId;
-    const topic = req.body.topic;
+    let topic = req.body.topic;
 
     if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
     if (!sub_meeting_id) return res.send(errResponse(baseResponse.SUBMEETING_ID_EMPTY));
     // if (!topic) return res.send(errResponse(baseResponse.SUBMEETING_TOPIC_EMPTY));
+    if (!topic || topic == "") topic = '새로운 주제';
+    // console.log(topic);
 
     const updateSubMeetingTopicInfo = await meetingService.updateSubMeetingTopic(userIdxFromJWT, meeting_id, sub_meeting_id, topic);
     return res.send(updateSubMeetingTopicInfo);

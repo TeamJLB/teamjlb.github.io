@@ -200,7 +200,7 @@ exports.enterMeeting = async function (userIdx, meeting_id) {
 
                 // [정상적으로 처리되면 트랜잭션 완료]
                 await connection.commit();
-                return response(baseResponse.SUCCESS, {"added_subMeeting_id": added_subMeeting_id, "added_match_id" : added_match_id});
+                return response(baseResponse.SUCCESS, {"action": "회의를 개설합니다.", "added_subMeeting_id": added_subMeeting_id, "added_match_id" : added_match_id});
             }
 
             // CASE 2 - 열려있는 서브회의에 새로 참여하는 경우
@@ -212,7 +212,7 @@ exports.enterMeeting = async function (userIdx, meeting_id) {
 
                 // [정상적으로 처리되면 트랜잭션 완료]
                 await connection.commit();
-                return response(baseResponse.SUCCESS, {"opened_subMeeting_id": openSubMeetingId, "added_match_id" : added_match_id});
+                return response(baseResponse.SUCCESS, {"action": "회의에 참가합니다.", "opened_subMeeting_id": openSubMeetingId, "added_match_id" : added_match_id});
             }
 
             // CASE 3 - 열려있는 서브회의에 다시 참여하는 경우
@@ -223,7 +223,7 @@ exports.enterMeeting = async function (userIdx, meeting_id) {
 
                 // [정상적으로 처리되면 트랜잭션 완료]
                 await connection.commit();
-                return response(baseResponse.SUCCESS, {"opened_subMeeting_id": openSubMeetingId, "updated_match_id" : previous_match_id});
+                return response(baseResponse.SUCCESS, {"action": "회의에 재입장합니다.", "opened_subMeeting_id": openSubMeetingId, "updated_match_id" : previous_match_id});
             }
 
             // [나머지 경우에 트랜잭션 처리 -> 실패]
