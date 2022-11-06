@@ -2,16 +2,37 @@ import React from "react";
 import styles from "./Sidebar.module.css";
 import Avatar from "@mui/material/Avatar";
 import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import host_config from "../../config/serverHost";
+import axios from "axios";
+import { useState } from "react";
 
 const Sidebar = (props) => {
   const location = useLocation();
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const USER_TOKEN = location.state?.userToken;
+  const config = {
+    headers: {
+      "x-access-token": USER_TOKEN,
+    },
+  };
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://${host_config.current_host}:${host_config.current_port}/users/userInfo`,
+        config
+      )
+      .then((res) => {
+        setUserName(res.data.result.user_name);
+        setUserEmail(res.data.result.email);
+      });
+  }, []);
+
   if (location.pathname === "/") return null;
   if (location.pathname === "/login") return null;
   if (location.pathname === "/meetingRoom") return null;
-
-  // 나중에 추가할 것 : 유저 정보 가져오기
-  const userName = "김민지";
-  const userEmail = "minji@gmail.com";
 
   return (
     <div className={styles.sidebar}>
