@@ -21,6 +21,11 @@ button {
   cursor: pointer;
 }
 
+ul {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
 @font-face {
   font-family: "Noto Sans CJK KR";
   font-style: normal;
