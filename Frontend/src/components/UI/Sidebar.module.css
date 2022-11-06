@@ -1,6 +1,6 @@
 .sidebar {
   display: flex;
-  box-shadow: 1px 0 3px 1px rgb(169, 169, 169);
+  box-shadow: 1px 0 5px 1px rgb(200, 200, 200);
   flex-direction: column;
   align-items: center;
   width: 15%;
@@ -9,6 +9,9 @@
   top: 0;
   bottom: 0;
   left: 0;
+  text-align: center;
+  z-index: 99;
+  background-color: rgb(241, 241, 241);
 }
 
 .logo {
@@ -16,9 +19,15 @@
   font-size: 30px;
 }
 
+.logo:hover {
+  cursor: pointer;
+}
+
 .userProfile {
-  padding-top: 10px;
+  padding: 30px 0 50px 0;
+  width: 100%;
   text-align: center;
+  border-bottom: 1px solid rgb(219, 219, 219);
 }
 
 .userName {
@@ -28,4 +37,45 @@
 .userEmail {
   font-size: 12px;
   color: gray;
+}
+
+.menu {
+  width: 100%;
+  padding: 10px;
+}
+
+.menuTitle {
+  display: inline-block;
+  width: fit-content;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.menuContent {
+  width: 100%;
+  padding-top: 10px;
+}
+
+.meeting {
+  padding: 0 20px;
+  height: 30px;
+  font-size: 15px;
+  padding-bottom: 10px;
+  line-height: 30px;
+  border-radius: 5px;
+  color: dimgray;
+}
+
+.meeting:hover {
+  cursor: pointer;
+  background-color: rgb(218, 218, 218);
+}
+
+.myPage {
+  width: 100%;
+  border-top: 1px solid rgb(219, 219, 219);
+  position: absolute;
+  bottom: 0;
+  padding: 20px;
+  color: dimgray;
 }

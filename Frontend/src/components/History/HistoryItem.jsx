@@ -53,14 +53,14 @@ const HistoryItem = (props) => {
   const memoContents = memoContent ? (
     <MemoContents item={memoContent} />
   ) : (
-    <div>작성한 노트가 없어요 😢</div>
+    <div style={{ padding: "20px" }}>작성한 노트가 없어요 😢</div>
   );
 
   const summaryContents =
     summaryContent?.length !== 0 ? (
       <SummaryContents items={summaryContent} />
     ) : (
-      <div>요약본이 기록되지 않았어요 😢</div>
+      <div style={{ padding: "20px" }}>요약본이 기록되지 않았어요 😢</div>
     );
 
   return (

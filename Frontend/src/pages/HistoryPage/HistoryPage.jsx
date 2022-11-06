@@ -14,6 +14,7 @@ const HistoryPage = () => {
     },
   };
   const meetingId = location.state.meeting_id;
+  const meetingName = location.state.meeting_name;
 
   const [historyList, sethistoryList] = useState();
 
@@ -26,12 +27,12 @@ const HistoryPage = () => {
       .then((res) => {
         sethistoryList(res.data.result);
       });
-  }, []);
+  }, [location.state]);
 
   return (
     <div className={styles.history}>
       <div className={styles.historyTitle}>
-        <h1>🔍 HISTORY</h1>
+        <h1>🔍 HISTORY : {meetingName}</h1>
       </div>
       <HistoryList historyList={historyList} config={config} />
     </div>

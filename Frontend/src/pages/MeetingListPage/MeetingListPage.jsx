@@ -43,9 +43,13 @@ const MeetingListPage = () => {
       .catch((err) => alert(err));
   };
 
-  const handleEnterHistory = (meetingid) => {
+  const handleEnterHistory = (meetingid, meetingName) => {
     navigate("/history", {
-      state: { userToken: USER_TOKEN, meeting_id: meetingid },
+      state: {
+        userToken: USER_TOKEN,
+        meeting_id: meetingid,
+        meeting_name: meetingName,
+      },
     });
   };
   const handleEnterMeeting = (meetingID) => {

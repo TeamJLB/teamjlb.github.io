@@ -1,11 +1,12 @@
 .historyList {
-  width: 60%;
+  width: 70%;
   margin: 0 auto;
-  height: auto;
+  height: 670px;
   background-color: gainsboro;
   white-space: nowrap;
   border-radius: 10px;
   padding: 20px;
+  overflow-x: auto;
 }
 
 .list {

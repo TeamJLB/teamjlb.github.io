@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Sidebar.module.css";
 import Avatar from "@mui/material/Avatar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import host_config from "../../config/serverHost";
 import axios from "axios";
@@ -9,6 +9,8 @@ import { useState } from "react";
 
 const Sidebar = (props) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userMeetingList, setUserMeetingList] = useState([]);
@@ -38,7 +40,7 @@ const Sidebar = (props) => {
         config
       )
       .then((res) => {
-        console.log(res.data.result);
+        setUserMeetingList(res.data.result);
       });
   }, [userToken]);
 
@@ -46,9 +48,25 @@ const Sidebar = (props) => {
   if (location.pathname === "/login") return null;
   if (location.pathname === "/meetingRoom") return null;
 
+  const clickLogoHandler = () => {
+    navigate("/meetingList", { state: { userToken } });
+  };
+
+  const clickMeetingHandler = (event) => {
+    navigate("/history", {
+      state: {
+        userToken: userToken,
+        meeting_id: event.target.id,
+        meeting_name: event.target.innerText,
+      },
+    });
+  };
+
   return (
     <div className={styles.sidebar}>
-      <div className={styles.logo}>밋로그</div>
+      <div className={styles.logo} onClick={clickLogoHandler}>
+        밋로그
+      </div>
       <div className={styles.userProfile}>
         <Avatar
           sx={{ width: "70px", height: "70px", margin: "auto", mb: "10px" }}
@@ -58,14 +76,26 @@ const Sidebar = (props) => {
         <div className={styles.userName}>{userName}</div>
         <div className={styles.userEmail}>{userEmail}</div>
       </div>
-      <div className={styles.meetingList}>
+      <div className={styles.menu}>
         <ul>
-          <li>졸업프로젝트</li>
-          <li>자바스크립트 스터디</li>
-          <li>코딩테스트 스터디</li>
-          <li>CS 스터디</li>
+          <li className={styles.menuTitle}>🖥 MY MEETING LIST</li>
+          <ul className={styles.menuContent}>
+            {userMeetingList.map((meeting) => {
+              return (
+                <li
+                  className={styles.meeting}
+                  id={meeting.meeting_id}
+                  key={meeting.meeting_id}
+                  onClick={clickMeetingHandler}
+                >
+                  {meeting.meeting_name}
+                </li>
+              );
+            })}
+          </ul>
         </ul>
       </div>
+      <div className={styles.myPage}>마이페이지</div>
     </div>
   );
 };
