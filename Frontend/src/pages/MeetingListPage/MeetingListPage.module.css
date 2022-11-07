@@ -93,6 +93,10 @@ span {
 .searchMeeting:focus {
   outline: 1px solid gray;
 }
+.bombRightOut {
+  -webkit-animation-name: bombRightOut;
+  animation-name: bombRightOut;
+}
 
 .hvrBounceIn {
   display: inline-block;
