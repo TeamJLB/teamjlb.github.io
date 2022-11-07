@@ -93,3 +93,16 @@ span {
 .searchMeeting:focus {
   outline: 1px solid gray;
 }
+
+.hvrBounceIn {
+  display: inline-block;
+  vertical-align: middle;
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  transition-duration: 1s;
+}
+.hvrBounceIn:hover, .hvrBounceIn:focus, .hvrBounceIn:active {
+  transform: scale(1.05);
+  transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+  box-shadow: lemonchiffon;
+}

@@ -4,7 +4,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
-import style from "./Meeting.module.css";
+import style from "./MeetingBlock.module.css";
 import { CardActions } from "@mui/material";
 
 const MeetingBlock = ({
@@ -37,7 +37,7 @@ const MeetingBlock = ({
   return (
     <>
       {searchStatus ? (
-        <Card elevation={3} sx={{ maxWidth: 345 }}>
+        <Card className={style.hvrBounceIn} elevation={3} sx={{ maxWidth: 345 }}>
           <CardContent>
             <Typography variant="subtitle1">{item.meeting_id}</Typography>
             <Typography variant="h6" component="div">
@@ -68,7 +68,7 @@ const MeetingBlock = ({
           </div>
         </Card>
       ) : (
-        <Card elevation={3} sx={{ maxWidth: 345 }}>
+        <Card className={style.hvrBounceIn} elevation={3} sx={{ maxWidth: 345 }}>
           <CardContent>
             <Typography variant="subtitle1">{item.meeting_id}</Typography>
             <Typography variant="h6" component="div">

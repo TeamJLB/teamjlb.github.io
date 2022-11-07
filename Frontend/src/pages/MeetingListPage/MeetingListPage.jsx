@@ -279,7 +279,7 @@ const MeetingListPage = () => {
               cancelSearch={cancelSearch}
               AddMeetingByID={AddMeetingByID}
             />
-            <Card elevation={3}>
+            <Card elevation={3} className={style.hvrBounceIn}>
               <Button
                 variant="text"
                 sx={{ pt: 8, pb: 8, pl: 13.5, pr: 13.5 }}
