@@ -7,6 +7,9 @@ body {
 html,
 #root {
   height: 100%;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: light;
 }
 
 a {
@@ -16,6 +19,11 @@ a {
 
 button {
   cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  padding-inline-start: 0;
 }
 
 @font-face {

@@ -7,8 +7,14 @@ import host_config from "../../config/serverHost";
 
 const HistoryPage = () => {
   const location = useLocation();
-  const config = location.state.config;
+  const USER_TOKEN = location.state.userToken;
+  const config = {
+    headers: {
+      "x-access-token": USER_TOKEN,
+    },
+  };
   const meetingId = location.state.meeting_id;
+  const meetingName = location.state.meeting_name;
 
   const [historyList, sethistoryList] = useState();
 
@@ -21,12 +27,12 @@ const HistoryPage = () => {
       .then((res) => {
         sethistoryList(res.data.result);
       });
-  }, []);
+  }, [location.state]);
 
   return (
     <div className={styles.history}>
       <div className={styles.historyTitle}>
-        <h1>🔍 HISTORY</h1>
+        <h1>🔍 HISTORY : {meetingName}</h1>
       </div>
       <HistoryList historyList={historyList} config={config} />
     </div>

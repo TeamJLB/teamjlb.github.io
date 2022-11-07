@@ -7,3 +7,8 @@
   font-weight: bold;
   text-align: center;
 }
+
+.history {
+  padding-left: 15%;
+  position: relative;
+}
