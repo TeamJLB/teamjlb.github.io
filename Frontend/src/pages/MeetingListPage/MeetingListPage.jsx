@@ -212,16 +212,14 @@ const MeetingListPage = () => {
   };
 
   // 새 회의 추가 모달 -> 추가 버튼
-  const handleAddSubmit = (meetingName, topic) => {
+  const handleAddSubmit = (meetingName) => {
     setModalOn(false);
     console.log("회의 명 : ", meetingName);
-    console.log("주제: ", topic);
     axios
         .post(
             `http://${host_config.current_host}:${host_config.current_port}/meetings/newMeeting`,
             {
-              meeting_name: meetingName,
-              topic: topic,
+              meeting_name: meetingName
             },
             config
         )
