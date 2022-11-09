@@ -8,6 +8,8 @@ import Modal from "../UI/Modal";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import host_config from "../../config/serverHost";
 
+const correctPunctuation = (givenTranscript) => `${givenTranscript}.`;
+
 const StreamBox = (props) => {
   // [로컬 서버에서 테스트]
   const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
@@ -23,18 +25,14 @@ const StreamBox = (props) => {
   const [peerId, setPeerId] = useState("");
   const [myStream, setMyStream] = useState(null);
 
-  const [mute, setMute] = useState(false);
+  const [mute, setMute] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
 
   const videoGrid = useRef();
   const myVideo = useRef();
   
-  const [finalSpan, setFinalSpan] = useState('final');
-  const [interimSpan, setInterimSpan] = useState('interim');
-
-  const FIRST_CHAR = /\S/;
-  const TWO_LINE = /\n\n/g;
-  const ONE_LINE = /\n/g;
+  const [correctedTranscript, setCorrectedTranscript] = useState('');
+  const prevFinalTranscriptRef = useRef();
 
   let textSummaryScript = '';
 
@@ -52,76 +50,15 @@ const StreamBox = (props) => {
   } = useSpeechRecognition();
   const language = 'ko';
 
-  /**
-   * 음성 인식 결과 처리
-   */
-  // recognition.onresult = function (event) {
-  //   console.log('onresult', event);
-
-  //   let interimTranscript = '';
-  //   if (typeof event.results === 'undefined') {
-  //     recognition.onend = null;
-  //     recognition.stop();
-  //     return;
-  //   }
-
-  //   for (let i = event.resultIndex; i < event.results.length; ++i) {
-  //     const transcript = event.results[i][0].transcript;
-
-  //     if (event.results[i].isFinal) {
-  //       finalTranscript += transcript + '.';
-  //     } else {
-  //       interimTranscript += transcript + '.';
-  //     }
-  //   }
-
-  //   finalTranscript = capitalize(finalTranscript);
-    // final_span.innerHTML = linebreak(finalTranscript);
-    // interim_span.innerHTML = linebreak(interimTranscript);
-
-    // console.log('finalTranscript', finalTranscript);
-    // console.log('interimTranscript', interimTranscript);
-  // };
-
-  /**
-   * 음성 인식 트리거
-   */
-   function start() {
+  // [음성 인식 트리거]
+  function startSpeechRecognition() {
     if (listening) {
       recognition.stopListening();
-      // recognition.stop();
       return;
     }
-    recognition.startListening({ language : language});
-    // recognition.lang = language;
-    // recognition.start();
-    // ignoreEndProcess = false;
-
-    console.log(listening);
-    console.log(finalTranscript);
-    console.log(interimTranscript);
-    // finalTranscript = '';
-    // $final_span.innerHTML = '';
-    // $interim_span.innerHTML = '';
+    recognition.startListening({ continuous: true, language : language});
+    // console.log(listening);
   }
-
-  /**
-   * 개행 처리
-   * @param {string} s
-   */ 
-  function linebreak(s) {
-    return s.replace(TWO_LINE, '<p></p>').replace(ONE_LINE, '<br>');
-  }  
-
-  /**
-   * 첫문자를 대문자로 변환
-   * @param {string} s
-   */ 
-  function capitalize(s) {
-    return s.replace(FIRST_CHAR, function (m) {
-      return m.toUpperCase();
-    });  
-  }  
 
   // ------------------------------------
   // let myStream;
@@ -135,15 +72,15 @@ const StreamBox = (props) => {
 
   useEffect(() => {
     peer = new Peer();
-    // start();
 
+    // 음성 인식 환경이 마련됐는지 확인 (Chrome)
     if (!browserSupportsSpeechRecognition) {
       console.log(`Browser doesn't support speech recognition`);
       alert(`Browser doesn't support speech recognition`);
     } else{
       console.log(`Browser ready for speech recognition`);
+      // startSpeechRecognition();
     }
-    recognition.startListening();
       
     navigator.mediaDevices
       .getUserMedia({
@@ -211,24 +148,47 @@ const StreamBox = (props) => {
 
   }, []);
 
+  // [음성 인식 결과 처리] - stt 사이 마침표 추가
+  useEffect(() => {
+    prevFinalTranscriptRef.current = finalTranscript;
+  });
+
+  const prevFinalTranscript = prevFinalTranscriptRef.current;
+
+  useEffect(() => {
+    if (finalTranscript != '') {
+      // console.log(prevFinalTranscript);
+      const newSpeech = finalTranscript.substring(prevFinalTranscript.length).trim();
+      setCorrectedTranscript(`${correctedTranscript} ${correctPunctuation(newSpeech)}`);
+    }
+  }, [finalTranscript]);
+  // ---
+
   const addVideoStream = (video, stream, peerId) => {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => video.play());
   };
 
   const handleMuteClick = () => {
+    // 음성인식 상태 바꾸기
     if (!mute && listening) {
-      recognition.abortListening();
-      console.log(transcript);
-    } else {
-      recognition.startListening();
+      recognition.stopListening();
+      // recognition.abortListening();
+      // console.log(transcript);
+      // console.log(interimTranscript);
+      // console.log(finalTranscript);
+    } else if (mute && !listening) {
+      recognition.startListening({continuous: true, language : language});
     }
-    console.log(listening);
+    console.log(mute, listening);
 
+    // mute 값 상태 바꾸기
+    setMute((prev) => !prev);
+
+    // 음향 트랙 바꾸기
     myStream
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
-    setMute((prev) => !prev);
   };
 
   const handleCameraClick = () => {
@@ -262,8 +222,7 @@ const StreamBox = (props) => {
   return (
     <>
       <div className={styles.sttBox}>
-        <span className={styles.final} id="final_span">{finalSpan}</span>
-        <span className={styles.interim} id="interim_span">{interimSpan}</span>
+        <span className={styles.sttText} id="sttText">{correctedTranscript}</span>
       </div>
       <div className={styles.streamBox}>
         <div className={styles.streams}>

@@ -61,22 +61,24 @@
 }
 
 .sttBox {
+  position:sticky;
+  top: 0;
+  left: 0;
   width: 500px;
   height: 500px;
-  /* display: none; */
-  background-color: lightgray;
+  display: none;
+  background-color: lightgrey;
 
-  display: absolute;
+  padding: 5px;
   justify-content: center;
   align-items: center;
 }
 
-.final .interim {
+.sttText .final .interim {
   font-size: 15px;
-  width: calc(100% - 40px);
+  width: 100%;
   border: none;
   background-color: transparent;
   outline: none;
   letter-spacing: 1px;
-  padding: 20px;
 }
