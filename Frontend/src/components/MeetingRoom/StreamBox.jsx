@@ -4,16 +4,20 @@ import { io } from "socket.io-client";
 import Peer from "peerjs";
 import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
-import host_config from "../../config/serverHost";
 import axios from "axios";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import host_config from "../../config/serverHost";
+
+const correctPunctuation = (givenTranscript) => `${givenTranscript}.`;
 
 const StreamBox = (props) => {
   // [로컬 서버에서 테스트]
-  // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
+  const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
   // [실제 서버에서 테스트]
   const socket = io.connect(
     `http://${host_config.current_host}:${host_config.socket_port}/`
   );
+  
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -29,13 +33,45 @@ const StreamBox = (props) => {
   const [roomName, setRoomName] = useState("");
   const [editMode, setEditMode] = useState("true");
 
-  const [mute, setMute] = useState(false);
+  const [mute, setMute] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
 
   const videoGrid = useRef();
   const myVideo = useRef();
+  
   const topic = useRef();
 
+  const [correctedTranscript, setCorrectedTranscript] = useState('');
+  const prevFinalTranscriptRef = useRef();
+
+  let textSummaryScript = '';
+
+  // [음성 인식 stt]
+  const recognition = SpeechRecognition;
+
+  const {
+    transcript,
+    interimTranscript,
+    finalTranscript,
+    resetTranscript,
+    listening,
+    browserSupportsSpeechRecognition,
+    isMicrophoneAvailable,
+  } = useSpeechRecognition();
+  const language = 'ko';
+
+  // [음성 인식 트리거]
+  function startSpeechRecognition() {
+    if (listening) {
+      recognition.stopListening();
+      return;
+    }
+    recognition.startListening({ continuous: true, language : language});
+    // console.log(listening);
+  }
+
+  // ------------------------------------
+  // let myStream;
   let peer;
 
   const confirm = (userstream) => {
@@ -54,6 +90,15 @@ const StreamBox = (props) => {
 
     peer = new Peer();
 
+    // 음성 인식 환경이 마련됐는지 확인 (Chrome)
+    if (!browserSupportsSpeechRecognition) {
+      console.log(`Browser doesn't support speech recognition`);
+      alert(`Browser doesn't support speech recognition`);
+    } else{
+      console.log(`Browser ready for speech recognition`);
+      // startSpeechRecognition();
+    }
+      
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
@@ -112,7 +157,24 @@ const StreamBox = (props) => {
           removeVideo.remove();
         });
       });
+
   }, []);
+
+  // [음성 인식 결과 처리] - stt 사이 마침표 추가
+  useEffect(() => {
+    prevFinalTranscriptRef.current = finalTranscript;
+  });
+
+  const prevFinalTranscript = prevFinalTranscriptRef.current;
+
+  useEffect(() => {
+    if (finalTranscript != '') {
+      // console.log(prevFinalTranscript);
+      const newSpeech = finalTranscript.substring(prevFinalTranscript.length).trim();
+      setCorrectedTranscript(`${correctedTranscript} ${correctPunctuation(newSpeech)}`);
+    }
+  }, [finalTranscript]);
+  // ---
 
   const addVideoStream = (video, stream) => {
     video.srcObject = stream;
@@ -120,10 +182,25 @@ const StreamBox = (props) => {
   };
 
   const handleMuteClick = () => {
+    // 음성인식 상태 바꾸기
+    if (!mute && listening) {
+      recognition.stopListening();
+      // recognition.abortListening();
+      // console.log(transcript);
+      // console.log(interimTranscript);
+      // console.log(finalTranscript);
+    } else if (mute && !listening) {
+      recognition.startListening({continuous: true, language : language});
+    }
+    console.log(mute, listening);
+
+    // mute 값 상태 바꾸기
+    setMute((prev) => !prev);
+
+    // 음향 트랙 바꾸기
     myStream
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
-    setMute((prev) => !prev);
   };
 
   const handleCameraClick = () => {
@@ -182,6 +259,9 @@ const StreamBox = (props) => {
 
   return (
     <>
+      <div className={styles.sttBox}>
+        <span className={styles.sttText} id="sttText">{correctedTranscript}</span>
+      </div>
       <div className={styles.streamBox}>
         <div className={styles.meetingHeader}>
           <div className={styles.roomName}>💡 {roomName}</div>

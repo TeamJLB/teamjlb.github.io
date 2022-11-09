@@ -16,5 +16,5 @@ app.get("/", (req, res) => {
 require('./controllers/socket.js')(server);
 
 server.listen(PORT, () =>
-    console.log(`✅ Listening on http://${server_config.web_host}:${PORT}`)
+  console.log(`✅ Listening on http://${server_config.web_host}:${PORT}`)
 );
