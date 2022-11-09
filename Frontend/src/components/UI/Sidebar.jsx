@@ -67,7 +67,7 @@ const Sidebar = (props) => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.logo} onClick={clickLogoHandler}>
-        밋로그
+        <img width="200px" alt="MEETLOG" src="img/logo.png" />
       </div>
       <div className={styles.userProfile}>
         <Avatar

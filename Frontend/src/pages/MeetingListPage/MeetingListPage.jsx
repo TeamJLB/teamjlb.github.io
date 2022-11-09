@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Meetings from "../../components/MeetingListBlock/Meetings";
-import NewMeeingModal from "../../components/MeetingListBlock/NewMeetingModal";
+import NewMeetingModal from "../../components/MeetingListBlock/NewMeetingModal";
 import style from "./MeetingListPage.module.css";
 import { useLocation } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -118,8 +118,6 @@ const MeetingListPage = () => {
       .then((res) => {
         console.log(res);
         if (res.data.isSuccess) {
-
-
           console.log(res);
           loadList();
         } else {
@@ -223,20 +221,20 @@ const MeetingListPage = () => {
     setModalOn(false);
     console.log("회의 명 : ", meetingName);
     axios
-        .post(
-            `http://${host_config.current_host}:${host_config.current_port}/meetings/newMeeting`,
-            {
-              meeting_name: meetingName
-            },
-            config
-        )
-        .then((res) => {
-          if (res.data.isSuccess) {
-            loadList();
-          } else {
-            alert(res.data.message);
-          }
-        });
+      .post(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/newMeeting`,
+        {
+          meeting_name: meetingName,
+        },
+        config
+      )
+      .then((res) => {
+        if (res.data.isSuccess) {
+          loadList();
+        } else {
+          alert(res.data.message);
+        }
+      });
   };
 
   return (
@@ -292,7 +290,7 @@ const MeetingListPage = () => {
             </Card>
           </div>
           {modalOn && (
-            <NewMeeingModal
+            <NewMeetingModal
               handleAddCancel={handleAddCancel}
               handleAddSubmit={handleAddSubmit}
             />
