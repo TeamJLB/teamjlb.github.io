@@ -26,7 +26,11 @@ const controllers = (props) => {
           </div>
         </div>
         <div className={styles.controllers_col2}>
-          <Button variant="outlined" color="error" onClick={onLeaveClick}>
+          <Button
+            variant="outlined"
+            onClick={onLeaveClick}
+            className={styles.leave}
+          >
             회의 나가기
           </Button>
         </div>

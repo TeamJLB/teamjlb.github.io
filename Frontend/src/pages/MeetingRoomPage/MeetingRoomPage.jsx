@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import StreamBox from "../../components/MeetingRoom/StreamBox";
 import Memo from "../../components/MeetingRoom/Memo";
 import styles from "./MeetingRoomPage.module.css";

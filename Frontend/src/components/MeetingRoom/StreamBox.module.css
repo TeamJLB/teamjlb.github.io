@@ -18,7 +18,7 @@
 .streams video {
   width: 300px;
   height: 225px;
-  border-radius: 15px;
+  border-radius: 5px;
   margin: 10px;
 
   transform: rotateY(180deg);
@@ -59,4 +59,58 @@
   font-size: 18px;
   font-weight: 500;
   letter-spacing: 1px;
+}
+
+.meetingHeader {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 1px 0 3px 3px rgb(70, 70, 70);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  height: 55px;
+  line-height: 35px;
+}
+
+.roomName {
+  padding: 0 10px;
+  font-size: 16px;
+}
+
+.topicForm input {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  width: 200px;
+  height: 35px;
+  outline: none;
+  margin: 0 10px;
+  padding: 0 10px;
+  text-align: center;
+  font-size: 15px;
+  border-radius: 10px;
+  color: white;
+}
+
+.topicForm input:disabled {
+  font-weight: bold;
+}
+
+.topicForm input:focus {
+  border-bottom: 1px solid gray;
+}
+
+.topicForm {
+  line-height: 35px;
+}
+
+.topicForm > button {
+  width: 50px;
+  height: 35px;
+  border-radius: 10px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.topicForm > button:hover {
+  background-color: rgba(255, 255, 255, 0.5);
 }

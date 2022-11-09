@@ -83,7 +83,6 @@ span {
   background-color: rgb(233, 233, 233);
   border-radius: 10px;
   border: none;
-  font-weight: bold;
 }
 
 .searchBtn:hover {
@@ -105,7 +104,9 @@ span {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
   transition-duration: 1s;
 }
-.hvrBounceIn:hover, .hvrBounceIn:focus, .hvrBounceIn:active {
+.hvrBounceIn:hover,
+.hvrBounceIn:focus,
+.hvrBounceIn:active {
   transform: scale(1.05);
   transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
   box-shadow: lemonchiffon;
