@@ -23,101 +23,162 @@ exports.getAllMeetings = async function (req, res) {
 
 /**
  * API No. 2
- * API Name : 본인이 속한 회의 검색 API
- * [GET] /meetings/myMeeting/?meetingId=
+ * API Name : 본인이 속한 회의 검색어로 검색 API
+ * [GET] /meetings/myMeeting/?search=
  * header : x-access-token
- * query string : meetingId
+ * query string : search
  */
 exports.getMeetingById = async function (req, res) {
     const userIdxFromJWT = req.verifiedToken.user_id;
-    const meeting_id = req.query.meetingId;
+    const search = req.query.search;
 
     // errResponse 전달
-    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
+    if (!search) return res.send(errResponse(baseResponse.MEETING_SEARCH_EMPTY));
 
-    // meetingId를 통한 유저 검색 함수 호출 및 결과 저장
-    const meetingIdResponse = await meetingProvider.retrieveMeeting(userIdxFromJWT, meeting_id);
-    return res.send(meetingIdResponse);
+    const meetingSearchResponse = await meetingProvider.retrieveMeetingSearch(userIdxFromJWT, search);
+    return res.send(meetingSearchResponse);
 };
 
 /**
  * API No. 3
+ * API Name : meeting_id로 회의 검색 API
+ * [GET] /meetings/search/:meetingId'
+ * header : x-access-token
+ * path variable : meetingId
+ */
+exports.getSortedMeetingById = async function (req, res) {
+    const userIdxFromJWT = req.verifiedToken.user_id;
+    const meeting_id = req.params.meetingId;
+
+    // errResponse 전달
+    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
+
+    // 내 회의면 isMyMeeting : 1 else 0
+    const meetingSearchResponse = await meetingProvider.retrieveSortedMeetingSearch(userIdxFromJWT, meeting_id);
+    return res.send(meetingSearchResponse);
+};
+
+/**
+ * API No. 4
+ * API Name : 회의를 내 회의 리스트에 추가하기 API
+ * [POST] '/meetings/myMeeting/:meetingId'
+ * header : x-access-token
+ * path variable : meetingId
+ */
+exports.postNewMeetingMatch = async function (req, res) {
+    const userIdxFromJWT = req.verifiedToken.user_id;
+    const meeting_id = req.params.meetingId;
+
+    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
+
+    const matchUserMeetingInfo = await meetingService.matchUserMeeting(userIdxFromJWT, meeting_id);
+    return res.send(matchUserMeetingInfo);
+};
+
+/**
+ * API No. 5
  * API Name : 새 회의 개설 API
  * [POST] '/meetings/newMeeting'
  * header : x-access-token
- * body : meeting_name, (first) topic
+ * body : meeting_name
  */
 exports.postNewMeeting = async function (req, res) {
     const userIdxFromJWT = req.verifiedToken.user_id;
 
     const meeting_name = req.body.meeting_name;
-    const first_topic = req.body.topic;
 
     if (!meeting_name) return res.send(errResponse(baseResponse.MEETING_NAME_EMPTY));
-    if (!first_topic) return res.send(errResponse(baseResponse.MEETING_TOPIC_EMPTY));
 
-    const addMeetingInfo = await meetingService.addNewMeeting(userIdxFromJWT, meeting_name, first_topic);
+    const addMeetingInfo = await meetingService.addNewMeeting(userIdxFromJWT, meeting_name);
     return res.send(addMeetingInfo);
 };
 
 /**
- * API No. 4
- * API Name : 기존 회의 다시 개설 API
- * [POST] '/meetings/openMeeting/:meetingId'
- * header : x-access-token
- * path variable : meetingId
- * body : topic
- */
-exports.postNewSubMeeting = async function (req, res) {
-    const userIdxFromJWT = req.verifiedToken.user_id;
-
-    const meeting_id = req.params.meetingId;
-
-    const new_topic = req.body.topic;
-
-    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
-    if (!new_topic) return res.send(errResponse(baseResponse.MEETING_TOPIC_EMPTY));
-
-    const addSubMeetingInfo = await meetingService.addNewSubMeeting(userIdxFromJWT, meeting_id, new_topic);
-    return res.send(addSubMeetingInfo);
-};
-
-/**
- * API No. 5
- * API Name : 새 회의 참가 API
- * [POST] '/meetings/newMeeting/:meetingId'
- * header : x-access-token
- * path variable : meetingId
- */
-exports.joinNewMeeting = async function (req, res) {
-    const userIdxFromJWT = req.verifiedToken.user_id;
-
-    const meeting_id = req.params.meetingId;
-
-    const joinNewMeetingInfo = await meetingService.joinNewMeeting(userIdxFromJWT, meeting_id);
-    return res.send(joinNewMeetingInfo);
-};
-
-/**
  * API No. 6
- * API Name : 회의 삭제 API
+ * API Name : 회의를 내 회의 리스트에서 제거하기 API
  * [DELETE] '/meetings/myMeeting/:meetingId'
  * header : x-access-token
  * path variable : meetingId
  */
-exports.deleteMeeting = async function (req, res) {
+exports.deleteMyMeeting = async function (req, res) {
     const userIdxFromJWT = req.verifiedToken.user_id;
 
     const meeting_id = req.params.meetingId;
 
     if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
 
-    const deleteMeetingInfo = await meetingService.deleteMeeting(userIdxFromJWT, meeting_id);
-    return res.send(deleteMeetingInfo);
+    const deleteMyMeetingInfo = await meetingService.unMatchUserMeeting(userIdxFromJWT, meeting_id);
+    return res.send(deleteMyMeetingInfo);
 };
 
 /**
  * API No. 7
+ * API Name : (서브)회의에 입장하기 API
+ * [POST] '/meetings/openMeeting/:meetingId'
+ * header : x-access-token
+ * path variable : meetingId
+ */
+exports.postEnterMeeting = async function (req, res) {
+    const userIdxFromJWT = req.verifiedToken.user_id;
+
+    const meeting_id = req.params.meetingId;
+
+    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
+
+    const enterMeetingInfo = await meetingService.enterMeeting(userIdxFromJWT, meeting_id);
+    return res.send(enterMeetingInfo);
+};
+
+/**
+ * API No. 8
+ * API Name : (서브)회의에 퇴장하기 API
+ * [POST] '/meetings/closeMeeting/:meetingId'
+ * header : x-access-token
+ * path variable : meetingId, subMeetingId
+ * body : matchId
+ */
+exports.patchExitMeeting = async function (req, res) {
+    const userIdxFromJWT = req.verifiedToken.user_id;
+
+    const meeting_id = req.params.meetingId;
+    const sub_meeting_id = req.params.subMeetingId;
+    const match_id = req.body.matchId;
+
+    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
+    if (!sub_meeting_id) return res.send(errResponse(baseResponse.SUBMEETING_ID_EMPTY));
+    if (!match_id) return res.send(errResponse(baseResponse.MATCH_ID_EMPTY));
+
+    const exitMeetingInfo = await meetingService.exitMeeting(userIdxFromJWT, meeting_id, sub_meeting_id, match_id);
+    return res.send(exitMeetingInfo);
+};
+
+/**
+ * API No. 9
+ * API Name : (서브)회의 주제 변경(저장)하기 API
+ * [POST] '/meetings/openMeeting/:meetingId/:subMeetingId'
+ * header : x-access-token
+ * path variable : meetingId, subMeetingId
+ * body : topic
+ */
+exports.patchSubMeetingTopic = async function (req, res) {
+    const userIdxFromJWT = req.verifiedToken.user_id;
+
+    const meeting_id = req.params.meetingId;
+    const sub_meeting_id = req.params.subMeetingId;
+    let topic = req.body.topic;
+
+    if (!meeting_id) return res.send(errResponse(baseResponse.MEETING_ID_EMPTY));
+    if (!sub_meeting_id) return res.send(errResponse(baseResponse.SUBMEETING_ID_EMPTY));
+    // if (!topic) return res.send(errResponse(baseResponse.SUBMEETING_TOPIC_EMPTY));
+    if (!topic || topic == "") topic = '새로운 주제';
+    // console.log(topic);
+
+    const updateSubMeetingTopicInfo = await meetingService.updateSubMeetingTopic(userIdxFromJWT, meeting_id, sub_meeting_id, topic);
+    return res.send(updateSubMeetingTopicInfo);
+};
+
+/**
+ * API No. 10
  * API Name : 회의 히스토리 리스트 API
  * [GET] /meetings/meetingHistory
  * header : x-access-token

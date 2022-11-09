@@ -15,6 +15,9 @@ module.exports = function(app){
     // 3. 중복 아이디 체크하기 API
     app.get('/users', user.getUserById);
 
+    // 4. 로그인한 회원 정보 불러오기 API
+    app.get('/users/userInfo', jwtMiddleware, user.getUser)
+
     // 회원 정보 수정 API (JWT 검증 및 Validation - 메소드 체이닝 방식으로 jwtMiddleware 사용)
     // app.patch('/app/users/:userId', jwtMiddleware, user.patchUsers)
 

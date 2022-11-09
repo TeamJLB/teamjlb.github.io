@@ -1,15 +1,9 @@
 import React from "react";
+import styles from "./MemoContents.module.css";
 
 const MemoContents = (props) => {
   const { item } = props;
-  return (
-    <>
-      <div>
-        <h2>{item.topic}</h2>
-      </div>
-      <div>{item.memo_content}</div>
-    </>
-  );
+  return <div className={styles.memoContents}>{item.memo_content}</div>;
 };
 
 export default MemoContents;

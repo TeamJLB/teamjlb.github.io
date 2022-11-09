@@ -1,3 +1,15 @@
-.history {
+.historyTitle {
+  margin: 0 auto;
+  width: 60%;
+  padding: 10px 0;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: bold;
   text-align: center;
+}
+
+.history {
+  padding-left: 13%;
+  position: relative;
+  width: 80%;
 }

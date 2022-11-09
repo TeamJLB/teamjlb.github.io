@@ -1,42 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import HistoryTable from "../../components/History/HistoryTable";
-import Modal from "../../components/UI/Modal";
-import HistoryContents from "../../components/History/HistoryContents";
-import MemoContents from "../../components/History/MemoContents";
+import HistoryList from "../../components/History/HistoryList";
 import styles from "./HistoryPage.module.css";
 import host_config from "../../config/serverHost";
+import TimeLineList from "../../components/History/TimeLineList"
 
 const HistoryPage = () => {
   const location = useLocation();
-  const config = location.state.config;
+  const USER_TOKEN = location.state.userToken;
+  const config = {
+    headers: {
+      "x-access-token": USER_TOKEN,
+    },
+  };
   const meetingId = location.state.meeting_id;
+  const meetingName = location.state.meeting_name;
 
-  const [meetingInfo, setMeetingInfo] = useState();
-  const [modalOn, setModalOn] = useState(false);
-  const [header, setHeader] = useState("");
-  const [contents, setContents] = useState("");
-
-  const clickSummary = (subMeetingId) => {
-    setModalOn(true);
-    setHeader("회의 요약본");
-    axios
-      .get(`http://${host_config.current_host}:${host_config.current_port}/summaries/summary/${subMeetingId}`, config)
-      .then((res) => {
-        setContents(<HistoryContents items={res.data.result} />);
-      });
-  };
-
-  const clickMemo = (subMeetingId) => {
-    setModalOn(true);
-    setHeader("메모");
-    axios
-      .get(`http://${host_config.current_host}:${host_config.current_port}/memos/memo/${subMeetingId}`, config)
-      .then((res) => {
-        setContents(<MemoContents item={res.data.result[0]} />);
-      });
-  };
+  const [historyList, sethistoryList] = useState();
 
   useEffect(() => {
     axios
@@ -45,25 +26,20 @@ const HistoryPage = () => {
         config
       )
       .then((res) => {
-        setMeetingInfo(res.data.result);
+        sethistoryList(res.data.result);
       });
-  }, []);
-
-  const closeHandler = () => {
-    setModalOn(false);
-  };
+  }, [location.state]);
 
   return (
+      <>
     <div className={styles.history}>
-      <HistoryTable
-        meetingInfo={meetingInfo}
-        clickSummary={clickSummary}
-        clickMemo={clickMemo}
-      />
-      {modalOn && (
-        <Modal onClose={closeHandler} header={header} contents={contents} />
-      )}
+      <div className={styles.historyTitle}>
+        <h1>🔍 HISTORY : {meetingName}</h1>
+      </div>
+      <HistoryList historyList={historyList} config={config} />
     </div>
+      <TimeLineList historyList={historyList} config={config}/>
+        </>
   );
 };
 

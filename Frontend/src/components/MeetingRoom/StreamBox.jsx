@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 import Peer from "peerjs";
 import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
-import Modal from "../UI/Modal";
+import axios from "axios";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import host_config from "../../config/serverHost";
 
@@ -14,16 +14,24 @@ const StreamBox = (props) => {
   // [로컬 서버에서 테스트]
   const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
   // [실제 서버에서 테스트]
-  // const socket = io.connect(`http://${host_config.current_host}:${host_config.socket_port}/`);
-
+  const socket = io.connect(
+    `http://${host_config.current_host}:${host_config.socket_port}/`
+  );
+  
   const location = useLocation();
   const navigate = useNavigate();
 
+  const config = location.state.config;
   const userToken = location.state.config.headers["x-access-token"];
-  const roomName = location.state.meeting_id;
+  const meetingId = location.state.meeting_id;
+  const subMeetingId = location.state.subMeeting_id;
+  const matchID = location.state.match_id;
+  console.log("stream");
+  console.log("sub", subMeetingId, "match", matchID);
 
-  const [peerId, setPeerId] = useState("");
   const [myStream, setMyStream] = useState(null);
+  const [roomName, setRoomName] = useState("");
+  const [editMode, setEditMode] = useState("true");
 
   const [mute, setMute] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
@@ -31,6 +39,8 @@ const StreamBox = (props) => {
   const videoGrid = useRef();
   const myVideo = useRef();
   
+  const topic = useRef();
+
   const [correctedTranscript, setCorrectedTranscript] = useState('');
   const prevFinalTranscriptRef = useRef();
 
@@ -63,14 +73,21 @@ const StreamBox = (props) => {
   // ------------------------------------
   // let myStream;
   let peer;
-  // const peer = new Peer();
-  const peers = {};
 
   const confirm = (userstream) => {
-    console.log(roomName, userstream["user"], "✅ 연결됨");
+    console.log(meetingId, userstream["user"], "✅ 연결됨");
   };
 
   useEffect(() => {
+    axios
+      .get(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/search/${meetingId}`,
+        config
+      )
+      .then((res) => {
+        setRoomName(res.data.result[0].meeting_name);
+      });
+
     peer = new Peer();
 
     // 음성 인식 환경이 마련됐는지 확인 (Chrome)
@@ -90,14 +107,13 @@ const StreamBox = (props) => {
       .then((currentStream) => {
         let streamId = currentStream.id;
         setMyStream(currentStream);
-        addVideoStream(myVideo.current, currentStream, streamId);
+        addVideoStream(myVideo.current, currentStream);
         videoGrid.current.append(myVideo.current);
 
         peer.on("open", (peerId) => {
-          setPeerId(peerId);
           socket.emit(
             "join-room",
-            roomName,
+            meetingId,
             { user: peerId, stream: streamId },
             confirm
           );
@@ -111,13 +127,9 @@ const StreamBox = (props) => {
           video.setAttribute("autoplay", "playsinline");
 
           call.on("stream", (videoStream) => {
-            addVideoStream(video, videoStream, userId);
+            addVideoStream(video, videoStream);
             videoGrid.current.append(video);
           });
-
-          // call.on("close", () => {
-          //   video.remove();
-          // });
         });
 
         peer.on("call", (call) => {
@@ -126,7 +138,7 @@ const StreamBox = (props) => {
           video.setAttribute("autoplay", "playsinline");
 
           call.on("stream", (userVideoStream) => {
-            addVideoStream(video, userVideoStream, peerId);
+            addVideoStream(video, userVideoStream);
             videoGrid.current.append(video);
           });
         });
@@ -164,7 +176,7 @@ const StreamBox = (props) => {
   }, [finalTranscript]);
   // ---
 
-  const addVideoStream = (video, stream, peerId) => {
+  const addVideoStream = (video, stream) => {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => video.play());
   };
@@ -199,14 +211,34 @@ const StreamBox = (props) => {
   };
 
   const handleLeaveClick = () => {
-    socket.disconnect();
-    peer?.destroy();
-    myStream.getTracks().forEach((track) => track.stop());
-    setMyStream(null);
-    myVideo.srcObject = null;
-    clearAllVideos();
-    navigate("/meetingList", { state: { userToken } });
-    window.location.reload();
+    axios
+      .patch(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
+        { topic: topic.current.value },
+        config
+      )
+      .then((res) => console.log(res));
+    axios
+      .patch(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/closeMeeting/${meetingId}/${subMeetingId}`,
+        { matchId: matchID },
+        config
+      )
+      .then((res) => {
+        if (res.data.isSuccess) {
+          console.log(res.data.result);
+          socket.disconnect();
+          peer?.destroy();
+          myStream.getTracks().forEach((track) => track.stop());
+          setMyStream(null);
+          myVideo.srcObject = null;
+          clearAllVideos();
+          navigate("/meetingList", { state: { userToken } });
+          window.location.reload();
+        } else {
+          alert(res.data.message);
+        }
+      });
   };
 
   const clearAllVideos = () => {
@@ -214,9 +246,15 @@ const StreamBox = (props) => {
     const videos = document.querySelectorAll("video");
     videos.forEach((video) => {
       if (video.id != myVideo) {
-        videoGrid.removeChild(video);
+        videoGrid?.removeChild(video);
       }
     });
+  };
+
+  const clickTopicHandler = () => {
+    if (editMode) topic.current.disabled = true;
+    else topic.current.disabled = false;
+    setEditMode((prev) => !prev);
   };
 
   return (
@@ -225,16 +263,26 @@ const StreamBox = (props) => {
         <span className={styles.sttText} id="sttText">{correctedTranscript}</span>
       </div>
       <div className={styles.streamBox}>
+        <div className={styles.meetingHeader}>
+          <div className={styles.roomName}>💡 {roomName}</div>
+          <div className={styles.topicForm}>
+            <input placeholder="오늘의 주제를 입력하세요." ref={topic} />
+            <button onClick={clickTopicHandler}>
+              {editMode ? "완료" : "수정"}
+            </button>
+          </div>
+        </div>
         <div className={styles.streams}>
-          <div id="videos" ref={videoGrid}>
-            <video
-              id="myVideo"
-              ref={myVideo}
-              muted
-              autoPlay
-              className={styles.myFace}
-            />
-            <h3 className={styles.userNickname} />
+          <div id="videos" ref={videoGrid} className={styles.videos}>
+            <div>
+              <video
+                id="myVideo"
+                ref={myVideo}
+                muted
+                autoPlay
+                className={styles.myFace}
+              />
+            </div>
           </div>
         </div>
         <Controllers
