@@ -75,6 +75,8 @@ module.exports = {
 
     ENTER_MEETING_FAILED : { "isSuccess": false, "code": 3250, "message": "회의에 입장하는데 실패했습니다. (자세한 내용은 개발자에게 물어보세요)" },
 
+    MEMO_NO_OPEN_SUBMEETING : { "isSuccess": false, "code": 3300, "message": "서브회의가 없거나, 열려있는 상태가 아닙니다." },
+
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},

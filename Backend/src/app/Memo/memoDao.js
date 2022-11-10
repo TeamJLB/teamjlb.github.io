@@ -1,3 +1,25 @@
+// 열려있는 서브회의 있는지 확인
+async function checkOpenSubMeetingById(connection, sub_meeting_id) {
+    const selectOpenSubMeetingByIdQuery = `
+        SELECT *
+        FROM SubMeeting
+        WHERE sub_meeting_id = ? AND status = 'open';
+    `;
+    const subMeetingResult = await connection.query(selectOpenSubMeetingByIdQuery, sub_meeting_id);
+    return subMeetingResult[0];
+}
+
+// 메모가 이미 있는지 확인
+async function checkMemoById(connection, sub_meeting_id) {
+    const selectMemoByIdQuery = `
+        SELECT *
+        FROM Memo
+        WHERE sub_meeting_id = ?;
+    `;
+    const memoResult = await connection.query(selectMemoByIdQuery, sub_meeting_id);
+    return memoResult[0];
+}
+
 // 새 메모 추가
 async function insertMemoInfo(connection, insertMemoParams) {
     const insertMemoInfoQuery = `
@@ -56,6 +78,8 @@ async function insertKeywordInfo(connection, insertKeywordParams) {
 }
 
 module.exports = {
+    checkOpenSubMeetingById,
+    checkMemoById,
     insertMemoInfo,
     selectMemoById,
     updateMemoInfo,
