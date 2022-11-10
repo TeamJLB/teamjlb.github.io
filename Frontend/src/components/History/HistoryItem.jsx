@@ -50,11 +50,12 @@ const HistoryItem = (props) => {
     setIsDetailsOpen((prev) => !prev);
   };
 
-  const memoContents = memoContent ? (
-    <MemoContents item={memoContent} />
-  ) : (
-    <div style={{ padding: "20px" }}>작성한 노트가 없어요 😢</div>
-  );
+  const memoContents =
+    memoContent && memoContent.memo_content !== "" ? (
+      <MemoContents item={memoContent} />
+    ) : (
+      <div style={{ padding: "20px" }}>작성한 노트가 없어요 😢</div>
+    );
 
   const summaryContents =
     summaryContent?.length !== 0 ? (

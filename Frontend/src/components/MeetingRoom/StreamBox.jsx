@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import Peer from "peerjs";
+import Memo from "./Memo";
 import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import axios from "axios";
@@ -37,6 +38,7 @@ const StreamBox = (props) => {
 
   const [meetingLog, setMeetingLog] = useState(null);
   const [meetingLogOn, setMeetingLogOn] = useState(false);
+  const memo = useRef();
 
   const videoGrid = useRef();
   const myVideo = useRef();
@@ -214,13 +216,23 @@ const StreamBox = (props) => {
   };
 
   const handleLeaveClick = () => {
-    axios
-      .patch(
-        `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
-        { topic: topic },
-        config
-      )
-      .then((res) => console.log(res));
+    if (topic === "") {
+      alert("❗️오늘의 주제를 입력해주세요❗️");
+      return;
+    }
+
+    axios.patch(
+      `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
+      { topic: topic },
+      config
+    );
+
+    axios.post(
+      `http://${host_config.current_host}:${host_config.current_port}/memos/memo`,
+      { subMeeting_id: subMeetingId, content: memo.current.value },
+      config
+    );
+
     axios
       .patch(
         `http://${host_config.current_host}:${host_config.current_port}/meetings/closeMeeting/${meetingId}/${subMeetingId}`,
@@ -318,8 +330,9 @@ const StreamBox = (props) => {
           onLeaveClick={handleLeaveClick}
         />
       </div>
+      <Memo config={config} meetingId={meetingId} ref={memo} />
     </>
   );
 };
 
-export default StreamBox;
+export default memo(StreamBox);

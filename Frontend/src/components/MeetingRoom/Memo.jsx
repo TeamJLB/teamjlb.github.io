@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import MemoList from "./MemoList";
 import styles from "./Memo.module.css";
 import axios from "axios";
 import host_config from "../../config/serverHost";
 
-const Memo = (props) => {
+const Memo = React.forwardRef((props, ref) => {
   const { config, meetingId } = props;
 
   const [modalOn, setModalOn] = useState(false);
@@ -65,10 +65,11 @@ const Memo = (props) => {
           spellCheck="false"
           className={styles.memoText}
           placeholder="이곳에 기록하세요!"
+          ref={ref}
         />
       </div>
     </div>
   );
-};
+});
 
-export default Memo;
+export default memo(Memo);

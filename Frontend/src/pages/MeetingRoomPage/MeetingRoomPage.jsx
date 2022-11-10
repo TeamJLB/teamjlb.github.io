@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import StreamBox from "../../components/MeetingRoom/StreamBox";
 import Memo from "../../components/MeetingRoom/Memo";
 import styles from "./MeetingRoomPage.module.css";
@@ -21,7 +21,6 @@ const MeetingRoomPage = () => {
         subMeetingId={subMeetingId}
         matchID={matchID}
       />
-      <Memo config={config} meetingId={meetingId} />
     </div>
   );
 };
