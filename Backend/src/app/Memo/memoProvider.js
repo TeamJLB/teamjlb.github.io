@@ -26,3 +26,21 @@ exports.retrieveAllMemoById = async function (userIdx, meeting_id) {
 
     return response(baseResponse.SUCCESS, allMemoListResult);
 };
+
+exports.checkSubMeeting = async function (sub_meeting_id) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const subMeetingResult = await memoDao.checkOpenSubMeetingById(connection, sub_meeting_id);
+
+    connection.release();
+
+    return subMeetingResult;
+};
+
+exports.checkMemo = async function (sub_meeting_id) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const memoResult = await memoDao.checkMemoById(connection, sub_meeting_id);
+
+    connection.release();
+
+    return memoResult;
+};
