@@ -82,8 +82,8 @@
 
 .closeBtn {
   float: right;
-  background-color: #fffcf3;
   border: none;
+  background-color: rgba(255, 255, 255, 0);
 }
 
 .memoListBtn {

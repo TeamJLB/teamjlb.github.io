@@ -9,6 +9,7 @@ import MeetingHeader from "./MeetingHeader";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import SummaryContents from "../History/SummaryContents";
 import host_config from "../../config/serverHost";
 
 const correctPunctuation = (givenTranscript) => `${givenTranscript}.`;
@@ -253,6 +254,19 @@ const StreamBox = (props) => {
     });
   };
 
+  const logCloseHandler = () => {
+    setMeetingLogOn(false);
+  };
+
+  const logContents =
+    meetingLog &&
+    meetingLog.logContent &&
+    meetingLog.logContent.length !== 0 ? (
+      <SummaryContents items={meetingLog.logContent} />
+    ) : (
+      <div className={styles.zeroNote}>요약본이 기록되지 않았어요 😢</div>
+    );
+
   return (
     <>
       <div className={styles.sttBox}>
@@ -284,8 +298,17 @@ const StreamBox = (props) => {
             />
           </div>
         </div>
-        {meetingLogOn && (
-          <div className={styles.meetingLog}>요약본 나올 곳</div>
+        {meetingLogOn && meetingLog && (
+          <div className={styles.meetingLog}>
+            <span className={styles.meetingTopic}>{meetingLog.topic}</span>
+            <span className={styles.meetingDate}>
+              {meetingLog.date}에 기록됨
+            </span>
+            <button className={styles.closeBtn} onClick={logCloseHandler}>
+              <img width="15px" height="15px" src="img/close.png"></img>
+            </button>
+            <div className={styles.meetingLogContent}>{logContents}</div>
+          </div>
         )}
         <Controllers
           mute={mute}

@@ -6,7 +6,14 @@ import MeetingLog from "./MeetingLog";
 import host_config from "../../config/serverHost";
 
 const MeetingHeader = (props) => {
-  const { config, meetingId, roomName, setTopic, setMeeingLog } = props;
+  const {
+    config,
+    meetingId,
+    roomName,
+    setTopic,
+    setMeetingLog,
+    setMeetingLogOn,
+  } = props;
 
   const [editMode, setEditMode] = useState("true");
   const [modalOn, setModalOn] = useState(false);
@@ -51,9 +58,11 @@ const MeetingHeader = (props) => {
       </div>
       {modalOn && (
         <MeetingLog
+          config={config}
           setModalOn={setModalOn}
           subMeetings={subMeetings}
-          setMeeingLog={setMeeingLog}
+          setMeetingLog={setMeetingLog}
+          setMeetingLogOn={setMeetingLogOn}
         />
       )}
     </>
