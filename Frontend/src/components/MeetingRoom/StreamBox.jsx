@@ -6,35 +6,34 @@ import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import host_config from "../../config/serverHost";
 import axios from "axios";
+import MeetingHeader from "./MeetingHeader";
 
 const StreamBox = (props) => {
+  const { config, userToken, meetingId, subMeetingId, matchID } = props;
+
   // [로컬 서버에서 테스트]
   // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
   // [실제 서버에서 테스트]
   const socket = io.connect(
     `http://${host_config.current_host}:${host_config.socket_port}/`
   );
-  const location = useLocation();
   const navigate = useNavigate();
 
-  const config = location.state.config;
-  const userToken = location.state.config.headers["x-access-token"];
-  const meetingId = location.state.meeting_id;
-  const subMeetingId = location.state.subMeeting_id;
-  const matchID = location.state.match_id;
   console.log("stream");
   console.log("sub", subMeetingId, "match", matchID);
 
   const [myStream, setMyStream] = useState(null);
   const [roomName, setRoomName] = useState("");
-  const [editMode, setEditMode] = useState("true");
+  const [topic, setTopic] = useState("");
 
   const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
 
+  const [meetingLog, setMeetingLog] = useState(null);
+  const [meetingLogOn, setMeetingLogOn] = useState(true);
+
   const videoGrid = useRef();
   const myVideo = useRef();
-  const topic = useRef();
 
   let peer;
 
@@ -137,7 +136,7 @@ const StreamBox = (props) => {
     axios
       .patch(
         `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
-        { topic: topic.current.value },
+        { topic: topic },
         config
       )
       .then((res) => console.log(res));
@@ -174,37 +173,34 @@ const StreamBox = (props) => {
     });
   };
 
-  const clickTopicHandler = () => {
-    if (editMode) topic.current.disabled = true;
-    else topic.current.disabled = false;
-    setEditMode((prev) => !prev);
-  };
-
   return (
     <>
       <div className={styles.streamBox}>
-        <div className={styles.meetingHeader}>
-          <div className={styles.roomName}>💡 {roomName}</div>
-          <div className={styles.topicForm}>
-            <input placeholder="오늘의 주제를 입력하세요." ref={topic} />
-            <button onClick={clickTopicHandler}>
-              {editMode ? "완료" : "수정"}
-            </button>
-          </div>
-        </div>
+        <MeetingHeader
+          config={config}
+          meetingId={meetingId}
+          roomName={roomName}
+          setTopic={setTopic}
+          setMeetingLog={setMeetingLog}
+        />
         <div className={styles.streams}>
-          <div id="videos" ref={videoGrid} className={styles.videos}>
-            <div>
-              <video
-                id="myVideo"
-                ref={myVideo}
-                muted
-                autoPlay
-                className={styles.myFace}
-              />
-            </div>
+          <div
+            id="videos"
+            ref={videoGrid}
+            className={`${styles.videos} ${meetingLogOn && styles.logOn}`}
+          >
+            <video
+              id="myVideo"
+              ref={myVideo}
+              muted
+              autoPlay
+              className={styles.myFace}
+            />
           </div>
         </div>
+        {meetingLogOn && (
+          <div className={styles.meetingLog}>요약본 나올 곳</div>
+        )}
         <Controllers
           mute={mute}
           cameraOn={cameraOn}

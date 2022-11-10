@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import MemoList from "./MemoList";
 import styles from "./Memo.module.css";
-import Button from "@mui/material/Button";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import host_config from "../../config/serverHost";
 
-const Memo = () => {
-  const location = useLocation();
-  const config = location.state.config;
-  const meetingId = location.state.meeting_id;
+const Memo = (props) => {
+  const { config, meetingId } = props;
 
   const [modalOn, setModalOn] = useState(false);
   const [memoList, setMemoList] = useState([]);
