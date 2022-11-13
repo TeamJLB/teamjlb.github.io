@@ -1,3 +1,4 @@
 .memoContents {
   padding: 15px 20px 20px 20px;
+  overflow-wrap: break-word;
 }
