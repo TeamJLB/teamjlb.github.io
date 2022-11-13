@@ -55,6 +55,7 @@
 .menuContent {
   width: 100%;
   padding-top: 10px;
+  overflow: auto;
 }
 
 .meeting {
