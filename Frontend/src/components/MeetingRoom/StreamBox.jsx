@@ -33,7 +33,7 @@ const StreamBox = (props) => {
   const [roomName, setRoomName] = useState("");
   const [topic, setTopic] = useState("");
 
-  const [mute, setMute] = useState(true);
+  const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
   const [sttOn, setSttOn] = useState(true);
 
