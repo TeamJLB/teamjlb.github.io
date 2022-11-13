@@ -63,7 +63,6 @@ const NewMeetingModal = ({ handleAddCancel, handleAddSubmit }) => {
                   item
                   xs={12}
                   sm={7}
-                  direction="row"
                   justifyContent="center"
                   alignItems="center"
                 >
