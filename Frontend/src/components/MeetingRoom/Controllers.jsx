@@ -2,7 +2,19 @@ import Button from "@mui/material/Button";
 import styles from "./Controllers.module.css";
 
 const controllers = (props) => {
-  const { mute, cameraOn, onMuteClick, onCameraClick, onLeaveClick } = props;
+  const {
+    mute,
+    cameraOn,
+    sttOn,
+    onMuteClick,
+    onCameraClick,
+    onLeaveClick,
+    setSttOn,
+  } = props;
+
+  const onSttClick = () => {
+    setSttOn((prev) => !prev);
+  };
 
   return (
     <div className={styles.controllers}>
@@ -22,6 +34,13 @@ const controllers = (props) => {
               onClick={onCameraClick}
             >
               {cameraOn ? "카메라 끄기" : "카메라 켜기"}
+            </Button>
+            <Button
+              sx={{ color: "black" }}
+              className={styles.cameraBtn}
+              onClick={onSttClick}
+            >
+              {sttOn ? "자막 끄기" : "자막 켜기"}
             </Button>
           </div>
         </div>

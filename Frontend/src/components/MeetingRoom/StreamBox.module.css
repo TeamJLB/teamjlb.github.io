@@ -10,10 +10,6 @@
   padding: 10px 30px;
 }
 
-.videos {
-  height: 400px;
-}
-
 .streams video {
   width: 300px;
   height: 225px;
@@ -60,45 +56,50 @@
   letter-spacing: 1px;
 }
 
-.sttBox {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 500px;
-  height: 500px;
-  display: none;
-  background-color: lightgrey;
+.speakerIcon {
+  font-size: 20px;
+  height: 50px;
+  margin: 0 10px;
+  line-height: 50px;
+}
 
-  padding: 5px;
-  justify-content: center;
-  align-items: center;
+.sttBox {
+  width: 100%;
+  position: absolute;
+  bottom: 70px;
+  display: flex;
 }
 
 .sttText {
-  font-size: 15px;
+  height: 50px;
+  margin-right: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 10px 15px;
+  overflow: auto;
+  color: rgb(83, 83, 83);
+  font-size: 13px;
   width: 100%;
-  border: none;
-  background-color: transparent;
-  outline: none;
   letter-spacing: 1px;
 }
 
 .meetingLog {
   background-color: rgba(255, 255, 255, 0.7);
-  height: 30%;
-  margin: 20px;
+  height: 32%;
+  margin: 10px 20px;
   padding: 20px;
   border-radius: 10px;
   overflow: auto;
 }
 
 .logOn {
-  padding: 0 70px;
+  height: 340px;
+  padding: 0 110px;
 }
 
 .logOn video {
-  width: 240px;
-  height: 180px;
+  width: 200px;
+  height: 150px;
 }
 
 .closeBtn {

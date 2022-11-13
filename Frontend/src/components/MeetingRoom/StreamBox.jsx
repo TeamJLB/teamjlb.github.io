@@ -19,11 +19,11 @@ const StreamBox = (props) => {
   const { config, userToken, meetingId, subMeetingId, matchID } = props;
 
   // [로컬 서버에서 테스트]
-  const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
+  // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
   // [실제 서버에서 테스트]
-  // const socket = io.connect(
-  //   `http://${host_config.current_host}:${host_config.socket_port}/`
-  // );
+  const socket = io.connect(
+    `http://${host_config.current_host}:${host_config.socket_port}/`
+  );
   const navigate = useNavigate();
 
   console.log("stream");
@@ -35,6 +35,7 @@ const StreamBox = (props) => {
 
   const [mute, setMute] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
+  const [sttOn, setSttOn] = useState(true);
 
   const [meetingLog, setMeetingLog] = useState(null);
   const [meetingLogOn, setMeetingLogOn] = useState(false);
@@ -175,7 +176,7 @@ const StreamBox = (props) => {
         .substring(prevFinalTranscript.length)
         .trim();
       setCorrectedTranscript(
-        `${correctedTranscript} ${correctPunctuation(newSpeech)}`
+        (prev) => `${prev} ${correctPunctuation(newSpeech)}`
       );
     }
   }, [finalTranscript]);
@@ -281,11 +282,6 @@ const StreamBox = (props) => {
 
   return (
     <>
-      <div className={styles.sttBox}>
-        <span className={styles.sttText} id="sttText">
-          {correctedTranscript}
-        </span>
-      </div>
       <div className={styles.streamBox}>
         <MeetingHeader
           config={config}
@@ -322,12 +318,22 @@ const StreamBox = (props) => {
             <div className={styles.meetingLogContent}>{logContents}</div>
           </div>
         )}
+        {sttOn && (
+          <div className={styles.sttBox}>
+            <div className={styles.speakerIcon}>🔊 </div>
+            <div className={styles.sttText} id="sttText">
+              {correctedTranscript}
+            </div>
+          </div>
+        )}
         <Controllers
           mute={mute}
           cameraOn={cameraOn}
+          sttOn={sttOn}
           onMuteClick={handleMuteClick}
           onCameraClick={handleCameraClick}
           onLeaveClick={handleLeaveClick}
+          setSttOn={setSttOn}
         />
       </div>
       <Memo config={config} meetingId={meetingId} ref={memo} />
