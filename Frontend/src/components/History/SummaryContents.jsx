@@ -21,10 +21,16 @@ const SummaryContents = (props) => {
           </ListItemAvatar>
           <div className={styles.userContent}>
             <div className={styles.userName}>{item.user_name}</div>
-            <div className={styles.summaryContent}>
+            <div
+              className={styles.summaryContent}
+              style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+            >
               요약 | {item.summary_content}
             </div>
-            <div className={styles.originalContent}>
+            <div
+              className={styles.originalContent}
+              style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+            >
               원본 | {item.original_content}
             </div>
           </div>
