@@ -27,7 +27,7 @@ const TimeLineList = (props) => {
                 date={date}
                 time={time}
                 topic={history.topic}
-                participants={participants}
+                participants={people}
                 config={config}
               />
             );
