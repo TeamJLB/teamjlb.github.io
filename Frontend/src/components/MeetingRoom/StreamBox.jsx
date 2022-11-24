@@ -7,10 +7,8 @@ import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import axios from "axios";
 import MeetingHeader from "./MeetingHeader";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
 import SummaryContents from "../History/SummaryContents";
+import SttBox from "./SttBox";
 import host_config from "../../config/serverHost";
 
 const correctPunctuation = (givenTranscript) => `${givenTranscript}.`;
@@ -26,7 +24,6 @@ const StreamBox = (props) => {
   );
   const navigate = useNavigate();
 
-  console.log("stream");
   console.log("sub", subMeetingId, "match", matchID);
 
   const [myStream, setMyStream] = useState(null);
@@ -43,35 +40,6 @@ const StreamBox = (props) => {
 
   const videoGrid = useRef();
   const myVideo = useRef();
-
-  const [correctedTranscript, setCorrectedTranscript] = useState("");
-  const prevFinalTranscriptRef = useRef();
-
-  let textSummaryScript = "";
-
-  // [음성 인식 stt]
-  const recognition = SpeechRecognition;
-
-  const {
-    transcript,
-    interimTranscript,
-    finalTranscript,
-    resetTranscript,
-    listening,
-    browserSupportsSpeechRecognition,
-    isMicrophoneAvailable,
-  } = useSpeechRecognition();
-  const language = "ko";
-
-  // [음성 인식 트리거]
-  function startSpeechRecognition() {
-    if (listening) {
-      recognition.stopListening();
-      return;
-    }
-    recognition.startListening({ continuous: true, language: language });
-    // console.log(listening);
-  }
 
   // ------------------------------------
   // let myStream;
@@ -92,15 +60,6 @@ const StreamBox = (props) => {
       });
 
     peer = new Peer();
-
-    // 음성 인식 환경이 마련됐는지 확인 (Chrome)
-    if (!browserSupportsSpeechRecognition) {
-      console.log(`Browser doesn't support speech recognition`);
-      alert(`Browser doesn't support speech recognition`);
-    } else {
-      console.log(`Browser ready for speech recognition`);
-      // startSpeechRecognition();
-    }
 
     navigator.mediaDevices
       .getUserMedia({
@@ -162,48 +121,14 @@ const StreamBox = (props) => {
       });
   }, []);
 
-  // [음성 인식 결과 처리] - stt 사이 마침표 추가
-  useEffect(() => {
-    prevFinalTranscriptRef.current = finalTranscript;
-  });
-
-  const prevFinalTranscript = prevFinalTranscriptRef.current;
-
-  useEffect(() => {
-    if (finalTranscript != "") {
-      // console.log(prevFinalTranscript);
-      const newSpeech = finalTranscript
-        .substring(prevFinalTranscript.length)
-        .trim();
-      setCorrectedTranscript(
-        (prev) => `${prev} ${correctPunctuation(newSpeech)}`
-      );
-    }
-  }, [finalTranscript]);
-  // ---
-
   const addVideoStream = (video, stream) => {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => video.play());
   };
 
   const handleMuteClick = () => {
-    // 음성인식 상태 바꾸기
-    if (!mute && listening) {
-      recognition.stopListening();
-      // recognition.abortListening();
-      // console.log(transcript);
-      // console.log(interimTranscript);
-      // console.log(finalTranscript);
-    } else if (mute && !listening) {
-      recognition.startListening({ continuous: true, language: language });
-    }
-    console.log(mute, listening);
-
-    // mute 값 상태 바꾸기
     setMute((prev) => !prev);
 
-    // 음향 트랙 바꾸기
     myStream
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
@@ -318,14 +243,7 @@ const StreamBox = (props) => {
             <div className={styles.meetingLogContent}>{logContents}</div>
           </div>
         )}
-        {sttOn && (
-          <div className={styles.sttBox}>
-            <div className={styles.speakerIcon}>🔊 </div>
-            <div className={styles.sttText} id="sttText">
-              {correctedTranscript}
-            </div>
-          </div>
-        )}
+        {sttOn && <SttBox mute={mute} />}
         <Controllers
           mute={mute}
           cameraOn={cameraOn}
