@@ -73,6 +73,19 @@ const StreamBox = (props) => {
     // console.log(listening);
   }
 
+  /**
+   * 회의 내용 요약
+  */
+  function textSummarize(text) {
+    // TODO - text 에 공백이나 아무 글이 없을 때 실행 안 시키도록 하기
+    socket.emit("stt_data", text);
+
+    socket.on("result", (result) => {
+      console.log(result);
+      // $textSummaryResult.innerText = result;
+    })
+  }
+
   // ------------------------------------
   // let myStream;
   let peer;
@@ -221,6 +234,8 @@ const StreamBox = (props) => {
       alert("❗️오늘의 주제를 입력해주세요❗️");
       return;
     }
+
+    textSummarize(correctedTranscript);
 
     axios.patch(
       `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,

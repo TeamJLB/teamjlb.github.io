@@ -39,25 +39,25 @@
      */
     io.on("connection", (socket) => {
         socket.on("join-room", (roomName, userStream, done) => {
-            if (typeof done === "function") done(userStream);
-            socket.join(roomName);
-        
-            socket.to(roomName).emit("user-connected", userStream);
-        
-            socket.on("disconnect", () => {
+          if (typeof done === "function") done(userStream);
+          socket.join(roomName);
+      
+          socket.to(roomName).emit("user-connected", userStream);
+      
+          socket.on("disconnect", () => {
             socket.to(roomName).emit("user-disconnected", userStream);
-            });
+          });
         });
 
         // [문서 요약]
-        // socket.on("stt_data", (text) => {
-        //     console.log(text);
-        //     const python = spawn('python3', ["../../Text Summarization/KoreanReviewSummarizer/ks4r/__init__.py", text]);
-        //     python.stdout.on('data', (data) => {
-        //     // console.log(data.toString());
-        //     socket.emit("result", data.toString());
-        //     });
-        // });
+        socket.on("stt_data", (text) => {
+          console.log(text);
+          const python = spawn('python3', ["../../Text Summarization/KoreanReviewSummarizer/ks4r/__init__.py", text]);
+          python.stdout.on('data', (data) => {
+            // console.log(data.toString());
+            socket.emit("result", data.toString());
+          });
+        });
 
     // });    
     // io.on('connection', (socket) => {
