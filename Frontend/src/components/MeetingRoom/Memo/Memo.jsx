@@ -68,7 +68,7 @@ const Memo = React.forwardRef((props, ref) => {
             ["heading", "bold", "italic", "strike"],
             ["hr", "quote"],
             ["ul", "ol", "task", "indent", "outdent"],
-            ["code", "codeblock"],
+            ["table", "code", "codeblock"],
           ]}
           placeholder="이곳에 기록하세요!"
           previewStyle="vertical"
