@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, memo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import Peer from "peerjs";
-import Memo from "./Memo";
+import Memo from "./Memo/Memo";
 import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import axios from "axios";

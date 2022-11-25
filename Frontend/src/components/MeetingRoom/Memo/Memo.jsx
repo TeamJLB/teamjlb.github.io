@@ -2,7 +2,7 @@ import React, { memo, useEffect, useState } from "react";
 import MemoList from "./MemoList";
 import styles from "./Memo.module.css";
 import axios from "axios";
-import host_config from "../../config/serverHost";
+import host_config from "../../../config/serverHost";
 
 const Memo = React.forwardRef((props, ref) => {
   const { config, meetingId } = props;
