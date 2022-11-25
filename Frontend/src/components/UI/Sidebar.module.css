@@ -3,7 +3,7 @@
   box-shadow: 1px 0 3px 1px rgb(227, 227, 227);
   flex-direction: column;
   align-items: center;
-  width: 17%;
+  width: 15%;
   height: 100%;
   position: absolute;
   top: 0;
@@ -11,7 +11,7 @@
   left: 0;
   text-align: center;
   z-index: 99;
-  background-color: #FFFDF6;
+  background-color: #f9f9f9;
 }
 
 .logo {
