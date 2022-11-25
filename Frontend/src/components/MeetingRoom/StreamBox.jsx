@@ -222,6 +222,8 @@ const StreamBox = (props) => {
       return;
     }
 
+    console.log(memo.current?.getInstance().getMarkdown());
+
     axios.patch(
       `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
       { topic: topic },
@@ -230,7 +232,10 @@ const StreamBox = (props) => {
 
     axios.post(
       `http://${host_config.current_host}:${host_config.current_port}/memos/memo`,
-      { subMeeting_id: subMeetingId, content: memo.current.value },
+      {
+        subMeeting_id: subMeetingId,
+        content: memo.current?.getInstance().getMarkdown(),
+      },
       config
     );
 
