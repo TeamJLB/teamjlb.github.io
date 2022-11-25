@@ -240,7 +240,7 @@ const MeetingListPage = () => {
   return (
     <div className={style.body}>
       <div className={style.content}>
-        <h1 className={style.listTitle}>🖥 MY MEETING LIST</h1>
+        <h1 className={style.listTitle}> 🖥 MY MEETING LIST </h1>
         <div className={style.searchGroup}>
           <div className={style.searchbar}>
             내 회의 검색
