@@ -78,9 +78,14 @@ module.exports = (server) => {
             console.log(result.toString());
           });
 
+          // 에러 시 출력
+          summarize_process.stderr.on('data', (result)=>{
+            console.log('error 발생 :', result.toString());
+          })
+
           // 명령이 끝나면 close
           summarize_process.on('exit', (code)=>{
-            console.log('exit', code);
+            console.log('exit code :', code);
           })
         } catch (err) {
           console.log('error');
