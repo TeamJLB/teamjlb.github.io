@@ -12,7 +12,6 @@ const MemoContents = (props) => {
       <Viewer initialValue={item.memo_content} />
     </div>
   );
-  // return <div className={styles.memoContents} style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>{item.memo_content}</div>;
 };
 
 export default MemoContents;
