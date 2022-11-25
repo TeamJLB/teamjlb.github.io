@@ -208,6 +208,10 @@ const StreamBox = (props) => {
       // console.log(transcript);
       // console.log(interimTranscript);
       // console.log(finalTranscript);
+      
+      // 요약 테스트
+      textSummarize(correctedTranscript)
+      
     } else if (mute && !listening) {
       recognition.startListening({ continuous: true, language: language });
     }
@@ -235,7 +239,8 @@ const StreamBox = (props) => {
       return;
     }
 
-    textSummarize(correctedTranscript);
+    // 요약 진행
+    // textSummarize(correctedTranscript);
 
     axios.patch(
       `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
