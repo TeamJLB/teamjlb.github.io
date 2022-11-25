@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import StreamBox from "../../components/MeetingRoom/StreamBox";
-import Memo from "../../components/MeetingRoom/Memo";
 import styles from "./MeetingRoomPage.module.css";
 import { useLocation } from "react-router-dom";
 
