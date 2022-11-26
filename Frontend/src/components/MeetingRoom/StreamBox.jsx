@@ -341,7 +341,12 @@ const StreamBox = (props) => {
           setSttOn={setSttOn}
         />
       </div>
-      <Memo config={config} meetingId={meetingId} ref={memo} />
+      <Memo
+        roomName={roomName}
+        config={config}
+        meetingId={meetingId}
+        ref={memo}
+      />
     </>
   );
 };
