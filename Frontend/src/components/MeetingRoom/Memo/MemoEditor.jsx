@@ -71,7 +71,8 @@ const MemoEditor = (roomName) => {
     const ydoc = new Y.Doc();
     const provider = new WebrtcProvider(
       `http://${host_config.current_host}:${host_config.socket_port}/meetingRoom`,
-      ydoc
+      ydoc,
+      { signaling: ["ws://localhost:3001"] }
     );
     const type = ydoc.getText("quill");
     const binding = new QuillBinding(
