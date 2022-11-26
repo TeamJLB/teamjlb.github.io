@@ -1,13 +1,12 @@
 import React, { memo, useEffect, useState } from "react";
 import MemoList from "./MemoList";
 import styles from "./Memo.module.css";
-import { Editor } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
+import MemoEditor from "./MemoEditor";
 import axios from "axios";
 import host_config from "../../../config/serverHost";
 
 const Memo = React.forwardRef((props, ref) => {
-  const { config, meetingId } = props;
+  const { roomName, config, meetingId } = props;
 
   const [modalOn, setModalOn] = useState(false);
   const [memoList, setMemoList] = useState([]);
@@ -63,20 +62,7 @@ const Memo = React.forwardRef((props, ref) => {
         </div>
       )}
       <div className={styles.memoArea}>
-        <Editor
-          toolbarItems={[
-            ["heading", "bold", "italic", "strike"],
-            ["hr", "quote"],
-            ["ul", "ol", "task", "indent", "outdent"],
-            ["table", "code", "codeblock"],
-          ]}
-          placeholder="이곳에 기록하세요!"
-          previewStyle="vertical"
-          height="100%"
-          initialEditType="wysiwyg"
-          spellcheck="false"
-          ref={ref}
-        />
+        <MemoEditor roomName={roomName} />
       </div>
     </div>
   );
