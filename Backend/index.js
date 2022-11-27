@@ -1,12 +1,9 @@
 const express = require("./config/express");
-const cors = require("cors");
 const app = express();
 const server = require("http").createServer(app);
 
 const server_config = require("./config/server");
 const PORT = server_config.web_port || process.env.PORT;
-
-app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Server is Running");

@@ -76,13 +76,24 @@ const StreamBox = (props) => {
   /**
    * 회의 내용 요약
   */
-  function textSummarize(text) {
-    // TODO - text 에 공백이나 아무 글이 없을 때 실행 안 시키도록 하기
-    socket.emit("stt_data", text);
+  function textSummarize(originalText) {
+    // text 에 공백이나 아무 글이 없을 때 실행 안 시키도록 하기
+    if (originalText === "") return;
 
-    socket.on("result", (result) => {
-      console.log(result);
-      // $textSummaryResult.innerText = result;
+    socket.emit("stt_data", originalText);
+
+    // 요약 내용 결과 처리
+    socket.on("result", (summarizedResult) => {
+      console.log(summarizedResult);
+      
+      // TODO - 요약 처리하기
+      
+      if (typeof(summarizedResult) !== 'undefined'){
+        console.log('summary process ended');
+      } else {
+        console.log('summary process failed');
+      }
+      return
     })
   }
 
@@ -210,7 +221,7 @@ const StreamBox = (props) => {
       // console.log(finalTranscript);
       
       // 요약 테스트
-      textSummarize(correctedTranscript)
+      // textSummarize(correctedTranscript)
       
     } else if (mute && !listening) {
       recognition.startListening({ continuous: true, language: language });
@@ -240,7 +251,8 @@ const StreamBox = (props) => {
     }
 
     // 요약 진행
-    // textSummarize(correctedTranscript);
+    textSummarize(correctedTranscript);
+    // TODO - 요약 API (원본 내용만이라도 저장하기)
 
     axios.patch(
       `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
