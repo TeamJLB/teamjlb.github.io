@@ -19,11 +19,11 @@ const StreamBox = (props) => {
   const { config, userToken, meetingId, subMeetingId, matchID } = props;
 
   // [로컬 서버에서 테스트]
-  // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
+  const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
   // [실제 서버에서 테스트]
-  const socket = io.connect(
-    `http://${host_config.current_host}:${host_config.socket_port}/`
-  );
+  // const socket = io.connect(
+  //   `http://${host_config.current_host}:${host_config.socket_port}/`
+  // );
   const navigate = useNavigate();
 
   console.log("stream");
@@ -36,10 +36,11 @@ const StreamBox = (props) => {
   const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
   const [sttOn, setSttOn] = useState(true);
-
   const [meetingLog, setMeetingLog] = useState(null);
   const [meetingLogOn, setMeetingLogOn] = useState(false);
-  const memo = useRef();
+
+  const [isFinish, setIsFinish] = useState(false);
+  const [memo, setMemo] = useState(null);
 
   const videoGrid = useRef();
   const myVideo = useRef();
@@ -221,46 +222,51 @@ const StreamBox = (props) => {
       alert("❗️오늘의 주제를 입력해주세요❗️");
       return;
     }
-
-    console.log(memo.current?.getInstance().getMarkdown());
-
-    axios.patch(
-      `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
-      { topic: topic },
-      config
-    );
-
-    axios.post(
-      `http://${host_config.current_host}:${host_config.current_port}/memos/memo`,
-      {
-        subMeeting_id: subMeetingId,
-        content: memo.current?.getInstance().getMarkdown(),
-      },
-      config
-    );
-
-    axios
-      .patch(
-        `http://${host_config.current_host}:${host_config.current_port}/meetings/closeMeeting/${meetingId}/${subMeetingId}`,
-        { matchId: matchID },
-        config
-      )
-      .then((res) => {
-        if (res.data.isSuccess) {
-          console.log(res.data.result);
-          socket.disconnect();
-          peer?.destroy();
-          myStream.getTracks().forEach((track) => track.stop());
-          setMyStream(null);
-          myVideo.srcObject = null;
-          clearAllVideos();
-          navigate("/meetingList", { state: { userToken } });
-          window.location.reload();
-        } else {
-          alert(res.data.message);
-        }
-      });
+    setIsFinish(true);
   };
+
+  useEffect(() => {
+    if (isFinish === true) {
+      console.log(memo.value);
+
+      axios.patch(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
+        { topic: topic },
+        config
+      );
+
+      axios.post(
+        `http://${host_config.current_host}:${host_config.current_port}/memos/memo`,
+        {
+          subMeeting_id: subMeetingId,
+          content: memo.value,
+        },
+        config
+      );
+
+      axios
+        .patch(
+          `http://${host_config.current_host}:${host_config.current_port}/meetings/closeMeeting/${meetingId}/${subMeetingId}`,
+          { matchId: matchID },
+          config
+        )
+        .then((res) => {
+          if (res.data.isSuccess) {
+            console.log(res.data.result);
+            socket.disconnect();
+            peer?.destroy();
+            myStream.getTracks().forEach((track) => track.stop());
+            setMyStream(null);
+            myVideo.srcObject = null;
+            clearAllVideos();
+            navigate("/meetingList", { state: { userToken } });
+            window.location.reload();
+          } else {
+            alert(res.data.message);
+          }
+        });
+    }
+  }, [isFinish]);
 
   const clearAllVideos = () => {
     const videoGrid = document.querySelector("#videos");
@@ -345,7 +351,7 @@ const StreamBox = (props) => {
         roomName={roomName}
         config={config}
         meetingId={meetingId}
-        ref={memo}
+        setMemo={setMemo}
       />
     </>
   );

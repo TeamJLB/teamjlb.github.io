@@ -12,8 +12,10 @@ import { useRef, useEffect } from "react";
 import host_config from "../../../config/serverHost";
 import styled from "styled-components";
 
-const MemoEditor = (roomName) => {
+const MemoEditor = (props) => {
+  const { roomName, setMemo } = props;
   let quillRef = null;
+
   Quill.register("modules/cursors", QuillCursors);
 
   const modules = {
@@ -86,10 +88,6 @@ const MemoEditor = (roomName) => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   provider.connect();
-  // }, []);
-
   return (
     <MouseBox>
       <ReactQuill
@@ -98,7 +96,10 @@ const MemoEditor = (roomName) => {
         modules={modules}
         formats={formats}
         style={{ height: "100%" }}
-        ref={(el) => (quillRef = el)}
+        ref={(el) => {
+          setMemo(el);
+          return (quillRef = el);
+        }}
       />
     </MouseBox>
   );
@@ -129,20 +130,3 @@ const MouseBox = styled.div`
 `;
 
 export default MemoEditor;
-{
-  /*       
-      <Editor
-        toolbarItems={[
-          ["heading", "bold", "italic", "strike"],
-          ["hr", "quote"],
-          ["ul", "ol", "task", "indent", "outdent"],
-          ["code", "codeblock"],
-        ]}
-        placeholder="이곳에 기록하세요!"
-        previewStyle="vertical"
-        height="100%"
-        initialEditType="wysiwyg"
-        spellcheck="false"
-        ref={ref}
-      /> */
-}

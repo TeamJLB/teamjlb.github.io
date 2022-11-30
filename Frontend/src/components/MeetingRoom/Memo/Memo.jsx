@@ -5,8 +5,8 @@ import MemoEditor from "./MemoEditor";
 import axios from "axios";
 import host_config from "../../../config/serverHost";
 
-const Memo = React.forwardRef((props, ref) => {
-  const { roomName, config, meetingId } = props;
+const Memo = (props) => {
+  const { roomName, config, meetingId, setMemo } = props;
 
   const [modalOn, setModalOn] = useState(false);
   const [memoList, setMemoList] = useState([]);
@@ -62,10 +62,10 @@ const Memo = React.forwardRef((props, ref) => {
         </div>
       )}
       <div className={styles.memoArea}>
-        <MemoEditor roomName={roomName} />
+        <MemoEditor roomName={roomName} setMemo={setMemo} />
       </div>
     </div>
   );
-});
+};
 
 export default memo(Memo);

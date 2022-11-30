@@ -1,16 +1,11 @@
-import React from "react";
-import { Viewer } from "@toast-ui/react-editor";
+import React, { memo } from "react";
 import styles from "./MemoContents.module.css";
+import ReactQuill from "react-quill";
 
 const MemoContents = (props) => {
   const { item } = props;
   return (
-    <div
-      className={styles.memoContents}
-      style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
-    >
-      <Viewer initialValue={item.memo_content} />
-    </div>
+    <ReactQuill value={item.memo_content} readOnly="true" theme="bubble" />
   );
 };
 
