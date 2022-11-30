@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./MemoItem.module.css";
+import ReactQuill from "react-quill";
 
 const MemoItem = (props) => {
   const { subMeetingId, memo, onMemoClick } = props;
@@ -15,7 +16,9 @@ const MemoItem = (props) => {
     <li className={styles.memoItem} onClick={memoClickHandler}>
       <span className={styles.memoTopic}>{memo.topic}</span>
       <span className={styles.memoDate}>{date}</span>
-      <div className={styles.memoContent}>{memo.memo_content}</div>
+      <div className={styles.memoContent}>
+        <ReactQuill value={memo.memo_content} readOnly="true" theme="bubble" />
+      </div>
     </li>
   );
 };

@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState } from "react";
 import MemoList from "./MemoList";
 import styles from "./Memo.module.css";
 import MemoEditor from "./MemoEditor";
+import ReactQuill from "react-quill";
 import axios from "axios";
 import host_config from "../../../config/serverHost";
 
@@ -58,7 +59,13 @@ const Memo = (props) => {
           <button className={styles.closeBtn} onClick={memoCloseHandler}>
             <img width="15px" height="15px" src="img/close.png"></img>
           </button>
-          <div className={styles.memoContent}>{memoItem.content}</div>
+          <div className={styles.memoContent}>
+            <ReactQuill
+              value={memoItem.content}
+              readOnly="true"
+              theme="bubble"
+            />
+          </div>
         </div>
       )}
       <div className={styles.memoArea}>
