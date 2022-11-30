@@ -47,7 +47,7 @@ const StreamBox = (props) => {
   const [correctedTranscript, setCorrectedTranscript] = useState("");
   const prevFinalTranscriptRef = useRef();
 
-  let textSummaryScript = "";
+  const [summarizedResult, setSummarizedResult] = useState("");
 
   // [음성 인식 stt]
   const recognition = SpeechRecognition;
@@ -83,12 +83,13 @@ const StreamBox = (props) => {
     socket.emit("stt_data", originalText);
 
     // 요약 내용 결과 처리
-    socket.on("result", (summarizedResult) => {
-      console.log(summarizedResult);
+    socket.on("result", (summaryResult) => {
+      console.log(summaryResult);
       
-      // TODO - 요약 처리하기
-      
-      if (typeof(summarizedResult) !== 'undefined'){
+      // TODO - (check) 요약 처리하기
+      if (typeof(summaryResult) !== 'undefined'){
+        setSummarizedResult(summaryResult);
+
         console.log('summary process ended');
       } else {
         console.log('summary process failed');
@@ -252,7 +253,7 @@ const StreamBox = (props) => {
 
     // 요약 진행
     textSummarize(correctedTranscript);
-    // TODO - 요약 API (원본 내용만이라도 저장하기)
+    // TODO - 요약 API
 
     axios.patch(
       `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
