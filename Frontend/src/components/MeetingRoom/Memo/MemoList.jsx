@@ -2,7 +2,7 @@ import styles from "./MemoList.module.css";
 import React from "react";
 import MemoItem from "./MemoItem";
 import axios from "axios";
-import host_config from "../../config/serverHost";
+import host_config from "../../../config/serverHost";
 
 const MemoList = (props) => {
   const { setModalOn, memoList, setMemoOn, setMemoItem, config } = props;

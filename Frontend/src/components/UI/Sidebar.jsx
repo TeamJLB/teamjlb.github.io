@@ -46,6 +46,7 @@ const Sidebar = (props) => {
 
   if (location.pathname === "/") return null;
   if (location.pathname === "/login") return null;
+  if (location.pathname === "/register") return null;
   if (location.pathname === "/meetingRoom") return null;
 
   const clickLogoHandler = () => {

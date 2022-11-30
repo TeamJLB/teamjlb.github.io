@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, memo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import Peer from "peerjs";
-import Memo from "./Memo";
+import Memo from "./Memo/Memo";
 import Controllers from "./Controllers";
 import styles from "./StreamBox.module.css";
 import axios from "axios";
@@ -254,6 +254,8 @@ const StreamBox = (props) => {
     // 요약 진행
     textSummarize(correctedTranscript);
     // TODO - 요약 API
+    
+    console.log(memo.current?.getInstance().getMarkdown());
 
     axios.patch(
       `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
@@ -263,7 +265,10 @@ const StreamBox = (props) => {
 
     axios.post(
       `http://${host_config.current_host}:${host_config.current_port}/memos/memo`,
-      { subMeeting_id: subMeetingId, content: memo.current.value },
+      {
+        subMeeting_id: subMeetingId,
+        content: memo.current?.getInstance().getMarkdown(),
+      },
       config
     );
 
@@ -369,7 +374,12 @@ const StreamBox = (props) => {
           setSttOn={setSttOn}
         />
       </div>
-      <Memo config={config} meetingId={meetingId} ref={memo} />
+      <Memo
+        roomName={roomName}
+        config={config}
+        meetingId={meetingId}
+        ref={memo}
+      />
     </>
   );
 };

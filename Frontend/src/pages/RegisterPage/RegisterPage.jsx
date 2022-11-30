@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 
-import { useNavigate } from 'react-router-dom'
-import { Button,Typography , Link, MenuItem} from '@mui/material';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import IconButton from '@mui/material/IconButton';
-import Grid from '@mui/material/Grid';
-import { LoadingButton } from '@mui/lab';
-import CallIcon from '@mui/icons-material/Call';
-import InputLabel from '@mui/material/InputLabel';
-import axios from 'axios';
-import Select from '@mui/material/Select';
-import './RegisterPage.css';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { useNavigate } from "react-router-dom";
+import { Button, Typography, Link, MenuItem } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import Grid from "@mui/material/Grid";
+import { LoadingButton } from "@mui/lab";
+import CallIcon from "@mui/icons-material/Call";
+import InputLabel from "@mui/material/InputLabel";
+import axios from "axios";
+import Select from "@mui/material/Select";
+import "./RegisterPage.css";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import host_config from "../../config/serverHost";
 
 const RegisterPage = () => {
@@ -122,7 +122,7 @@ const RegisterPage = () => {
   };
   const handleCancel = () => {
     if (window.confirm("회원가입을 취소하시겠습니까?")) {
-      navigate("/Login");
+      navigate("/login");
     } else {
       console.log("cancel");
     }

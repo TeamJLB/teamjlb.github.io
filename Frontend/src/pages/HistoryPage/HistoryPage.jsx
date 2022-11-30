@@ -4,7 +4,7 @@ import axios from "axios";
 import HistoryList from "../../components/History/HistoryList";
 import styles from "./HistoryPage.module.css";
 import host_config from "../../config/serverHost";
-import TimeLineList from "../../components/History/TimeLineList"
+import TimeLineList from "../../components/History/TimeLineList";
 
 const HistoryPage = () => {
   const location = useLocation();
@@ -31,15 +31,15 @@ const HistoryPage = () => {
   }, [location.state]);
 
   return (
-      <>
-    <div className={styles.history}>
-      <div className={styles.historyTitle}>
-        <h1>🔍 HISTORY : {meetingName}</h1>
+    <>
+      <div className={styles.history}>
+        <div className={styles.historyTitle}>
+          <h1> 🔍 HISTORY : {meetingName} </h1>
+        </div>
+        <HistoryList historyList={historyList} config={config} />
       </div>
-      <HistoryList historyList={historyList} config={config} />
-    </div>
-      <TimeLineList historyList={historyList} config={config}/>
-        </>
+      <TimeLineList historyList={historyList} config={config} />
+    </>
   );
 };
 

@@ -21,6 +21,7 @@ const HistoryItem = (props) => {
         config
       )
       .then((res) => {
+        console.log(res.data.result[0]);
         if (res.data.result?.length !== 0) setMemoContent(res.data.result[0]);
       });
 
