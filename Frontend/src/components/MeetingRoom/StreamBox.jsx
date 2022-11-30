@@ -48,7 +48,7 @@ const StreamBox = (props) => {
   const [correctedTranscript, setCorrectedTranscript] = useState("");
   const prevFinalTranscriptRef = useRef();
 
-  let textSummaryScript = "";
+  const [summarizedResult, setSummarizedResult] = useState("");
 
   // [음성 인식 stt]
   const recognition = SpeechRecognition;
@@ -72,6 +72,31 @@ const StreamBox = (props) => {
     }
     recognition.startListening({ continuous: true, language: language });
     // console.log(listening);
+  }
+
+  /**
+   * 회의 내용 요약
+   */
+  function textSummarize(originalText) {
+    // text 에 공백이나 아무 글이 없을 때 실행 안 시키도록 하기
+    if (originalText === "") return;
+
+    socket.emit("stt_data", originalText);
+
+    // 요약 내용 결과 처리
+    socket.on("result", (summaryResult) => {
+      console.log(summaryResult);
+
+      // TODO - (check) 요약 처리하기
+      if (typeof summaryResult !== "undefined") {
+        setSummarizedResult(summaryResult);
+
+        console.log("summary process ended");
+      } else {
+        console.log("summary process failed");
+      }
+      return;
+    });
   }
 
   // ------------------------------------
@@ -196,6 +221,9 @@ const StreamBox = (props) => {
       // console.log(transcript);
       // console.log(interimTranscript);
       // console.log(finalTranscript);
+
+      // 요약 테스트
+      // textSummarize(correctedTranscript)
     } else if (mute && !listening) {
       recognition.startListening({ continuous: true, language: language });
     }
@@ -222,6 +250,11 @@ const StreamBox = (props) => {
       alert("❗️오늘의 주제를 입력해주세요❗️");
       return;
     }
+
+    // 요약 진행
+    textSummarize(correctedTranscript);
+    // TODO - 요약 API
+
     setIsFinish(true);
   };
 
