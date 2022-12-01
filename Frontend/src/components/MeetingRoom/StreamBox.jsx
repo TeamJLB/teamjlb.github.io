@@ -19,11 +19,11 @@ const StreamBox = (props) => {
   const { config, userToken, meetingId, subMeetingId, matchID } = props;
 
   // [로컬 서버에서 테스트]
-  const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
+  // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
   // [실제 서버에서 테스트]
-  // const socket = io.connect(
-  //   `http://${host_config.current_host}:${host_config.socket_port}/`
-  // );
+  const socket = io.connect(
+    `http://${host_config.current_host}:${host_config.socket_port}/`
+  );
   const navigate = useNavigate();
 
   console.log("stream");
@@ -223,7 +223,7 @@ const StreamBox = (props) => {
       // console.log(finalTranscript);
 
       // 요약 테스트
-      // textSummarize(correctedTranscript)
+      textSummarize(correctedTranscript)
     } else if (mute && !listening) {
       recognition.startListening({ continuous: true, language: language });
     }
@@ -252,7 +252,7 @@ const StreamBox = (props) => {
     }
 
     // 요약 진행
-    textSummarize(correctedTranscript);
+    // textSummarize(correctedTranscript);
     // TODO - 요약 API
 
     setIsFinish(true);
