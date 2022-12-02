@@ -7,6 +7,12 @@ import styles from "./SummaryContents.module.css";
 
 const SummaryContents = (props) => {
   const { items } = props;
+  console.log(items);
+
+  const makeSummaryContent = (summary) => {
+    return summary?.replace(/'|\[|\]|\n/g, "").split(", ");
+  };
+
   return (
     <List sx={{ padding: 0 }}>
       {items.map((item) => (
@@ -21,17 +27,25 @@ const SummaryContents = (props) => {
           </ListItemAvatar>
           <div className={styles.userContent}>
             <div className={styles.userName}>{item.user_name}</div>
-            <div
-              className={styles.summaryContent}
-              style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
-            >
-              요약 | {item.summary_content}
+            <div className={styles.summaryContainer}>
+              <div className={styles.summaryTitle}>요약본</div>
+              <div
+                className={styles.summaryContent}
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >
+                {item.summary_content
+                  ? makeSummaryContent(item.summary_content).join("\n")
+                  : "(내용 없음)"}
+              </div>
             </div>
-            <div
-              className={styles.originalContent}
-              style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
-            >
-              원본 | {item.original_content}
+            <div className={styles.summaryContainer}>
+              <div className={styles.summaryTitle}>원본</div>
+              <div
+                className={styles.summaryContent}
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >
+                {item.original_content ? item.original_content : "(내용 없음)"}
+              </div>
             </div>
           </div>
         </ListItem>
