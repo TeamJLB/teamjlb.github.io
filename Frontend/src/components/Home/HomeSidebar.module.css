@@ -1,0 +1,95 @@
+.sidebar {
+    position: fixed;
+    box-shadow: 1px 0 3px 1px rgb(227, 227, 227);
+    flex-direction: column;
+    align-items: center;
+    width: 15%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    z-index: 99;
+    background-color: #f9f9f9;
+}
+
+.logo {
+    font-size: 30px;
+    height: 120px;
+}
+
+.logo:hover {
+    cursor: pointer;
+}
+
+.userProfile {
+    padding: 30px 0;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    border-top: 1px solid rgb(219, 219, 219);
+    border-bottom: 1px solid rgb(219, 219, 219);
+}
+
+.userName {
+    font-size: 18px;
+}
+
+.userEmail {
+    font-size: 12px;
+    color: gray;
+}
+
+.menu {
+    padding: 10px;
+}
+
+.menuTitle {
+    display: inline-block;
+    width: fit-content;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.menuContent {
+    width: 100%;
+    padding-top: 10px;
+    overflow: auto;
+}
+
+.menuItem {
+    height: 30px;
+    font-size: 14px;
+    padding: 4px;
+    line-height: 30px;
+    border-radius: 5px;
+    color: dimgray;
+    align-items: center;
+}
+
+.menuItem:hover {
+    cursor: pointer;
+    background-color: #e7e7e7;
+}
+
+.myPage {
+    width: 82%;
+    border-top: 1px solid rgb(219, 219, 219);
+    position: absolute;
+    bottom: 0;
+    padding: 20px;
+    color: dimgray;
+}
+
+.active{
+    height: 30px;
+    font-size: 14px;
+    padding: 4px;
+    line-height: 30px;
+    border-radius: 5px;
+    color: dimgray;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    background-color: #e7e7e7;
+}

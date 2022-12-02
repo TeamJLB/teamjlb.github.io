@@ -106,7 +106,7 @@ const LoginPage = () => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: 'url(https://source.unsplash.com/random)',
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -118,14 +118,14 @@ const LoginPage = () => {
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          ></Box>
+    sx={{
+      my: 8,
+      mx: 4,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }}
+    />
           <div className="loginForm">
             <LockOutlinedIcon />
             <Typography component="h1" variant="h5">
