@@ -18,3 +18,11 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+__pycache__/*
+./__pycache__
+./__pycache__/*
+ks4r/__pycache__/*
+./ks4r/__pycache__
+./ks4r/__pycache__/*
+.DS_Store

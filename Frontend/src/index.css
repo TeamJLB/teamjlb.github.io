@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  line-height: inherit;
 }
 
 html,
@@ -64,4 +65,9 @@ ul {
     url("styles/fonts/NotoSansKR-Bold.woff") format("woff"),
     url("styles/fonts/NotoSansKR-Bold.otf") format("truetype");
   font-display: block;
+}
+
+.ql-editing {
+  position: inherit;
+  left: 0;
 }

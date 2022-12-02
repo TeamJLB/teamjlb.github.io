@@ -36,10 +36,11 @@ const StreamBox = (props) => {
   const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
   const [sttOn, setSttOn] = useState(true);
-
   const [meetingLog, setMeetingLog] = useState(null);
   const [meetingLogOn, setMeetingLogOn] = useState(false);
-  const memo = useRef();
+
+  const [isFinish, setIsFinish] = useState(false);
+  const [memo, setMemo] = useState(null);
 
   const videoGrid = useRef();
   const myVideo = useRef();
@@ -47,7 +48,7 @@ const StreamBox = (props) => {
   const [correctedTranscript, setCorrectedTranscript] = useState("");
   const prevFinalTranscriptRef = useRef();
 
-  let textSummaryScript = "";
+  const [summarizedResult, setSummarizedResult] = useState("");
 
   // [음성 인식 stt]
   const recognition = SpeechRecognition;
@@ -71,6 +72,31 @@ const StreamBox = (props) => {
     }
     recognition.startListening({ continuous: true, language: language });
     // console.log(listening);
+  }
+
+  /**
+   * 회의 내용 요약
+   */
+  function textSummarize(originalText) {
+    // text 에 공백이나 아무 글이 없을 때 실행 안 시키도록 하기
+    if (originalText === "") return;
+
+    socket.emit("stt_data", originalText);
+
+    // 요약 내용 결과 처리
+    socket.on("result", (summaryResult) => {
+      console.log(summaryResult);
+
+      // TODO - (check) 요약 처리하기
+      if (typeof summaryResult !== "undefined") {
+        setSummarizedResult(summaryResult);
+
+        console.log("summary process ended");
+      } else {
+        console.log("summary process failed");
+      }
+      return;
+    });
   }
 
   // ------------------------------------
@@ -195,6 +221,9 @@ const StreamBox = (props) => {
       // console.log(transcript);
       // console.log(interimTranscript);
       // console.log(finalTranscript);
+
+      // 요약 테스트
+      textSummarize(correctedTranscript)
     } else if (mute && !listening) {
       recognition.startListening({ continuous: true, language: language });
     }
@@ -222,45 +251,55 @@ const StreamBox = (props) => {
       return;
     }
 
-    console.log(memo.current?.getInstance().getMarkdown());
+    // 요약 진행
+    // textSummarize(correctedTranscript);
+    // TODO - 요약 API
 
-    axios.patch(
-      `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
-      { topic: topic },
-      config
-    );
-
-    axios.post(
-      `http://${host_config.current_host}:${host_config.current_port}/memos/memo`,
-      {
-        subMeeting_id: subMeetingId,
-        content: memo.current?.getInstance().getMarkdown(),
-      },
-      config
-    );
-
-    axios
-      .patch(
-        `http://${host_config.current_host}:${host_config.current_port}/meetings/closeMeeting/${meetingId}/${subMeetingId}`,
-        { matchId: matchID },
-        config
-      )
-      .then((res) => {
-        if (res.data.isSuccess) {
-          console.log(res.data.result);
-          socket.disconnect();
-          peer?.destroy();
-          myStream.getTracks().forEach((track) => track.stop());
-          setMyStream(null);
-          myVideo.srcObject = null;
-          clearAllVideos();
-          navigate("/meetingList", { state: { userToken } });
-          window.location.reload();
-        } else {
-          alert(res.data.message);
-        }
-      });
+    setIsFinish(true);
   };
+
+  useEffect(() => {
+    if (isFinish === true) {
+      console.log(memo.value);
+
+      axios.patch(
+        `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
+        { topic: topic },
+        config
+      );
+
+      axios.post(
+        `http://${host_config.current_host}:${host_config.current_port}/memos/memo`,
+        {
+          subMeeting_id: subMeetingId,
+          content: memo.value,
+        },
+        config
+      );
+
+      axios
+        .patch(
+          `http://${host_config.current_host}:${host_config.current_port}/meetings/closeMeeting/${meetingId}/${subMeetingId}`,
+          { matchId: matchID },
+          config
+        )
+        .then((res) => {
+          if (res.data.isSuccess) {
+            console.log(res.data.result);
+            socket.disconnect();
+            peer?.destroy();
+            myStream.getTracks().forEach((track) => track.stop());
+            setMyStream(null);
+            myVideo.srcObject = null;
+            clearAllVideos();
+            navigate("/meetingList", { state: { userToken } });
+            window.location.reload();
+          } else {
+            alert(res.data.message);
+          }
+        });
+    }
+  }, [isFinish]);
 
   const clearAllVideos = () => {
     const videoGrid = document.querySelector("#videos");
@@ -345,7 +384,7 @@ const StreamBox = (props) => {
         roomName={roomName}
         config={config}
         meetingId={meetingId}
-        ref={memo}
+        setMemo={setMemo}
       />
     </>
   );
