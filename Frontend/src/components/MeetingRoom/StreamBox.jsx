@@ -44,11 +44,12 @@ const StreamBox = (props) => {
 
   const videoGrid = useRef();
   const myVideo = useRef();
+  const originalStt = useRef();
 
   const [correctedTranscript, setCorrectedTranscript] = useState("");
   const prevFinalTranscriptRef = useRef();
 
-  const [summarizedResult, setSummarizedResult] = useState("");
+  const [summarizedResult, setSummarizedResult] = useState(null);
 
   // [음성 인식 stt]
   const recognition = SpeechRecognition;
@@ -223,7 +224,7 @@ const StreamBox = (props) => {
       // console.log(finalTranscript);
 
       // 요약 테스트
-      textSummarize(correctedTranscript)
+      // textSummarize(correctedTranscript)
     } else if (mute && !listening) {
       recognition.startListening({ continuous: true, language: language });
     }
@@ -252,15 +253,27 @@ const StreamBox = (props) => {
     }
 
     // 요약 진행
-    // textSummarize(correctedTranscript);
+    if (correctedTranscript) {
+      textSummarize(correctedTranscript);
+    }
     // TODO - 요약 API
-
     setIsFinish(true);
   };
 
   useEffect(() => {
-    if (isFinish === true) {
-      console.log(memo.value);
+    if ((isFinish && !correctedTranscript) || summarizedResult) {
+      console.log(summarizedResult);
+      console.log(originalStt.current.innerText);
+
+      axios.post(
+        `http://${host_config.current_host}:${host_config.current_port}/summaries/summary`,
+        {
+          match_id: matchID,
+          summary_content: summarizedResult,
+          original_content: originalStt.current.innerText,
+        },
+        config
+      );
 
       axios.patch(
         `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
@@ -299,7 +312,7 @@ const StreamBox = (props) => {
           }
         });
     }
-  }, [isFinish]);
+  }, [isFinish, summarizedResult]);
 
   const clearAllVideos = () => {
     const videoGrid = document.querySelector("#videos");
@@ -365,7 +378,7 @@ const StreamBox = (props) => {
         {sttOn && (
           <div className={styles.sttBox}>
             <div className={styles.speakerIcon}>🔊 </div>
-            <div className={styles.sttText} id="sttText">
+            <div className={styles.sttText} id="sttText" ref={originalStt}>
               {correctedTranscript}
             </div>
           </div>
