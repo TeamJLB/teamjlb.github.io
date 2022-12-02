@@ -36,7 +36,7 @@ const Timeitem = (props) =>{
           { participantsCheck ? <TimelineDot variant="outlined" color="primary" /> : <TimelineDot /> }
           <TimelineConnector />
         </TimelineSeparator>
-        <TimelineContent className={style.timecontent} sx={{ py: '12px', px: 2 }}>
+        <TimelineContent className={style.timecontent} sx={{ py: '12px', px: 2 ,whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}} >
           <div>
             {topic}
           </div>
