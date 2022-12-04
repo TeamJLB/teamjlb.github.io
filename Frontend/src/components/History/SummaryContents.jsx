@@ -7,7 +7,6 @@ import styles from "./SummaryContents.module.css";
 
 const SummaryContents = (props) => {
   const { items } = props;
-  console.log(items);
 
   const makeSummaryContent = (summary) => {
     return summary?.replace(/'|\[|\]|\n/g, "").split(", ");

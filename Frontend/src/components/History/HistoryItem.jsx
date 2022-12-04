@@ -30,7 +30,6 @@ const HistoryItem = (props) => {
         config
       )
       .then((res) => {
-        console.log(res.data.result);
         setSummaryContent(res.data.result);
       });
   }, []);
