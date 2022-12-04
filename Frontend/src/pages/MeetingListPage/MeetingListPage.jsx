@@ -21,6 +21,7 @@ const MeetingListPage = () => {
   const [subId, setSubId] = useState("");
   const [matchId, setMatchId] = useState("");
   const [currentMeetingId, setCurrentMeetingId] = useState("");
+  const [userName, setUserName] = useState("");
 
   const config = {
     headers: {
@@ -31,6 +32,14 @@ const MeetingListPage = () => {
   useEffect(() => {
     loadList();
     console.log(config);
+    axios
+      .get(
+        `http://${host_config.current_host}:${host_config.current_port}/users/userInfo`,
+        config
+      )
+      .then((res) => {
+        setUserName(res.data.result.user_name);
+      });
   }, []);
 
   // user 회의 리스트 불러오기
@@ -102,6 +111,7 @@ const MeetingListPage = () => {
           meeting_id: currentMeetingId,
           subMeeting_id: subId,
           match_id: matchId,
+          user_name: userName,
         },
       });
     }

@@ -16,7 +16,8 @@ import host_config from "../../config/serverHost";
 const correctPunctuation = (givenTranscript) => `${givenTranscript}.`;
 
 const StreamBox = (props) => {
-  const { config, userToken, meetingId, subMeetingId, matchID } = props;
+  const { config, userToken, meetingId, subMeetingId, matchID, userName } =
+    props;
 
   // [로컬 서버에서 테스트]
   // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
@@ -398,6 +399,7 @@ const StreamBox = (props) => {
         config={config}
         meetingId={meetingId}
         setMemo={setMemo}
+        userName={userName}
       />
     </>
   );
