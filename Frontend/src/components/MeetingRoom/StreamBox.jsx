@@ -12,6 +12,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import SummaryContents from "../History/SummaryContents";
 import host_config from "../../config/serverHost";
+import Loading from "../UI/Loading";
 
 const correctPunctuation = (givenTranscript) => `${givenTranscript}.`;
 
@@ -33,15 +34,15 @@ const StreamBox = (props) => {
   const [myStream, setMyStream] = useState(null);
   const [roomName, setRoomName] = useState("");
   const [topic, setTopic] = useState("");
-
   const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
   const [sttOn, setSttOn] = useState(true);
   const [meetingLog, setMeetingLog] = useState(null);
   const [meetingLogOn, setMeetingLogOn] = useState(false);
+  const [memo, setMemo] = useState(null);
 
   const [isFinish, setIsFinish] = useState(false);
-  const [memo, setMemo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const videoGrid = useRef();
   const myVideo = useRef();
@@ -252,7 +253,7 @@ const StreamBox = (props) => {
       alert("❗️오늘의 주제를 입력해주세요❗️");
       return;
     }
-
+    setIsLoading(true);
     // 요약 진행
     if (correctedTranscript) {
       textSummarize(correctedTranscript);
@@ -263,8 +264,7 @@ const StreamBox = (props) => {
 
   useEffect(() => {
     if ((isFinish && !correctedTranscript) || summarizedResult) {
-      console.log(summarizedResult);
-      console.log(originalStt.current.innerText);
+      setIsLoading(false);
 
       axios.post(
         `http://${host_config.current_host}:${host_config.current_port}/summaries/summary`,
@@ -340,6 +340,7 @@ const StreamBox = (props) => {
 
   return (
     <>
+      {isLoading && <Loading />}
       <div className={styles.streamBox}>
         <MeetingHeader
           config={config}
