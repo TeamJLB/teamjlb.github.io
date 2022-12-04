@@ -58,7 +58,7 @@
 }
 
 .menuItem {
-    height: 30px;
+    height: 40px;
     font-size: 14px;
     padding: 4px;
     line-height: 30px;
@@ -73,7 +73,7 @@
 }
 
 .myPage {
-    width: 82%;
+    width: 100%;
     border-top: 1px solid rgb(219, 219, 219);
     position: absolute;
     bottom: 0;
@@ -82,7 +82,7 @@
 }
 
 .active{
-    height: 30px;
+    height: 40px;
     font-size: 14px;
     padding: 4px;
     line-height: 30px;
