@@ -54,13 +54,25 @@ const HomePage = () => {
             <div id="content3" className="content">
               {notion('ff267ed19fed442ba9104dcbd9b59212')}
             </div>
-            <div id="content4" className={styles.LetUse}>
-              <div>
-                <div className={styles.logo}>
-                  <img width="200px" alt="MEETLOG" src="img/logo.png" />
+            <div id="content4" className="content">
+              <div className={styles.forUse}/>
+              <div className={styles.LetUse}>
+                <div className={styles.useContent}>
+                  <div className={styles.logo}>
+                    <img width="200px" alt="MEETLOG" src="img/logo.png" />
+                  </div>
+                  <h1>지금 바로 밋로그를 사용해 보세요!</h1>
+                  <Button variant={'contained'} onClick={()=>{navigator('register')}}>회원가입</Button>
                 </div>
-                <h1>지금 바로 밋로그를 사용해 보세요!</h1>
-                <Button variant={'contained'}>회원가입</Button>
+                <div className={styles.contributor}>
+                  <h3>contributor</h3>
+                  <div>
+                    <spanp className={styles.contributorItem}> Jwa Jeonghyeon</spanp>
+                    <spanp className={styles.contributorItem}> Byeon JaeHo</spanp>
+                    <spanp className={styles.contributorItem}> Lee Haeihn</spanp>
+                  </div>
+                  <p style={{color:'gray'}}> Konkuk Univ. Department of software, Department of computer engineering </p>
+                </div>
               </div>
             </div>
           </div>

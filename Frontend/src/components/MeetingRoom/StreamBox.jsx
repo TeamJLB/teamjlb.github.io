@@ -128,6 +128,12 @@ const StreamBox = (props) => {
       // startSpeechRecognition();
     }
 
+    if (!isMicrophoneAvailable) {
+      console.log(`마이크 안 됨`);
+    } else {
+      console.log(`마이크 됨`);
+    }
+
     navigator.mediaDevices
       .getUserMedia({
         audio: true,

@@ -58,12 +58,13 @@
 }
 
 .menuItem {
-  height: 30px;
-  font-size: 14px;
-  padding: 4px;
-  border-radius: 5px;
-  color: dimgray;
-  align-items: center;
+    height: 40px;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    color: dimgray;
+    align-items: center;
+    align-content: center;
 }
 
 .menuItem:hover {
@@ -72,22 +73,28 @@
 }
 
 .myPage {
-  width: 82%;
-  border-top: 1px solid rgb(219, 219, 219);
-  position: absolute;
-  bottom: 0;
-  padding: 20px;
-  color: dimgray;
+    width: 100%;
+    border-top: 1px solid rgb(219, 219, 219);
+    position: absolute;
+    bottom: 0;
+    padding: 20px;
+    color: dimgray;
 }
 
-.active {
-  height: 30px;
-  font-size: 14px;
-  padding: 4px;
-  border-radius: 5px;
-  color: dimgray;
-  align-items: center;
-  text-align: center;
-  cursor: pointer;
-  background-color: #e7e7e7;
+.active{
+    height: 40px;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    color: dimgray;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    background-color: #e7e7e7;
+
+}
+.atag{
+    height: 30px;
+    line-height: 30px;
 }

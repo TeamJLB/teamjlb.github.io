@@ -7,6 +7,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { MeetingRoomPage } from "./pages/MeetingRoomPage";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Sidebar from "./components/UI/Sidebar";
+import LogoutBtn from './components/UI/LogoutBtn';
 
 const theme = createTheme({
   typography: {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/meetingRoom" element={<MeetingRoomPage />} />
         </Routes>
+        <LogoutBtn />
       </Router>
     </ThemeProvider>
   );
