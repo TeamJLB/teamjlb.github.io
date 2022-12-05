@@ -28,9 +28,6 @@ const StreamBox = (props) => {
   );
   const navigate = useNavigate();
 
-  console.log("stream");
-  console.log("sub", subMeetingId, "match", matchID);
-
   const [myStream, setMyStream] = useState(null);
   const [roomName, setRoomName] = useState("");
   const [topic, setTopic] = useState("");
@@ -159,7 +156,6 @@ const StreamBox = (props) => {
 
         socket.on("user-connected", (userStream) => {
           const userId = userStream["user"];
-          console.log("User connected : ", userId);
           const call = peer.call(userId, currentStream);
           const video = document.createElement("video");
           video.setAttribute("autoplay", "playsinline");
@@ -206,7 +202,6 @@ const StreamBox = (props) => {
 
   useEffect(() => {
     if (finalTranscript != "") {
-      // console.log(prevFinalTranscript);
       const newSpeech = finalTranscript
         .substring(prevFinalTranscript.length)
         .trim();
@@ -227,9 +222,6 @@ const StreamBox = (props) => {
     if (!mute && listening) {
       recognition.stopListening();
       // recognition.abortListening();
-      // console.log(transcript);
-      // console.log(interimTranscript);
-      // console.log(finalTranscript);
 
       // 요약 테스트
       // textSummarize(correctedTranscript)
@@ -305,7 +297,6 @@ const StreamBox = (props) => {
         )
         .then((res) => {
           if (res.data.isSuccess) {
-            console.log(res.data.result);
             socket.disconnect();
             peer?.destroy();
             myStream.getTracks().forEach((track) => track.stop());

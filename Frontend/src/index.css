@@ -71,3 +71,11 @@ ul {
   position: inherit;
   left: 0;
 }
+
+.ql-formats {
+  line-height: 1;
+}
+
+.ql-snow .ql-picker.ql-header {
+  width: 125px !important;
+}
