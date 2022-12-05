@@ -95,7 +95,7 @@ const MemoEditor = (props) => {
         theme="snow"
         modules={modules}
         formats={formats}
-        style={{ height: "100%" }}
+        style={{ height: "94.5%" }}
         ref={(el) => {
           setMemo(el);
           return (quillRef = el);

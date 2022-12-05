@@ -35,17 +35,9 @@ const NewMeetingModal = ({ handleAddCancel, handleAddSubmit }) => {
     <>
       <div className={style.modalBG}>
         <Box className={style.modalcover}>
-          <div className={style.modalclose}>
-            <img
-              id={style.closeimg}
-              onClick={onCancel}
-              width="20px"
-              height="20px"
-              src={"img/close.png"}
-            />
-          </div>
+          <div className={style.modalclose}></div>
           <Box mt={2}>
-            <h2>➕ 새 회의 개설</h2>
+            <h2> ✅ 새 회의 개설</h2>
           </Box>
           <div className={style.meetingInfo}>
             <Box mt={2}>
