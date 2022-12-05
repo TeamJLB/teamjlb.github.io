@@ -35,13 +35,10 @@ const LoginPage = () => {
         }
       )
       .then(function (res) {
-        console.log(res);
         if (res.status == "200") {
-          console.log("code : " + res.data.code);
           switch (res.data.code) {
             case 1000: {
               const userToken = res.data.result.jwt;
-              console.log(userToken);
               localStorage.setItem("refresh-token", userToken["refresh-token"]);
               if (userToken) {
                 axios.defaults.headers.common[
@@ -75,7 +72,6 @@ const LoginPage = () => {
           if (res.status == "400") {
             alert("회원정보를 확인해주세요");
           }
-          console.log(res);
           setLoading(false);
         }
       })
@@ -106,7 +102,7 @@ const LoginPage = () => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
+            backgroundImage: "url(https://source.unsplash.com/random)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -118,14 +114,14 @@ const LoginPage = () => {
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
-    sx={{
-      my: 8,
-      mx: 4,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    }}
-    />
+            sx={{
+              my: 8,
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          />
           <div className="loginForm">
             <LockOutlinedIcon />
             <Typography component="h1" variant="h5">

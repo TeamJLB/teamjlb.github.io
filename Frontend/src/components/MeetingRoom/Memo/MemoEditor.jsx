@@ -13,7 +13,7 @@ import host_config from "../../../config/serverHost";
 import styled from "styled-components";
 
 const MemoEditor = (props) => {
-  const { roomName, setMemo } = props;
+  const { roomName, setMemo, userName } = props;
   let quillRef = null;
 
   Quill.register("modules/cursors", QuillCursors);
@@ -83,7 +83,7 @@ const MemoEditor = (props) => {
     );
 
     provider.awareness.setLocalStateField("user", {
-      name: "hi",
+      name: userName,
       color: getRandomColor(),
     });
   }, []);

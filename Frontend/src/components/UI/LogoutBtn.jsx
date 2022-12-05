@@ -1,6 +1,5 @@
 import React from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import Button from '@mui/material/Button';
 import styles from './LogoutBtn.module.css';
 
 const LogoutBtn = () =>{
@@ -20,7 +19,7 @@ const LogoutBtn = () =>{
 
   return (
       <div className={styles.logoutBtn}>
-        <Button variant={'outlined'} color={'error'} onClick={handleClink}> 로그아웃 </Button>
+        <button className={styles.btn} onClick={handleClink}> 로그아웃 </button>
       </div>
   )
 }

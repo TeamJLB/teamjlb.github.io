@@ -9,6 +9,22 @@ div {
   font-weight: bold;
 }
 
+.summaryContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .userContent {
   padding-top: 10px;
+}
+
+.summaryTitle {
+  font-weight: bold;
+  padding: 5px 0;
+  text-align: right;
+}
+
+.summaryContent {
+  padding: 5px 8px;
+  width: 60vh;
 }

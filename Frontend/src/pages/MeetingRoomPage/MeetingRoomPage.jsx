@@ -10,6 +10,7 @@ const MeetingRoomPage = () => {
   const meetingId = location.state.meeting_id;
   const subMeetingId = location.state.subMeeting_id;
   const matchID = location.state.match_id;
+  const userName = location.state.user_name;
 
   return (
     <div className={styles.meetingRoomPage}>
@@ -19,6 +20,7 @@ const MeetingRoomPage = () => {
         meetingId={meetingId}
         subMeetingId={subMeetingId}
         matchID={matchID}
+        userName={userName}
       />
     </div>
   );

@@ -7,7 +7,7 @@ import MemoContents from "./MemoContents";
 import SummaryContents from "./SummaryContents";
 
 const HistoryItem = (props) => {
-  const { subMeetingId, date, topic, participants, keywords, config } = props;
+  const { subMeetingId, date, topic, participants, config } = props;
   const [memoContent, setMemoContent] = useState(null);
   const [summaryContent, setSummaryContent] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
@@ -21,7 +21,6 @@ const HistoryItem = (props) => {
         config
       )
       .then((res) => {
-        console.log(res.data.result[0]);
         if (res.data.result?.length !== 0) setMemoContent(res.data.result[0]);
       });
 
@@ -73,15 +72,6 @@ const HistoryItem = (props) => {
       >
         <div className={styles.date}>{date}</div>
         <div className={styles.topic}>{topic}</div>
-        <div className={styles.keywords}>
-          {keywords.map((keyword) => {
-            return (
-              <span key={Math.random().toString()} className={styles.keyword}>
-                {keyword}
-              </span>
-            );
-          })}
-        </div>
       </div>
       {isDetailsOpen && (
         <div className={styles.historyDetails}>

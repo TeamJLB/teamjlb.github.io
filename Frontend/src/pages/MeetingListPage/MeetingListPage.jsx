@@ -21,6 +21,7 @@ const MeetingListPage = () => {
   const [subId, setSubId] = useState("");
   const [matchId, setMatchId] = useState("");
   const [currentMeetingId, setCurrentMeetingId] = useState("");
+  const [userName, setUserName] = useState("");
 
   const config = {
     headers: {
@@ -30,7 +31,14 @@ const MeetingListPage = () => {
 
   useEffect(() => {
     loadList();
-    console.log(config);
+    axios
+      .get(
+        `http://${host_config.current_host}:${host_config.current_port}/users/userInfo`,
+        config
+      )
+      .then((res) => {
+        setUserName(res.data.result.user_name);
+      });
   }, []);
 
   // user 회의 리스트 불러오기
@@ -74,7 +82,6 @@ const MeetingListPage = () => {
         config
       )
       .then((res) => {
-        console.log(res);
         if (res.data.isSuccess) {
           if (res.data.result.action === "회의를 개설합니다.") {
             setSubId(res.data.result.added_subMeeting_id);
@@ -93,15 +100,14 @@ const MeetingListPage = () => {
   };
 
   useEffect(() => {
-    console.log(subId, matchId);
     if (subId && matchId) {
-      console.log("subid : ", subId, "matchid :", matchId);
       navigate("/meetingRoom", {
         state: {
           config: config,
           meeting_id: currentMeetingId,
           subMeeting_id: subId,
           match_id: matchId,
+          user_name: userName,
         },
       });
     }
@@ -109,16 +115,13 @@ const MeetingListPage = () => {
 
   // [MeetingBlock Handling] - 회의 삭제
   const handleRemove = (id) => {
-    console.log("remove", id);
     axios
       .delete(
         `http://${host_config.current_host}:${host_config.current_port}/meetings/myMeeting/${id}`,
         config
       )
       .then((res) => {
-        console.log(res);
         if (res.data.isSuccess) {
-          console.log(res);
           loadList();
         } else {
           alert(res.data.message);
@@ -207,7 +210,6 @@ const MeetingListPage = () => {
 
   // 새 회의 추가
   const handleAddMeeting = () => {
-    console.log("click");
     setModalOn(true);
   };
 
@@ -219,7 +221,6 @@ const MeetingListPage = () => {
   // 새 회의 추가 모달 -> 추가 버튼
   const handleAddSubmit = (meetingName) => {
     setModalOn(false);
-    console.log("회의 명 : ", meetingName);
     axios
       .post(
         `http://${host_config.current_host}:${host_config.current_port}/meetings/newMeeting`,

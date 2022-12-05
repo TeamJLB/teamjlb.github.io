@@ -30,25 +30,25 @@ const HomeSidebar = () => {
             <ul className={styles.menuContent}>
               <li className={activeID === "content1" ? styles.active : styles.menuItem}>
                 <a
-                href="#content1" >
+                href="#content1" className={styles.atag}>
                   밋로그란?
                 </a>
               </li>
               <li className={activeID === "content2" ? styles.active : styles.menuItem}>
                 <a
-                    href="#content2">
+                    href="#content2" className={styles.atag}>
                   기능상세
                 </a>
               </li>
               <li className={activeID === "content3" ? styles.active : styles.menuItem}>
                 <a
-                    href="#content3">
+                    href="#content3" className={styles.atag}>
                   사용방법
                 </a>
               </li>
               <li className={activeID === "content4" ? styles.active : styles.menuItem}>
                 <a
-                    href="#content4">
+                    href="#content4" className={styles.atag}>
                   사용해보기
                 </a>
               </li>

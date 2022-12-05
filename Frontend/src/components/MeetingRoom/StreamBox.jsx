@@ -12,11 +12,13 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import SummaryContents from "../History/SummaryContents";
 import host_config from "../../config/serverHost";
+import Loading from "../UI/Loading";
 
 const correctPunctuation = (givenTranscript) => `${givenTranscript}.`;
 
 const StreamBox = (props) => {
-  const { config, userToken, meetingId, subMeetingId, matchID } = props;
+  const { config, userToken, meetingId, subMeetingId, matchID, userName } =
+    props;
 
   // [로컬 서버에서 테스트]
   // const socket = io.connect(`http://localhost:${host_config.socket_port}/`);
@@ -32,23 +34,24 @@ const StreamBox = (props) => {
   const [myStream, setMyStream] = useState(null);
   const [roomName, setRoomName] = useState("");
   const [topic, setTopic] = useState("");
-
   const [mute, setMute] = useState(false);
   const [cameraOn, setCameraOn] = useState(true);
   const [sttOn, setSttOn] = useState(true);
   const [meetingLog, setMeetingLog] = useState(null);
   const [meetingLogOn, setMeetingLogOn] = useState(false);
+  const [memo, setMemo] = useState(null);
 
   const [isFinish, setIsFinish] = useState(false);
-  const [memo, setMemo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const videoGrid = useRef();
   const myVideo = useRef();
+  const originalStt = useRef();
 
   const [correctedTranscript, setCorrectedTranscript] = useState("");
   const prevFinalTranscriptRef = useRef();
 
-  const [summarizedResult, setSummarizedResult] = useState("");
+  const [summarizedResult, setSummarizedResult] = useState(null);
 
   // [음성 인식 stt]
   const recognition = SpeechRecognition;
@@ -126,6 +129,12 @@ const StreamBox = (props) => {
     } else {
       console.log(`Browser ready for speech recognition`);
       // startSpeechRecognition();
+    }
+
+    if (!isMicrophoneAvailable) {
+      console.log(`마이크 안 됨`);
+    } else {
+      console.log(`마이크 됨`);
     }
 
     navigator.mediaDevices
@@ -223,7 +232,7 @@ const StreamBox = (props) => {
       // console.log(finalTranscript);
 
       // 요약 테스트
-      textSummarize(correctedTranscript)
+      // textSummarize(correctedTranscript)
     } else if (mute && !listening) {
       recognition.startListening({ continuous: true, language: language });
     }
@@ -250,17 +259,28 @@ const StreamBox = (props) => {
       alert("❗️오늘의 주제를 입력해주세요❗️");
       return;
     }
-
+    setIsLoading(true);
     // 요약 진행
-    // textSummarize(correctedTranscript);
+    if (correctedTranscript) {
+      textSummarize(correctedTranscript);
+    }
     // TODO - 요약 API
-
     setIsFinish(true);
   };
 
   useEffect(() => {
-    if (isFinish === true) {
-      console.log(memo.value);
+    if ((isFinish && !correctedTranscript) || summarizedResult) {
+      setIsLoading(false);
+
+      axios.post(
+        `http://${host_config.current_host}:${host_config.current_port}/summaries/summary`,
+        {
+          match_id: matchID,
+          summary_content: summarizedResult,
+          original_content: originalStt.current.innerText,
+        },
+        config
+      );
 
       axios.patch(
         `http://${host_config.current_host}:${host_config.current_port}/meetings/openMeeting/${meetingId}/${subMeetingId}`,
@@ -299,7 +319,7 @@ const StreamBox = (props) => {
           }
         });
     }
-  }, [isFinish]);
+  }, [isFinish, summarizedResult]);
 
   const clearAllVideos = () => {
     const videoGrid = document.querySelector("#videos");
@@ -326,6 +346,7 @@ const StreamBox = (props) => {
 
   return (
     <>
+      {isLoading && <Loading />}
       <div className={styles.streamBox}>
         <MeetingHeader
           config={config}
@@ -365,7 +386,7 @@ const StreamBox = (props) => {
         {sttOn && (
           <div className={styles.sttBox}>
             <div className={styles.speakerIcon}>🔊 </div>
-            <div className={styles.sttText} id="sttText">
+            <div className={styles.sttText} id="sttText" ref={originalStt}>
               {correctedTranscript}
             </div>
           </div>
@@ -385,6 +406,7 @@ const StreamBox = (props) => {
         config={config}
         meetingId={meetingId}
         setMemo={setMemo}
+        userName={userName}
       />
     </>
   );
