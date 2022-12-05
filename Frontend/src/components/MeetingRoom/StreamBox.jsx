@@ -393,7 +393,6 @@ const StreamBox = (props) => {
         />
       </div>
       <Memo
-        roomName={roomName}
         config={config}
         meetingId={meetingId}
         setMemo={setMemo}
