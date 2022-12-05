@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import host_config from "../../config/serverHost";
 import axios from "axios";
 import { useState } from "react";
+import LogoutBtn from './LogoutBtn';
 
 const Sidebar = (props) => {
   const location = useLocation();
@@ -78,6 +79,9 @@ const Sidebar = (props) => {
         </Avatar>
         <div className={styles.userName}>{userName}</div>
         <div className={styles.userEmail}>{userEmail}</div>
+        <div>
+          <LogoutBtn/>
+        </div>
       </div>
       <div className={styles.menu}>
         <ul>

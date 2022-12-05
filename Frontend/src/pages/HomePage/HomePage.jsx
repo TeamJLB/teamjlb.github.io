@@ -67,9 +67,9 @@ const HomePage = () => {
                 <div className={styles.contributor}>
                   <h3>contributor</h3>
                   <div>
-                    <spanp className={styles.contributorItem}> Jwa Jeonghyeon</spanp>
-                    <spanp className={styles.contributorItem}> Byeon JaeHo</spanp>
-                    <spanp className={styles.contributorItem}> Lee Haeihn</spanp>
+                    <span className={styles.contributorItem}> Jwa Jeonghyeon</span>
+                    <span className={styles.contributorItem}> Byeon JaeHo</span>
+                    <span className={styles.contributorItem}> Lee Haeihn</span>
                   </div>
                   <p style={{color:'gray'}}> Konkuk Univ. Department of software, Department of computer engineering </p>
                 </div>

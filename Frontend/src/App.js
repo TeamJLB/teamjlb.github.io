@@ -29,7 +29,6 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/meetingRoom" element={<MeetingRoomPage />} />
         </Routes>
-        <LogoutBtn />
       </Router>
     </ThemeProvider>
   );
