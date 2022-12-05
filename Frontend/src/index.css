@@ -79,3 +79,11 @@ ul {
 .ql-snow .ql-picker.ql-header {
   width: 125px !important;
 }
+
+.ql-bubble .ql-editor {
+  padding: 10px;
+}
+
+.ql-snow .ql-editor {
+  padding-top: 25px;
+}
