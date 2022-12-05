@@ -25,7 +25,6 @@ const HistoryList = (props) => {
                 date={date + " " + time}
                 topic={history.topic}
                 participants={participants}
-                keywords={history.keywords}
                 config={config}
               />
             );
