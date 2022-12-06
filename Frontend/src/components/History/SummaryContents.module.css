@@ -25,6 +25,6 @@ div {
 }
 
 .summaryContent {
-  padding: 5px 8px;
-  width: 60vh;
+  padding: 5px 0;
+  width: 100%;
 }

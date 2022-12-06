@@ -262,8 +262,6 @@ const StreamBox = (props) => {
 
   useEffect(() => {
     if ((isFinish && !correctedTranscript) || summarizedResult) {
-      setIsLoading(false);
-
       axios.post(
         `http://${host_config.current_host}:${host_config.current_port}/summaries/summary`,
         {
@@ -309,6 +307,7 @@ const StreamBox = (props) => {
             alert(res.data.message);
           }
         });
+      setIsLoading(false);
     }
   }, [isFinish, summarizedResult]);
 

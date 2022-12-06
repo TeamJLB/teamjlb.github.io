@@ -20,7 +20,7 @@ const HistoryList = (props) => {
             }
             return (
               <HistoryItem
-                key={history.sub_meeting_id}
+                key={history.sub_meeting_id + date}
                 subMeetingId={history.sub_meeting_id}
                 date={date + " " + time}
                 topic={history.topic}
