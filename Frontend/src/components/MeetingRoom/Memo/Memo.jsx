@@ -7,7 +7,7 @@ import axios from "axios";
 import host_config from "../../../config/serverHost";
 
 const Memo = (props) => {
-  const { roomName, config, meetingId, setMemo, userName } = props;
+  const { config, meetingId, setMemo, userName } = props;
 
   const [modalOn, setModalOn] = useState(false);
   const [memoList, setMemoList] = useState([]);
@@ -69,7 +69,11 @@ const Memo = (props) => {
         </div>
       )}
       <div className={styles.memoArea}>
-        <MemoEditor roomName={roomName} setMemo={setMemo} userName={userName} />
+        <MemoEditor
+          meetingId={meetingId}
+          setMemo={setMemo}
+          userName={userName}
+        />
       </div>
     </div>
   );

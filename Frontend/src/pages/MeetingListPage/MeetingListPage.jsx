@@ -101,7 +101,7 @@ const MeetingListPage = () => {
 
   useEffect(() => {
     if (subId && matchId) {
-      navigate("/meetingRoom", {
+      navigate(`/meetingRoom/${currentMeetingId}`, {
         state: {
           config: config,
           meeting_id: currentMeetingId,

@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 
 const MeetingRoomPage = () => {
   const location = useLocation();
+  console.log(location);
   const config = location.state.config;
   const userToken = location.state.config.headers["x-access-token"];
   const meetingId = location.state.meeting_id;

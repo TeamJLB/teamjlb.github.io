@@ -13,7 +13,7 @@ import host_config from "../../../config/serverHost";
 import styled from "styled-components";
 
 const MemoEditor = (props) => {
-  const { roomName, setMemo, userName } = props;
+  const { meetingId, setMemo, userName } = props;
   let quillRef = null;
 
   Quill.register("modules/cursors", QuillCursors);
@@ -72,7 +72,7 @@ const MemoEditor = (props) => {
   useEffect(() => {
     const ydoc = new Y.Doc();
     const provider = new WebrtcProvider(
-      `http://${host_config.current_host}:${host_config.socket_port}/meetingRoom`,
+      `http://${host_config.current_host}:${host_config.socket_port}/meetingRoom/${meetingId}`,
       ydoc
     );
     const type = ydoc.getText("quill");

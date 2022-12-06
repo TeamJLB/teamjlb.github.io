@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import host_config from "../../config/serverHost";
 import axios from "axios";
 import { useState } from "react";
-import LogoutBtn from './LogoutBtn';
+import LogoutBtn from "./LogoutBtn";
 
 const Sidebar = (props) => {
   const location = useLocation();
@@ -48,7 +48,7 @@ const Sidebar = (props) => {
   if (location.pathname === "/") return null;
   if (location.pathname === "/login") return null;
   if (location.pathname === "/register") return null;
-  if (location.pathname === "/meetingRoom") return null;
+  if (location.pathname.includes("/meetingRoom")) return null;
 
   const clickLogoHandler = () => {
     // 추후 수정할 부분 (새로고침 하지 않고 리렌더링하도록)
@@ -80,7 +80,7 @@ const Sidebar = (props) => {
         <div className={styles.userName}>{userName}</div>
         <div className={styles.userEmail}>{userEmail}</div>
         <div>
-          <LogoutBtn/>
+          <LogoutBtn />
         </div>
       </div>
       <div className={styles.menu}>
