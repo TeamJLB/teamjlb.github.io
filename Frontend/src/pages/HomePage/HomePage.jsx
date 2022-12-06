@@ -6,7 +6,6 @@ import {useNavigate} from 'react-router-dom';
 import { NotionRenderer } from 'react-notion';
 import HomeSidebar from '../../components/Home/HomeSidebar';
 import styles from './HomePage.module.css';
-import text from './text';
 import Button from '@mui/material/Button';
 
 const HomePage = () => {
