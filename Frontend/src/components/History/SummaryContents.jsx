@@ -33,7 +33,7 @@ const SummaryContents = (props) => {
             >
               {item.summary_content
                 ? makeSummaryContent(item.summary_content).map((content) => {
-                    return <li>🗣 {content}</li>;
+                    return `🗣 ${content}\n`;
                   })
                 : "(내용 없음)"}
             </div>
