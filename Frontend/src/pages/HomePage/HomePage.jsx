@@ -6,7 +6,6 @@ import {useNavigate} from 'react-router-dom';
 import { NotionRenderer } from 'react-notion';
 import HomeSidebar from '../../components/Home/HomeSidebar';
 import styles from './HomePage.module.css';
-import text from './text';
 import Button from '@mui/material/Button';
 
 const HomePage = () => {
@@ -68,7 +67,7 @@ const HomePage = () => {
                   <h3>contributor</h3>
                   <div>
                     <span className={styles.contributorItem}> Jwa Jeonghyeon</span>
-                    <span className={styles.contributorItem}> Byeon JaeHo</span>
+                    <span className={styles.contributorItem}> Byun JaeHo</span>
                     <span className={styles.contributorItem}> Lee Haeihn</span>
                   </div>
                   <p style={{color:'gray'}}> Konkuk Univ. Department of software, Department of computer engineering </p>
