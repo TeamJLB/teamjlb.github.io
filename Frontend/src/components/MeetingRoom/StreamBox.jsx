@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, memo } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import Peer from "peerjs";
 import Memo from "./Memo/Memo";
@@ -54,10 +54,7 @@ const StreamBox = (props) => {
   const recognition = SpeechRecognition;
 
   const {
-    transcript,
-    interimTranscript,
     finalTranscript,
-    resetTranscript,
     listening,
     browserSupportsSpeechRecognition,
     isMicrophoneAvailable,
@@ -71,7 +68,6 @@ const StreamBox = (props) => {
       return;
     }
     recognition.startListening({ continuous: true, language: language });
-    // console.log(listening);
   }
 
   /**
@@ -87,7 +83,6 @@ const StreamBox = (props) => {
     socket.on("result", (summaryResult) => {
       console.log(summaryResult);
 
-      // TODO - (check) 요약 처리하기
       if (typeof summaryResult !== "undefined") {
         setSummarizedResult(summaryResult);
 
@@ -99,8 +94,6 @@ const StreamBox = (props) => {
     });
   }
 
-  // ------------------------------------
-  // let myStream;
   let peer;
 
   const confirm = (userstream) => {
@@ -210,7 +203,6 @@ const StreamBox = (props) => {
       );
     }
   }, [finalTranscript]);
-  // ---
 
   const addVideoStream = (video, stream) => {
     video.srcObject = stream;
@@ -222,9 +214,6 @@ const StreamBox = (props) => {
     if (!mute && listening) {
       recognition.stopListening();
       // recognition.abortListening();
-
-      // 요약 테스트
-      // textSummarize(correctedTranscript)
     } else if (mute && !listening) {
       recognition.startListening({ continuous: true, language: language });
     }
