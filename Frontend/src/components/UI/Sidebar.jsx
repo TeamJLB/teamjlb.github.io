@@ -7,6 +7,7 @@ import host_config from "../../config/serverHost";
 import axios from "axios";
 import { useState } from "react";
 import LogoutBtn from "./LogoutBtn";
+import logo from "../../assets/logo.png";
 
 const Sidebar = (props) => {
   const location = useLocation();
@@ -69,7 +70,7 @@ const Sidebar = (props) => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.logo} onClick={clickLogoHandler}>
-        <img width="200px" alt="MEETLOG" src="img/logo.png" />
+        <img width="200px" alt="MEETLOG" src={logo} />
       </div>
       <div className={styles.userProfile}>
         <Avatar

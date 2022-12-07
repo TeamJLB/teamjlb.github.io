@@ -5,6 +5,7 @@ import MemoEditor from "./MemoEditor";
 import ReactQuill from "react-quill";
 import axios from "axios";
 import host_config from "../../../config/serverHost";
+import close from "../../../assets/close.png";
 
 const Memo = (props) => {
   const { config, meetingId, setMemo, userName } = props;
@@ -57,7 +58,7 @@ const Memo = (props) => {
           <span className={styles.memoTopic}>{memoItem.topic}</span>
           <span className={styles.memoDate}>{memoItem.date}에 작성됨</span>
           <button className={styles.closeBtn} onClick={memoCloseHandler}>
-            <img width="15px" height="15px" src="img/close.png"></img>
+            <img width="15px" height="15px" src={close}></img>
           </button>
           <div className={styles.memoContent}>
             <ReactQuill

@@ -13,6 +13,7 @@ import SpeechRecognition, {
 import SummaryContents from "../History/SummaryContents";
 import host_config from "../../config/serverHost";
 import Loading from "../UI/Loading";
+import close from "../../assets/close.png";
 
 const correctPunctuation = (givenTranscript) => `${givenTranscript}.`;
 
@@ -357,7 +358,7 @@ const StreamBox = (props) => {
               {meetingLog.date}에 기록됨
             </span>
             <button className={styles.closeBtn} onClick={logCloseHandler}>
-              <img width="15px" height="15px" src="img/close.png"></img>
+              <img width="15px" height="15px" src={close}></img>
             </button>
             <div className={styles.meetingLogContent}>{logContents}</div>
           </div>
