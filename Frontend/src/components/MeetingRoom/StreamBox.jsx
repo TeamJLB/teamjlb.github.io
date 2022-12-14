@@ -134,6 +134,10 @@ const StreamBox = (props) => {
         video: true,
       })
       .then((currentStream) => {
+        currentStream
+          .getAudioTracks()
+          .forEach((track) => (track.enabled = !track.enabled));
+
         let streamId = currentStream.id;
         setMyStream(currentStream);
         addVideoStream(myVideo.current, currentStream);
