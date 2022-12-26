@@ -6,12 +6,16 @@
 2. 의존성 모듈들 설치 (node_modules 폴더 생성)
 > npm install
 
-3. 파일 추가하기 (gitignore 되어 있음)
+3. 데이터베이스 생성
+> 프로젝트에 사용된 데이터베이스를 만들어줘야합니다.<br>
+자세한 db 구조는 [프로젝트 백엔드 설명](https://lavender-condition-f6f.notion.site/BackEnd-96b9c9c2134a4796b47d2c5171ef6995)(로컬 서버로 실행하기)에서
+
+4. 파일 추가하기 (gitignore 되어 있음)
 > -Backend/config/database.js<br>
 -Backend/config/secret.js<br>
-파일 추가해주기 (샘플 파일은 )
+파일 추가해주기 (샘플 파일은 sample 폴더에 있음)
 
-4. 서버 실행하기
+5. 서버 실행하기
 > node index.js
 
 <br>
