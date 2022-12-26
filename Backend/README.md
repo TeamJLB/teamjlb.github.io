@@ -10,18 +10,7 @@
 > 다음 결과가 나오면 성공
 >> {"isSuccess":true,"code":1000,"message":"성공"}
 
-## To Start
-1. 해당 폴더 위치로 이동
-> cd ./Backend
-
-2. 의존성 모듈들 설치 (node_modules 폴더 생성)
-> npm install
-
-3. database.js 파일 따로 추가하기! (gitignore 되어 있음)
-
-
-4. 서버 열기
-> node index.js
+<br>
 
 ### Folder Structure
 - `src`: 메인 로직 
