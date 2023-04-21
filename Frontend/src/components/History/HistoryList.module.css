@@ -1,0 +1,17 @@
+.historyList {
+  width: 85%;
+  margin: 0 auto;
+  height: 88vh;
+  background-color: gainsboro;
+  white-space: nowrap;
+  border-radius: 10px;
+  padding: 20px;
+  overflow-x: auto;
+  box-shadow: inset 0 2px 3px 2px rgb(197, 197, 197);
+}
+
+.list {
+  list-style: none;
+  padding-inline-start: 0px;
+  margin-block: 0;
+}

@@ -1,0 +1,13 @@
+.originalTitle {
+  width: fit-content;
+  color: gray;
+  border-bottom: 1px solid rgb(180, 180, 180);
+}
+
+.originalTitle:hover {
+  cursor: pointer;
+}
+
+.originalContent {
+  padding-top: 5px;
+}

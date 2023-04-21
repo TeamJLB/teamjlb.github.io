@@ -1,0 +1,130 @@
+.streamBox {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background-color: rgb(83, 83, 83);
+}
+
+.streams {
+  width: 100%;
+  padding: 10px 30px;
+}
+
+.streams video {
+  width: 300px;
+  height: 225px;
+  border-radius: 5px;
+  margin: 10px;
+
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+  -moz-transform: rotateY(180deg); /* Firefox */
+}
+
+/* row 1 */
+.streams .people1 {
+  width: 70%;
+  height: 70%;
+}
+
+/* row 1 */
+.streams .people2 {
+  width: 47%;
+  height: 47%;
+}
+
+/* row 2 */
+.streams .people3,
+.streams .people4 {
+  width: 45%;
+  height: 42%;
+}
+
+/* row 2 */
+.streams .people5,
+.streams .people6 {
+  width: 32%;
+  height: 32%;
+}
+
+.streams .userNickname {
+  margin-top: 5px;
+  text-align: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.speakerIcon {
+  font-size: 20px;
+  height: 50px;
+  margin: 0 10px;
+  line-height: 50px;
+}
+
+.sttBox {
+  width: 100%;
+  position: absolute;
+  bottom: 70px;
+  display: flex;
+}
+
+.sttText {
+  height: 50px;
+  margin-right: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 10px 15px;
+  overflow: auto;
+  color: rgb(83, 83, 83);
+  font-size: 13px;
+  width: 100%;
+  letter-spacing: 1px;
+}
+
+.meetingLog {
+  background-color: rgba(255, 255, 255, 0.7);
+  height: 32%;
+  margin: 10px 20px;
+  padding: 20px;
+  border-radius: 10px;
+  overflow: auto;
+}
+
+.logOn {
+  height: 340px;
+  padding: 0 110px;
+}
+
+.logOn video {
+  width: 200px;
+  height: 150px;
+}
+
+.closeBtn {
+  float: right;
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.meetingTopic {
+  padding-bottom: 5px;
+  font-size: 18px;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: bold;
+}
+
+.meetingDate {
+  font-size: 12px;
+  padding-left: 10px;
+  color: gray;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: light;
+}
+
+.zeroNote {
+  padding: 10px;
+}

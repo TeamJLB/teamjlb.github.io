@@ -1,0 +1,27 @@
+.logItem {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  box-shadow: 1px 1px 3px 1px rgb(119, 119, 119);
+  border-radius: 10px;
+}
+
+.logItem:hover {
+  background-color: rgba(149, 149, 149, 0.5);
+}
+
+.topic {
+  padding-bottom: 5px;
+  font-size: 16px;
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: medium;
+}
+
+.date {
+  font-size: 12px;
+  padding-left: 10px;
+  color: rgb(60, 60, 60);
+  font-family: "Noto Sans CJK KR";
+  font-style: normal;
+  font-weight: light;
+}

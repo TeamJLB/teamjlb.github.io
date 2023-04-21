@@ -1,0 +1,36 @@
+.meetingLog {
+  width: 50%;
+  height: 50%;
+  z-index: 99;
+  position: absolute;
+  top: 55px;
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 1px 1px 3px 1px rgb(62, 62, 62);
+  backdrop-filter: blur(5px);
+  padding: 10px;
+  border-radius: 20px;
+  margin: 10px;
+  overflow: auto;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+}
+
+.zeroNote {
+  height: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logList {
+  padding: 0 10px;
+  margin: 10px 0;
+}
